@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+#yml
+*.yml
+
 # BlueJ files
 *.ctxt
 
@@ -31,3 +34,26 @@ hs_err_pid*
 out
 gen
 
+=======
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+*.iws
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
