@@ -17,7 +17,7 @@ public class ApplicationServiceTest {
 
     @Test
     public void applyPositionTest(){
-        //commit01
+        //commit-- xfnew
         boolean result = applicationService.applyPosition(5,1);
         Assert.assertEquals(true,result);
     }
