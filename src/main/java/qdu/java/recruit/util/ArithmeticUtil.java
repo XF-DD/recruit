@@ -71,12 +71,12 @@ public class ArithmeticUtil {
 
             //遍历寻找
             //赋值对应该职位title对应sessionContext内的当日pv数
-            Iterator iter = map.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
+            for (Map.Entry<Integer, Integer> integerIntegerEntry : map.entrySet()) {
+                Map.Entry entry = (Map.Entry) integerIntegerEntry;
                 int key = (Integer) entry.getKey();
                 if (key == pos.getPositionId()) {                            //getTitle -> getPositionId
                     pv = (Integer) entry.getValue();
+                    break;  //找到就跳出循环
                 }
             }
 
