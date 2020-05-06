@@ -11,8 +11,7 @@ public class DemoApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		//commit30
-		//commit15
+
 	}
 
 }
