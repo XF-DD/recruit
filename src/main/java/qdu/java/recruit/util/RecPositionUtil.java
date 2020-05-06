@@ -49,6 +49,7 @@ public class RecPositionUtil {
         int userId = user.getUserId();
         int resumeId = 0;
 
+        //获取简历
         if(posConst.resumeMapper.getResumeById(userId)!= null){
             resumeId = posConst.resumeMapper.getResumeId(userId);
         }
