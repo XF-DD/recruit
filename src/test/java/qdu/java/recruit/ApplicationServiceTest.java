@@ -17,7 +17,6 @@ public class ApplicationServiceTest {
 
     @Test
     public void applyPositionTest(){
-        //commit--masternew
         boolean result = applicationService.applyPosition(5,1);
         Assert.assertEquals(true,result);
     }

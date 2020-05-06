@@ -11,9 +11,7 @@ public class DemoApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		//new Branch -- master
-		//commit80
-		//commit60
+
 	}
 
 }
