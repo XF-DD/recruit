@@ -51,12 +51,11 @@ public class ArithmeticUtil {
 
         //所有Position,所有用户
         listPosAll = ariConst.positionMapper.listPosAll();
-        listUserAll = ariConst.userMapper.listUser();
 
         //职位推荐程度值
         double matchDegree = 0.0;
 
-        //城市、职位种类、pv 对应计算推荐程度值权重
+        //城市、职位种类、pv 对应计算推荐程度值权重2
         double cityRate = 0.3;
         double categoryRate = 0.7;
         double pvRate = 1;
