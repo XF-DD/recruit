@@ -414,8 +414,7 @@ public class ArithmeticUtil {
             }
         });
 
-        for (Map.Entry<Integer, Double> mapping : similarEntryList
-                ) {
+        for (Map.Entry<Integer, Double> mapping : similarEntryList) {
 
             //将没有应聘过的职位加入推荐列表
             if (ariConst.applicationMapper.getApplication(resumeId, mapping.getKey()) == null) {
