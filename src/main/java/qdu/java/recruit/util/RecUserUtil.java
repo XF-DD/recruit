@@ -65,13 +65,13 @@ public class RecUserUtil {
                  ) {
 
                 if(user.getDirDesire() == itemPosId){
-                    if(user.getCity() == itemPosCity){
+                    if(user.getCity().equals(itemPosCity)){
                         matchScore = 3;
                     }else{
                         matchScore = 2;
                     }
                 }else{
-                    if(user.getCity() == itemPosCity){
+                    if(user.getCity().equals(itemPosCity)){
                         matchScore = 1;
                     }else{
                         matchScore = 0;
