@@ -55,6 +55,7 @@ public class HRController extends BaseController{
 
     @PostMapping("/hr/register/first")
     @ResponseBody
+    //传入部门，公司id
     public String checkCompanyCode(ModelMap map,
                                    @RequestParam String CompanyCode,
                                    HttpServletRequest request,
@@ -90,6 +91,7 @@ public class HRController extends BaseController{
             if (hrService.registerHR(user)) {
                 return 1;
             }
+            //这里应该是0
             return 1;
         }
 
