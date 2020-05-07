@@ -11,7 +11,9 @@ public class DemoApplicationTests {
 
 	@Test
 	public void contextLoads() {
-
+		int[] ints = null;
+		ints[0] = 1;
+		System.out.println(ints[0]);
 	}
 
 }

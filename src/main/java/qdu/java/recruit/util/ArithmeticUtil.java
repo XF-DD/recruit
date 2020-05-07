@@ -50,7 +50,7 @@ public class ArithmeticUtil {
     public ArrayList<PositionCompanyBO> popularityRec(HashMap<Integer, Integer> map, UserEntity user) {
 
         //所有Position,所有用户
-        listPosAll = ariConst.positionMapper.listPosAll();
+        listPosAll = ariConst.positionMapper.listPosAll(); //IO--全部pos
 
         //职位推荐程度值
         double matchDegree = 0.0;
@@ -62,13 +62,13 @@ public class ArithmeticUtil {
 
         //有序TreeMap及ArrayList
         HashMap<Integer, Double> mapOrder = new HashMap<>();
-        ArrayList<PositionCompanyBO> listOrder = new ArrayList<>();
+        ArrayList<PositionCompanyBO> listOrder = new ArrayList<>();//公司+岗位实体
 
         for (PositionEntity pos : listPosAll) {
             //定义该职位当日pv数
             int pv = 0;
 
-            //遍历寻找
+            //遍历寻找 找到当前岗位对应的当日pv数
             //赋值对应该职位title对应sessionContext内的当日pv数
             for (Map.Entry<Integer, Integer> integerIntegerEntry : map.entrySet()) {
                 int key = integerIntegerEntry.getKey();
@@ -93,21 +93,16 @@ public class ArithmeticUtil {
                 }
             }
 
+            //该岗位对应该用户的推荐值
             mapOrder.put(pos.getPositionId(), matchDegree);
         }
 
-        //将mapOrder按照value值(pv数)降序排序
+        //将mapOrder按照value值(pv数)降序排序，即按照推荐值降序排序岗位
         List<Map.Entry<Integer, Double>> compareList = new ArrayList<>(mapOrder.entrySet());
-        compareList.sort(new Comparator<Map.Entry<Integer, Double>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
+        compareList.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
 
-        for (Map.Entry<Integer,Double> mapping:compareList
-             ) {
-            listOrder.add(ariConst.positionMapper.listPosCompany(mapping.getKey()));
+        for (Map.Entry<Integer,Double> mapping:compareList) {
+            listOrder.add(ariConst.positionMapper.listPosCompany(mapping.getKey())); // IO 找到所有岗位和公司对应实体
         }
 
         return listOrder;
