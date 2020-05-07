@@ -287,7 +287,7 @@ public class ArithmeticUtil {
                     itemArray[j] += 3;
                 }
 
-                CommentEntity com = ariConst.commentMapper.listComment(userItemId, posItemId);
+                CommentEntity com = ariConst.commentMapper.listComment(userItemId, posItemId); //io
                 if (com != null) {
                     switch (com.getType()) {
                         case 1:
