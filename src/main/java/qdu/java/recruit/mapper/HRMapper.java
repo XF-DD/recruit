@@ -44,11 +44,12 @@ public interface HRMapper {
             "description=#{description},departmentId=#{departmentId} where hrId = #{hrId}"})
     int updateHR(HREntity hrEntity);
 
-    @Insert({"insert into hr(mobile,password,name,email,description,departmentId}) " +
+    @Insert({"insert into hr(hrMobile,hrPassword,hrName,hrEmail,description,departmentId) " +
             "values(#{hrMobile},#{hrPassword},#{hrName},#{hrEmail},#{description},#{departmentId})"})
     int saveHR(HREntity hrEntity);
 
     @Select("select * from hr where hrMobile = #{hrMobile} limit 1")
-    HREntity getHRByMobile(@Param("mobile") String moblie);
+    HREntity getHRByMobile(@Param("hrMobile") String hrMobile);
+
 
 }

@@ -12,6 +12,8 @@ public class GlobalConst {
     //登录用户Session Key
     public static String LOGIN_SESSION_KEY = "user";
 
+    public static String LOGIN_SESSION_KEY_HR = "hr";
+
     //主页最大显示职位页数
     public static int MAX_PAGE = 100;
 

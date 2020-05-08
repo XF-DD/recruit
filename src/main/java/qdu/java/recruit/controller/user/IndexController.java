@@ -5,8 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import qdu.java.recruit.controller.BaseController;
 
 
@@ -15,6 +14,29 @@ import qdu.java.recruit.controller.BaseController;
 @Api("页面跳转控制器")
 public class IndexController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    /**
+     * hr按钮跳转hr登录页面
+     */
+    @GetMapping(value = "hr/login")
+    public String jumpHRLoginPage() {
+        return this.hrDirect("hr_login");
+    }
+
+    @GetMapping(value = "hr/index")
+    public String jumpHRPage() {
+        return this.hrDirect("index");
+    }
+
+    @GetMapping(value = "hr/info")
+    public String HRInfo() {
+        return this.hrDirect("hr_info");
+    }
+
+
+
+
+
 
     /**
      * 用户登录

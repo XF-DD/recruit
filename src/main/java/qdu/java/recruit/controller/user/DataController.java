@@ -2,7 +2,6 @@ package qdu.java.recruit.controller.user;
 
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
-import javafx.application.Application;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,9 +19,7 @@ import qdu.java.recruit.service.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +57,8 @@ public class DataController extends BaseController {
 
     @Resource
     private FavorService favorService;
+
+
 
 
     /**

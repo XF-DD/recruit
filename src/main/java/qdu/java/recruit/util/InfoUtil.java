@@ -26,6 +26,6 @@ public class InfoUtil {
         if(null == session){
             return null;
         }
-        return (HREntity) session.getAttribute(GlobalConst.LOGIN_SESSION_KEY);
+        return (HREntity) session.getAttribute(GlobalConst.LOGIN_SESSION_KEY_HR);
     }
 }

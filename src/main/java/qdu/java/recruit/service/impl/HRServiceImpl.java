@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.mapper.HRMapper;
 import qdu.java.recruit.service.HRService;
 import sun.misc.BASE64Encoder;
 
@@ -18,7 +17,7 @@ public class HRServiceImpl implements HRService {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Resource
-    private HRMapper HRMapper;
+    private qdu.java.recruit.mapper.HRMapper HRMapper;
 
     @Override
     public HREntity getHR(int HRId) {
@@ -39,10 +38,11 @@ public class HRServiceImpl implements HRService {
     public boolean registerHR(HREntity HREntity) {
 
         String password = HREntity.getHrPassword();
-        String mobile  = HREntity.getHrMobile();
+        String mobile = HREntity.getHrMobile();
 
 
-        if(HRMapper.getHRByMobile(mobile) != null) {
+        if (HRMapper.getHRByMobile(mobile) != null) {
+            System.out.println("已经存在该手机号");
             return false;
         }
 
@@ -58,6 +58,7 @@ public class HRServiceImpl implements HRService {
             System.out.println("编码转化出错");
         } finally {
             if (result > 0) {
+                System.out.println("成功");
                 return true;
             }
             return false;
@@ -77,13 +78,13 @@ public class HRServiceImpl implements HRService {
             System.out.println("md5加密出错");
         } catch (UnsupportedEncodingException e) {
             System.out.println("编码转化错误");
-        } finally {
-            return false;
         }
+        return false;
+
     }
 
     @Override
-    public HREntity getHRByMobile(String mobile){
+    public HREntity getHRByMobile(String mobile) {
 
         return HRMapper.getHRByMobile(mobile);
     }

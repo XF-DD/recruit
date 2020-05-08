@@ -3,7 +3,6 @@ package qdu.java.recruit.controller.hr;
 import com.github.pagehelper.PageInfo;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
@@ -17,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Controller
-public class PositionController extends BaseController{
+public class PositionController extends BaseController {
     /**
      * postion part
      * private int positionId;
@@ -122,6 +120,7 @@ public class PositionController extends BaseController{
         return jsonObject.toString();
     }
 
+
     @PostMapping("/position{id}/delete")
     public int deletePosition(HttpServletRequest request,@PathVariable int id) {
         valide(request,id);
@@ -198,7 +197,7 @@ public class PositionController extends BaseController{
      * @param id
      * @return
      */
-    public PositionEntity valide(HttpServletRequest request,int id) {
+    public PositionEntity valide(HttpServletRequest request, int id) {
         HREntity hr = this.getHR(request);
         PositionEntity position = positionService.getPositionById(id);
         if(hr == null || position == null) {
