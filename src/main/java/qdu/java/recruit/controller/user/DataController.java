@@ -295,14 +295,14 @@ public class DataController extends BaseController {
         PositionEntity position = positionService.getPositionById(id);
 
         if (user == null) {
-            this.errorDirect_404();
+            return this.errorDirect_404();
         }
         if (resume == null) {
             return "redirect:/user/info?type=person";
         }
         boolean result = applicationService.applyPosition(resume.getResumeId(), position.getPositionId());
         if (!result) {
-            this.errorDirect_404();
+            return this.errorDirect_404();
         }
 
         return "redirect:/user/success";
