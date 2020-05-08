@@ -13,7 +13,7 @@
 <body>
 <div class="login_box">
     <a class="go_home" style="background-image: url('/img/logo2.png');width:225px;height:126px;" href="/user/login"></a>
-    <div class="switch_to_hr"><div class="switch_btn"><a class="btn_hr_login" href="/hr/hr_login">HR登录</a></div></div>
+    <div class="switch_to_hr"><div class="switch_btn"><a class="btn_hr_login" href="/hr/login">HR登录</a></div></div>
     <div class="login_form_content" id="loginForm">
         <form name="login_form" id="">
             <input type="text" id="user_name" name="user_name" placeholder="请输入用户名" v-model="form.userName"/>
@@ -22,7 +22,6 @@
             <label for="user_pass"></label>
                 <!--<a class="found_pass " href="/user/found_pass">找回密码</a>-->
             <input type="button" id="login_btn" v-on:click="login" value="登  录">
-
         </form>
 
 

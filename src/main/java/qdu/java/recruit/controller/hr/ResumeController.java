@@ -8,7 +8,7 @@ import qdu.java.recruit.entity.HREntity;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-public class ResumeController extends BaseController{
+public class ResumeController extends BaseController {
 
 
     @PostMapping("/hr/applyInfo")

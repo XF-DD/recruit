@@ -6,16 +6,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
-import qdu.java.recruit.entity.*;
+import qdu.java.recruit.entity.CompanyEntity;
+import qdu.java.recruit.entity.DepartmentEntity;
+import qdu.java.recruit.entity.HREntity;
+import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
   <p>
@@ -30,7 +39,7 @@ import java.util.*;
  */
 @RestController
 @Api(value = "HR接口",description = "HR接口")
-public class HRController extends BaseController{
+public class HRController extends BaseController {
 
     protected Logger logger = LogManager.getLogger(getClass());
 
@@ -52,7 +61,6 @@ public class HRController extends BaseController{
     /**
      * 用户注册返回 0 -> 失败 1 -> 成功
      */
-
     @PostMapping("/hr/register/first")
     @ResponseBody
     public String checkCompanyCode(ModelMap map,
@@ -71,7 +79,6 @@ public class HRController extends BaseController{
             return hrDirect("hr/register/second");
         }
     }
-
 
 
     @PostMapping(value = "hr/register/second")
@@ -96,30 +103,28 @@ public class HRController extends BaseController{
 
 
     /**
-     * 用户登录
+     * hr登录
      *
      * @param httpSession
-     * @param mobile
-     * @param password
      * @return
      */
-    @PostMapping(value = "hr/login")
+    @PostMapping(value = "/hr/loginPost")
     public int userLogin(HttpSession httpSession,
-                         @RequestParam String mobile,
-                         @RequestParam String password) {
+                         @RequestParam String hrName,
+                         @RequestParam String hrPass) {
 
-        if (mobile == null || password == null) {
+        String mobile = hrName;
+        String password = hrPass;
+        if (hrName == null || hrPass == null) {
             return 0;
         }
 
-        if (hrService.loginHR(mobile, password)) {
-
-            httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
+        if (hrService.loginHR(hrName, hrPass)) {
+            httpSession.setAttribute("hr", hrService.getHRByMobile(hrName));
             return 1;
         }
         return 0;
     }
-
 
 
     /**
@@ -145,7 +150,6 @@ public class HRController extends BaseController{
 
         //收件箱
         List<ApplicationPositionHRBO> applyPosList = applicationService.listApplyInfoByHr(id);
-
         //创建的职位
         List<PositionEntity> positionEntities = positionService.listPositionByHr(id);
 
@@ -191,6 +195,7 @@ public class HRController extends BaseController{
                              @RequestParam("departmentId") int departmentId) {
 
         int hrId = this.getHRId(request);
+        request.getSession().getAttribute("hr");
 
         HREntity HREntity = new HREntity();
         HREntity.setHrId(hrId);
@@ -218,7 +223,7 @@ public class HRController extends BaseController{
         while (em.hasMoreElements()) {
             request.getSession().removeAttribute(em.nextElement().toString());
         }
-        request.getSession().removeAttribute(GlobalConst.LOGIN_SESSION_KEY);
+        request.getSession().removeAttribute(GlobalConst.LOGIN_SESSION_KEY_HR);
         request.getSession().invalidate();
 
         return userDirect("logout_success");
