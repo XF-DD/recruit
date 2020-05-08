@@ -20,11 +20,12 @@ public interface PositionMapper {
     @Select("select * from position where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
-    @Select("select p.*,c.* from position p,department d,company c \n" +
-            "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
-            "and title like #{keyword} and statePub = 1 \n" +
-            "order by ${order} DESC")
-    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,@Param("order") String order);
+
+ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
+                                           @Param("order") String order,
+                                           @Param("workCity") String workCity,
+                                           @Param("salaryDown") String salaryDown,
+                                           @Param("salaryUp") String salaryUp);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
