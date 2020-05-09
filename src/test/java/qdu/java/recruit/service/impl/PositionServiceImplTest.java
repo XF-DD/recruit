@@ -33,7 +33,7 @@ public class PositionServiceImplTest extends TestCase {
     @Test
     public void testSearchPosition() {
         PageInfo<PositionCompanyBO> positionCompanyBOPageInfo = positionService.searchPosition(
-                "java",
+                "里巴",
                 "hits",
                 null,
                 "5000",

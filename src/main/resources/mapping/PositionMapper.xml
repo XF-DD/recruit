@@ -44,17 +44,22 @@
                 position
             WHERE
                 statePub = 1
+            <!-- keyword可以是岗位名和公司名 -->
+            <!-- 岗位名称模糊查询 -->
             <if test="keyword!=null and keyword!=''">
                 <bind name="keyword" value="'%'+keyword+'%'"/>
                 and title like #{keyword}
             </if>
+            <!-- 城市名称模糊查询 -->
             <if test="workCity!=null and workCity!=''">
                 <bind name="workCity" value="'%'+workCity+'%'"/>
                 and workCity like #{workCity}
             </if>
+            <!-- 最低工资 -->
             <if test="salaryDown!=null and salaryDown!=''">
                 and salaryDown >= #{salaryDown}
             </if>
+            <!-- 最高工资 -->
             <if test="salaryUp!=null and salaryUp!=''">
                 and salaryUp &lt;= #{salaryUp}
             </if>
@@ -63,6 +68,7 @@
         LEFT JOIN company AS c ON c.companyId = d.companyId
 
         <if test="keyword!=null and keyword!=''">
+        <!-- keyword可能是公司名 -->
             UNION
             (
             SELECT

@@ -89,7 +89,6 @@ public class PositionServiceImpl implements PositionService {
                                                       int limit) {
 
         PageHelper.startPage(page, limit);
-
         List<PositionCompanyBO> searchList = positionMapper.listSearchPos(keyword,orderBy,workCity,salaryDown,salaryUp);
         return new PageInfo<>(searchList);
     }
