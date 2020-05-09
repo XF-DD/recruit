@@ -7,11 +7,13 @@ public class UserEntity {
     private String password;
     private String name;
     private int gender;
+
     private int birthYear;
     private String nickname;
     private String email;
     private String province;
     private String city;
+
     private String eduDegree;
     private String graduation;
     private int graYear;

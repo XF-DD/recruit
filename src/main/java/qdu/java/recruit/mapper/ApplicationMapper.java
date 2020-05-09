@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import qdu.java.recruit.entity.ApplicationEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
+import qdu.java.recruit.pojo.ApplicationResumeHRBO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ public interface ApplicationMapper {
 
     @Select("select * from application where resumeId = #{resumeId} and positionId = #{posId} limit 1")
     ApplicationEntity getApplication(@Param("resumeId") int resumeId, @Param("posId") int posId);
+
+    @Select("select resumeId,userId from application where applicationId = #{applicationId} limit 1")
+    ApplicationResumeHRBO getApplicationResumeHRBO(@Param("applicationId") int applicationId);
 
     @Insert("insert into application(state,recentTime,resumeId,positionId) values (0,#{recentTime},#{resumeId},#{positionId})")
     int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId);

@@ -5,6 +5,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import qdu.java.recruit.entity.ResumeEntity;
+import qdu.java.recruit.pojo.PostedRecumeBO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface ResumeMapper {
 
@@ -22,7 +26,38 @@ public interface ResumeMapper {
             "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId})")
     int createResume(ResumeEntity resumeEntity);
 
-    
 
+    @Select("select a.applicationId,u.*,p.title \n" +
+            "from user u join application a on u.userId = a.userId \n" +
+            "join position  p on p.positionId = a.positionId \n" +
+            "where hrId = #{hrId} and state = 0 order by a.recentTime DESC")
+    ArrayList<PostedRecumeBO> getNewResume(@Param("hrId")int hrId);
 
+    @Select("select a.applicationId,u.*,p.title \n"+
+            "from user u join application a on u.userId = a.userId \n"+
+            "join position  p on p.positionId = a.positionId \n"+
+            "where hrId = #{hrId} and state = 1 \n" +
+            "order by a.recentTime DESC")
+    List<PostedRecumeBO> getSeenResume(@Param("hrId")int hrId);
+
+    @Select("select a.applicationId,u.*,p.title \n"+
+            "from user u join application a on u.userId = a.userId \n"+
+            "join position  p on p.positionId = a.positionId \n"+
+            "where hrId = #{hrId} and NOT IN(1,0,-1,-2) \n" +
+            "order by a.recentTime DESC")
+    List<PostedRecumeBO> getInterviewResume(@Param("hrId")int hrId);
+
+    @Select("select a.applicationId,u.*,p.title \n"+
+            "from user u join application a on u.userId = a.userId \n"+
+            "join position  p on p.positionId = a.positionId \n"+
+            "where hrId = #{hrId} and state = -1 \n" +
+            "order by a.recentTime DESC")
+    List<PostedRecumeBO> getFailedResume(@Param("hrId")int hrId);
+
+    @Select("select a.applicationId,u.*,p.title \n"+
+            "from user u join application a on u.userId = a.userId \n"+
+            "join position  p on p.positionId = a.positionId \n"+
+            "where hrId = #{hrId} and state = -2 \n" +
+            "order by a.recentTime DESC")
+    List<PostedRecumeBO> getAbandonResume(@Param("hrId")int hrId);
 }

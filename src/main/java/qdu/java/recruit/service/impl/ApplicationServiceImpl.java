@@ -3,6 +3,7 @@ package qdu.java.recruit.service.impl;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.mapper.ApplicationMapper;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
+import qdu.java.recruit.pojo.ApplicationResumeHRBO;
 import qdu.java.recruit.service.ApplicationService;
 
 import javax.annotation.Resource;
@@ -56,5 +57,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     public List<ApplicationPositionHRBO> listApplyInfoByHr(int hrid) {
         return applicationMapper.listAppPosHR(hrid);
 
+    }
+
+    @Override
+    public ApplicationResumeHRBO getResumeHRBO(int applicationId) {
+        return applicationMapper.getApplicationResumeHRBO(applicationId);
     }
 }

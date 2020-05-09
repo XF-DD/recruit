@@ -11,6 +11,9 @@ public class ApplicationEntity {
     private int positionId;
     private int hrId;
 
+    private String interviewsDesc;
+    private int userId;
+
     public int getApplicationId() {
         return applicationId;
     }
@@ -58,5 +61,21 @@ public class ApplicationEntity {
 
     public void setHrId(int hrId) {
         this.hrId = hrId;
+    }
+
+    public void setInterviewsDesc(String interviewsDesc) {
+        this.interviewsDesc = interviewsDesc;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getInterviewsDesc() {
+        return interviewsDesc;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

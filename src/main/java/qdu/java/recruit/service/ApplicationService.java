@@ -2,6 +2,7 @@ package qdu.java.recruit.service;
 
 
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
+import qdu.java.recruit.pojo.ApplicationResumeHRBO;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ public interface ApplicationService {
     List<ApplicationPositionHRBO> listApplyInfoPub(int resumeId);
 
     List<ApplicationPositionHRBO> listApplyInfoByHr(int hrid);
+
+    ApplicationResumeHRBO getResumeHRBO(int applicationId);
 
 }
