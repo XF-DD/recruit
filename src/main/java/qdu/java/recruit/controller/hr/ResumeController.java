@@ -3,9 +3,7 @@ package qdu.java.recruit.controller.hr;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.ResumeEntity;
@@ -34,64 +32,57 @@ public class ResumeController extends BaseController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/hr/applyInfo")
+    /**
+     *   查询简历
+     *   通过state判断查询的简历状态，返回相应状态的简历
+     *   可查询新、备选、放弃、未通过、通过、一面、二面简历
+     *   @author  PocketKnife
+     *   @create  23:34 2020/5/9
+    */
+    @GetMapping(value = "/hr/resume/{state}")
+    @ResponseBody
+    public String getResume(HttpServletRequest request , @PathVariable int state){
+        HREntity hr = this.getHR(request);
+        if(hr == null) {
+            return errorDirect_404();
+        }
+        List<PostedRecumeBO> resumes = resumeService.getResumeByState(hr.getHrId(),state);
+        Map output = new TreeMap();
+        output.put("resumes",resumes);
+
+        JSONObject jsonObject = JSONObject.fromObject(output);
+
+        return jsonObject.toString();
+    }
+
+    /**
+     *   查看所有简历
+     *   @author  PocketKnife 
+     *   @create  23:40 2020/5/9
+    */
+    @ResponseBody
+    @GetMapping("/hr/resumeInfo")
     public String ResumeInfo(HttpServletRequest request) {
         HREntity hr = this.getHR(request);
         if(hr == null) {
             return errorDirect_404();
         }
-        return null;
-    }
-
-    /**
-     *   查看新简历
-     *   根据HRId查询投递到该hr下的各个岗位的投递者的信息。
-     *   @author  PocketKnife 
-     *   @create  12:12 2020/5/9
-    */
-    @PostMapping(value = "/hr/resume/newresume")
-    @ResponseBody
-    public String getResume(HttpServletRequest request){
-
-        HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-        }
-        List<PostedRecumeBO> newRecumeBOList = resumeService.getResumeByHrId(hr.getHrId());
+        List<PostedRecumeBO>  resumeInfo= resumeService.getAllResume(hr.getHrId());
         Map output = new TreeMap();
-        output.put("NewResumeList",newRecumeBOList);
-        JSONObject jsonObject = JSONObject.fromObject(output);
-        return jsonObject.toString();
-    }
-    
-    /**
-     *   查看备选的简历
-     *   根据hrId查询备选的简历，即以及看过的简历
-     *   @author  PocketKnife 
-     *   @create  19:04 2020/5/9
-    */
-    @PostMapping(value = "/hr/resume/seenresume")
-    @ResponseBody
-    public String getSeenResume(HttpServletRequest request){
-        HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-        }
-        List<PostedRecumeBO> seenRecumeBOList = resumeService.getSeenResumeByHrId(hr.getHrId());
-        Map output = new TreeMap();
-        output.put("NewResumeList",seenRecumeBOList);
-        JSONObject jsonObject = JSONObject.fromObject(output);
-        return jsonObject.toString();
+        output.put("resumeInfo",resumeInfo);
 
+        JSONObject jsonObject = JSONObject.fromObject(output);
+
+        return jsonObject.toString();
     }
 
     /**
      *   查看正在安排面试的简历
-     *   根据hrId查询正在面试中的简历
+     *   根据hrId查询正在面试中的简历(包括一面，二面...)
      *   @author  PocketKnife
      *   @create  19:11 2020/5/9
     */
-    @PostMapping(value = "/hr/resume/interviewresume")
+    @GetMapping(value = "/hr/resume/interviewresume")
     @ResponseBody
     public String getInterviewResume(HttpServletRequest request){
         HREntity hr = this.getHR(request);
@@ -105,43 +96,6 @@ public class ResumeController extends BaseController {
         return jsonObject.toString();
     }
 
-    /**
-     *   查看未通过的简历
-     *   @author  PocketKnife
-     *   @create  19:11 2020/5/9
-     */
-    @PostMapping(value = "/hr/resume/failedresume")
-    @ResponseBody
-    public String getFailedResume(HttpServletRequest request){
-        HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-        }
-        List<PostedRecumeBO> failedRecumeBOList = resumeService.getFailedResumeByHrId(hr.getHrId());
-        Map output = new TreeMap();
-        output.put("NewResumeList",failedRecumeBOList);
-        JSONObject jsonObject = JSONObject.fromObject(output);
-        return jsonObject.toString();
-    }
-
-    /**
-     *   查看未通过的简历
-     *   @author  PocketKnife
-     *   @create  21:40 2020/5/9
-    */
-    @PostMapping(value = "/hr/resume/abandonresume")
-    @ResponseBody
-    public String getAbandonResume(HttpServletRequest request){
-        HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-        }
-        List<PostedRecumeBO> abandonResumeBOList = resumeService.getAbandonResumeByHrId(hr.getHrId());
-        Map output = new TreeMap();
-        output.put("NewResumeList",abandonResumeBOList);
-        JSONObject jsonObject = JSONObject.fromObject(output);
-        return jsonObject.toString();
-    }
 
     /**
      *   查看简历具体信息
@@ -151,11 +105,16 @@ public class ResumeController extends BaseController {
     @PostMapping(value = "/hr/resume/ResumeDesc")
     @ResponseBody
     public String getResumeDesc(HttpServletRequest request){
+        HREntity hr = this.getHR(request);
+        if(hr == null) {
+            return errorDirect_404();
+        }
         int applicationId = (int) request.getSession().getAttribute("applicationId");
 
         ApplicationResumeHRBO applicationResumeHRBO = applicationService.getResumeHRBO(applicationId);
         UserEntity userEntity = userService.getUser(applicationResumeHRBO.getUserId());
         ResumeEntity resumeEntity = resumeService.getResumeById(applicationResumeHRBO.getResumeId());
+        applicationService.updateResumeState(1,applicationId);
 
         Map output = new TreeMap();
         output.put("userEntity",userEntity);

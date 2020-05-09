@@ -9,16 +9,11 @@ public interface ResumeService {
 
     ResumeEntity getResumeById(int userId);
 
-    List<PostedRecumeBO> getResumeByHrId(int hrId);
+    List<PostedRecumeBO> getResumeByState(int hrId,int state);
 
-    List<PostedRecumeBO> getSeenResumeByHrId(int hrId);
+    List<PostedRecumeBO> getAllResume(int hrId);
 
     List<PostedRecumeBO> getInterviewResumeByHrId(int hrId);
-
-    List<PostedRecumeBO> getFailedResumeByHrId(int hrId);
-
-
-    List<PostedRecumeBO> getAbandonResumeByHrId(int hrId);
 
     boolean updateResume(ResumeEntity resumeEntity);
 

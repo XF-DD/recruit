@@ -22,29 +22,21 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<PostedRecumeBO> getResumeByHrId(int hrId) {
-        return resumeMapper.getNewResume(hrId);
+    public List<PostedRecumeBO> getResumeByState(int hrId, int state) {
+        return resumeMapper.getResumeByState(hrId,state);
     }
 
     @Override
-    public List<PostedRecumeBO> getSeenResumeByHrId(int hrId) {
-        return resumeMapper.getSeenResume(hrId);
+    public List<PostedRecumeBO> getAllResume(int hrId) {
+        return resumeMapper.getAllResume(hrId);
     }
+
 
     @Override
     public List<PostedRecumeBO> getInterviewResumeByHrId(int hrId) {
         return resumeMapper.getInterviewResume(hrId);
     }
 
-    @Override
-    public List<PostedRecumeBO> getFailedResumeByHrId(int hrId) {
-        return resumeMapper.getFailedResume(hrId);
-    }
-
-    @Override
-    public List<PostedRecumeBO> getAbandonResumeByHrId(int hrId) {
-        return resumeMapper.getAbandonResume(hrId);
-    }
 
     @Override
     public boolean updateResume(ResumeEntity resumeEntity) {

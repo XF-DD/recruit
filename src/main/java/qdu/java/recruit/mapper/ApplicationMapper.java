@@ -3,6 +3,7 @@ package qdu.java.recruit.mapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import qdu.java.recruit.entity.ApplicationEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.ApplicationResumeHRBO;
@@ -17,6 +18,10 @@ public interface ApplicationMapper {
 
     @Select("select * from application where resumeId = #{resumeId} and positionId = #{posId} limit 1")
     ApplicationEntity getApplication(@Param("resumeId") int resumeId, @Param("posId") int posId);
+
+    //更新简历状态  0未看  1已看
+    @Update("update application set state = #{flag} where applicationId = #{applicationId}")
+    int updateResume(@Param("flag") int flag,@Param("applicationId") int applicationId);
 
     @Select("select resumeId,userId from application where applicationId = #{applicationId} limit 1")
     ApplicationResumeHRBO getApplicationResumeHRBO(@Param("applicationId") int applicationId);

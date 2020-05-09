@@ -30,6 +30,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return false;
     }
 
+    @Override
+    public int updateResumeState(int state, int applicationid) {
+        return applicationMapper.updateResume(state,applicationid);
+    }
+
     /**
      * 申请处理完成
      * @param resumeId

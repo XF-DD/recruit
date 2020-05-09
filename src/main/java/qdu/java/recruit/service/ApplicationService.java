@@ -10,6 +10,8 @@ public interface ApplicationService {
 
     boolean applyPosition(int resumeId, int positionId);
 
+    int updateResumeState(int state,int applicationid);
+
     List<ApplicationPositionHRBO> listApplyInfo(int resumeId);
 
     List<ApplicationPositionHRBO> listApplyInfoPub(int resumeId);
