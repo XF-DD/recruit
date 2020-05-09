@@ -23,6 +23,9 @@ public interface FavorMapper {
     @Select("select favorId,userId,position.* from favor,position where favor.positionId = position.positionId and userId = #{userId}")
     ArrayList<FavorPositionBO> listFavorPosition(@Param("userId") int userId);
 
+    @Select("select favorId,userId,position.* from favor,position where favor.positionId = position.positionId and positionId = #{positionId}")
+    ArrayList<FavorPositionBO> listFavorByPositionId(@Param("positionId") int userId);
+
     @Insert("insert into favor(userId,positionId) values (#{userId},#{posId})")
     int saveFavor(@Param("userId") int userId,@Param("posId") int posId);
 

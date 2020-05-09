@@ -71,7 +71,6 @@ public class PositionController extends BaseController {
         id = hr.getHrId();
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-
         PageInfo<PositionEntity> positionEntities = positionService.listPositionByHr(id,page,limit);
 
         Map output = new TreeMap();

@@ -69,7 +69,6 @@ public class HRServiceImpl implements HRService {
     public boolean loginHR(String mobile, String password) {
 
         String passwordDB = HRMapper.getHRByMobile(mobile).getHrPassword();
-
         try {
             if (this.EncodingByMd5(password).equals(passwordDB)) {
                 return true;
@@ -80,7 +79,6 @@ public class HRServiceImpl implements HRService {
             System.out.println("编码转化错误");
         }
         return false;
-
     }
 
     @Override

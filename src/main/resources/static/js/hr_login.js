@@ -2,8 +2,8 @@ var form =new Vue({
     el:'#loginForm',
     data:{
         form:{
-            userName: '',
-            userPass: ''
+            hrName: '',
+            hrPass: ''
         }
     },
     methods:{
@@ -15,6 +15,7 @@ var form =new Vue({
                 dataType:'json',
                 success:function (msg) {
                     if(msg=='0'){
+                        layer.msg("msg ="+msg);
                         layer.msg('您的账号或密码输入错误！！！');
                     }else {
                         layer.msg('登录成功，3S后跳转！');

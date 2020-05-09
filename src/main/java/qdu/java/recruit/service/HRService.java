@@ -13,4 +13,7 @@ public interface HRService {
     boolean loginHR(String mobile, String password);
 
     HREntity getHRByMobile(String mobile);
+
+
+
 }

@@ -109,6 +109,7 @@ public class HRController extends BaseController {
      * @return
      */
     @PostMapping(value = "/hr/loginPost")
+    @ResponseBody
     public int userLogin(HttpSession httpSession,
                          @RequestParam String hrName,
                          @RequestParam String hrPass) {
@@ -120,6 +121,7 @@ public class HRController extends BaseController {
         }
 
         if (hrService.loginHR(hrName, hrPass)) {
+            System.out.println("匹配到了");
             httpSession.setAttribute("hr", hrService.getHRByMobile(hrName));
             return 1;
         }

@@ -21,6 +21,12 @@ public class FavorServiceImpl implements FavorService {
     }
 
     @Override
+    public List<FavorPositionBO> listFavorByPositionId(int positionId) {
+        return favorMapper.listFavorByPositionId(positionId);
+    }
+
+
+    @Override
     public boolean favorPosition(int userId, int posId) {
 
         if (favorMapper.saveFavor(userId, posId) > 0) {

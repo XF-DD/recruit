@@ -8,6 +8,8 @@ public interface FavorService {
 
     List<FavorPositionBO> listFavorPosition(int userId);
 
+    List<FavorPositionBO> listFavorByPositionId(int positionId);
+
     boolean favorPosition(int userId,int posId);
 
     boolean favorOrNot(int userId, int posId);

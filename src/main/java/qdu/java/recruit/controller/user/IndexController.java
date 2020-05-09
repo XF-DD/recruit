@@ -33,11 +33,6 @@ public class IndexController extends BaseController {
         return this.hrDirect("hr_info");
     }
 
-
-
-
-
-
     /**
      * 用户登录
      *

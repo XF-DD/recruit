@@ -5,11 +5,8 @@ import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.entity.UserEntity;
-import qdu.java.recruit.mapper.CompanyMapper;
-import qdu.java.recruit.mapper.DepartmentMapper;
 import qdu.java.recruit.mapper.PositionMapper;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 import qdu.java.recruit.service.PositionService;
@@ -19,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 
 @Service
 public class PositionServiceImpl implements PositionService {
@@ -129,6 +127,11 @@ public class PositionServiceImpl implements PositionService {
         return pagination;
     }
 
+    /**
+    *   根据HR的Id返回职位信息 一对多
+    *   @author  PocketKnife
+    *   @create  11:27 2020/5/9
+    */
     @Override
     public List<PositionEntity> listPositionByHr(int hrid) {
         return positionMapper.listHRPos(hrid);

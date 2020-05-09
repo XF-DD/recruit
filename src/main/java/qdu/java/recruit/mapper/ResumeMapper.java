@@ -22,5 +22,7 @@ public interface ResumeMapper {
             "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId})")
     int createResume(ResumeEntity resumeEntity);
 
+    
+
 
 }
