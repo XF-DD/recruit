@@ -39,9 +39,9 @@ public class ArithmeticUtil {
     @Resource
     private UserMapper userMapper;
 
-    ArrayList<PositionEntity> listPosAll = new ArrayList<>();
+    ArrayList<PositionEntity> listPosAll = new ArrayList<PositionEntity>();
 
-    ArrayList<UserEntity> listUserAll = new ArrayList<>();
+    ArrayList<UserEntity> listUserAll = new ArrayList<UserEntity>();
 
     //基于pv流行性推荐算法
     // map          ->  存在ServletContext中所有职位当日PV数
@@ -51,11 +51,12 @@ public class ArithmeticUtil {
 
         //所有Position,所有用户
         listPosAll = ariConst.positionMapper.listPosAll();
+        listUserAll = ariConst.userMapper.listUser();
 
         //职位推荐程度值
         double matchDegree = 0.0;
 
-        //城市、职位种类、pv 对应计算推荐程度值权重2
+        //城市、职位种类、pv 对应计算推荐程度值权重
         double cityRate = 0.3;
         double categoryRate = 0.7;
         double pvRate = 1;
@@ -70,11 +71,12 @@ public class ArithmeticUtil {
 
             //遍历寻找
             //赋值对应该职位title对应sessionContext内的当日pv数
-            for (Map.Entry<Integer, Integer> integerIntegerEntry : map.entrySet()) {
-                int key = integerIntegerEntry.getKey();
+            Iterator iter = map.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                int key = (Integer) entry.getKey();
                 if (key == pos.getPositionId()) {                            //getTitle -> getPositionId
-                    pv = integerIntegerEntry.getValue();
-                    break;  //找到就跳出循环
+                    pv = (Integer) entry.getValue();
                 }
             }
 
@@ -98,7 +100,7 @@ public class ArithmeticUtil {
 
         //将mapOrder按照value值(pv数)降序排序
         List<Map.Entry<Integer, Double>> compareList = new ArrayList<>(mapOrder.entrySet());
-        compareList.sort(new Comparator<Map.Entry<Integer, Double>>() {
+        Collections.sort(compareList, new Comparator<Map.Entry<Integer, Double>>() {
             @Override
             public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
                 return o2.getValue().compareTo(o1.getValue());
@@ -139,10 +141,10 @@ public class ArithmeticUtil {
         double vectorProduct = 0.0;
 
         //map键值对，键为当前用户Id,值为所有职位对应数组,数组元素 收藏过 为1,未收藏过 为0
-        Map<Integer, int[]> colMap = new HashMap<>();
+        Map<Integer, int[]> colMap = new HashMap<Integer, int[]>();
 
         //降序排列相似度键值对,键为选中职位与当前职位相似度，值为选中职位Id
-        TreeMap<Double, Integer> simMap = new TreeMap<>(new Comparator<Double>() {
+        TreeMap<Double, Integer> simMap = new TreeMap<Double, Integer>(new Comparator<Double>() {
             @Override
             public int compare(Double o1, Double o2) {
                 if ((o2 - o1) < 0) {
@@ -193,10 +195,12 @@ public class ArithmeticUtil {
         }
 
         //遍历所有职位id对应收藏职位矩阵，计算向量模，点乘积，余弦值
+        Iterator iter = colMap.entrySet().iterator();
 
-        for (Map.Entry<Integer, int[]> integerEntry : colMap.entrySet()) {
-            itemKey = integerEntry.getKey();
-            itemArray = integerEntry.getValue();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            itemKey = (int) entry.getKey();
+            itemArray = (int[]) entry.getValue();
 
             if (itemKey != userId) {
                 for (int i = 0; i < itemArray.length; i++) {
@@ -224,13 +228,16 @@ public class ArithmeticUtil {
         int userId = -1;
 
         //推荐职位 Id队列
-        ArrayList<Integer> posIdList;
+        ArrayList<Integer> posIdList = null;
 
         //推荐职位 队列
-        ArrayList<PositionEntity> recList = new ArrayList<>();
+        ArrayList<PositionEntity> recList = null;
 
-        for (Map.Entry<Double, Integer> doubleIntegerEntry : map.entrySet()) {
-            userId = doubleIntegerEntry.getValue();
+        Iterator iter = map.entrySet().iterator();
+
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            userId = (int) entry.getValue();
 
             posIdList = ariConst.favorMapper.getQuery(userId, hostId);
 
@@ -258,10 +265,10 @@ public class ArithmeticUtil {
         int resumeId = ariConst.resumeMapper.getResumeId(userId);
 
         //定义键为职业Id值，值为每个用户对该职业好感度的键值对图HashMap
-        Map<Integer, int[]> favorMap = new HashMap<>();
+        Map<Integer, int[]> favorMap = new HashMap<Integer, int[]>();
 
         //定义键为 职位Id，值为 当前用户对选定职位的好感度 的键值对图HashMap
-        Map<Integer, Integer> defaultMap = new HashMap<>();
+        Map<Integer, Integer> defaultMap = new HashMap<Integer, Integer>();
 
         //用户总数
         int userSize = ariConst.userMapper.getUserSize();
@@ -275,8 +282,8 @@ public class ArithmeticUtil {
         int resumeItemId;
 
         //遍历所有职位，填充好感度键值对图
-        for (PositionEntity positionEntity : listPosAll) {
-            posItemId = positionEntity.getPositionId();
+        for (int i = 0; i < listPosAll.size(); i++) {
+            posItemId = listPosAll.get(i).getPositionId();
 
             for (int j = 0; j < listUserAll.size(); j++) {
                 userItemId = listUserAll.get(j).getUserId();
@@ -320,15 +327,15 @@ public class ArithmeticUtil {
         }
 
         //构造当前用户好感度降序排列的职位ArrayList
-        List<Map.Entry<Integer, Integer>> defaultEntryList = new ArrayList<>(defaultMap.entrySet());
-        defaultEntryList.sort(new Comparator<Map.Entry<Integer, Integer>>() {
+        List<Map.Entry<Integer, Integer>> defaultEntryList = new ArrayList<Map.Entry<Integer, Integer>>(defaultMap.entrySet());
+        Collections.sort(defaultEntryList, new Comparator<Map.Entry<Integer, Integer>>() {
             @Override
             public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
 
-        ArrayList<Integer> defaultList = new ArrayList<>();
+        ArrayList<Integer> defaultList = new ArrayList<Integer>();
 
         for (Map.Entry<Integer, Integer> mapping : defaultEntryList) {
 
@@ -342,7 +349,7 @@ public class ArithmeticUtil {
         int[] favorVector = favorMap.get(favorPosId);
 
         //与好感度第一职位的相似度键值对HashMap
-        HashMap<Integer, Double> similarMap = new HashMap<>();
+        HashMap<Integer, Double> similarMap = new HashMap<Integer, Double>();
 
         //单位数组向量
         int[] itemVector = null;
@@ -362,19 +369,20 @@ public class ArithmeticUtil {
         double itemModSqrt = 0;
         double vectorProduct = 0;
 
-        for (int value : favorVector) {
-            favorSum += value;
+        for (int i = 0; i < favorVector.length; i++) {
+            favorSum += favorVector[i];
         }
         favorAvg = favorSum / favorVector.length;
 
-        for (int i : favorVector) {
-            favorMod += (i - favorAvg) * (i - favorAvg);
+        for (int j = 0; j < favorVector.length; j++) {
+            favorMod += (favorVector[j] - favorAvg) * (favorVector[j] - favorAvg);
         }
         favorModSqrt = Math.sqrt(favorMod);
 
         //求每一职位与当前用户好感度第一的职位的相似度
+        Iterator iter = favorMap.entrySet().iterator();
 
-        for (Map.Entry<Integer, int[]> integerEntry : favorMap.entrySet()) {
+        while (iter.hasNext()) {
 
             itemSum = 0;
             itemAvg = 0;
@@ -382,7 +390,8 @@ public class ArithmeticUtil {
             itemModSqrt = 0;
             vectorProduct = 0;
 
-            itemVector = integerEntry.getValue();
+            Map.Entry entry = (Map.Entry) iter.next();
+            itemVector = (int[]) entry.getValue();
 
             for (m = 0; m < itemVector.length; m++) {
                 itemSum += itemVector[m];
@@ -396,24 +405,25 @@ public class ArithmeticUtil {
             itemModSqrt = Math.sqrt(itemMod);
 
             //相似度键值对,键为职业Id,值为 选定职业与当前职业 皮尔逊相关系数
-            similarMap.put(integerEntry.getKey(), (vectorProduct / (favorModSqrt * itemModSqrt)));
+            similarMap.put((int) entry.getKey(), (vectorProduct / (favorModSqrt * itemModSqrt)));
 
         }
 
         //元素为 键为职位Id,值为皮尔逊相关系数的键值对 的ArrayList
-        List<Map.Entry<Integer, Double>> similarEntryList = new ArrayList<>(similarMap.entrySet());
+        List<Map.Entry<Integer, Double>> similarEntryList = new ArrayList<Map.Entry<Integer, Double>>(similarMap.entrySet());
 
         //按与选中职业相似度皮尔逊系数降序排序 的元素为职位 的ArrayList
         ArrayList<PositionCompanyBO> similarPosList = new ArrayList<>();
 
-        similarEntryList.sort(new Comparator<Map.Entry<Integer, Double>>() {
+        Collections.sort(similarEntryList, new Comparator<Map.Entry<Integer, Double>>() {
             @Override
             public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
 
-        for (Map.Entry<Integer, Double> mapping : similarEntryList) {
+        for (Map.Entry<Integer, Double> mapping : similarEntryList
+                ) {
 
             //将没有应聘过的职位加入推荐列表
             if (ariConst.applicationMapper.getApplication(resumeId, mapping.getKey()) == null) {

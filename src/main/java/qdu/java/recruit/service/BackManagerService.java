@@ -8,10 +8,10 @@ import qdu.java.recruit.entity.WebCountEntity;
 import java.util.ArrayList;
 
 public interface BackManagerService {
-    int backLogin(Long userid,String password);
+    int backLogin(Long userid, String password);
     ArrayList<UserAreaEntity> userArea();
     ArrayList<CompanyEntity> getAllCompanies();
     ArrayList<UserEntity> getAllUsers();
     WebCountEntity getWebCount();
-    int addCompany(String companyName,String companyCode,String description);
+    int addCompany(String companyName, String companyCode, String description);
 }

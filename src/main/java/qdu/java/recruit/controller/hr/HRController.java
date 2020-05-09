@@ -6,25 +6,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
-import qdu.java.recruit.entity.CompanyEntity;
-import qdu.java.recruit.entity.DepartmentEntity;
-import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.entity.PositionEntity;
+import qdu.java.recruit.entity.*;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
   <p>
@@ -39,7 +30,7 @@ import java.util.TreeMap;
  */
 @RestController
 @Api(value = "HR接口",description = "HR接口")
-public class HRController extends BaseController {
+public class HRController extends BaseController{
 
     protected Logger logger = LogManager.getLogger(getClass());
 
@@ -228,6 +219,8 @@ public class HRController extends BaseController {
 
         return userDirect("logout_success");
     }
+
+
 
 
 

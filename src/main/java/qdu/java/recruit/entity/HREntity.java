@@ -10,6 +10,18 @@ public class HREntity {
     private String description;
     private int departmentId;
 
+    public HREntity() {
+    }
+
+    public HREntity(String hrMobile, String hrPassword, String hrName, String hrEmail, String description, int departmentId) {
+        this.hrMobile = hrMobile;
+        this.hrPassword = hrPassword;
+        this.hrName = hrName;
+        this.hrEmail = hrEmail;
+        this.description = description;
+        this.departmentId = departmentId;
+    }
+
     public int getHrId() {
         return hrId;
     }

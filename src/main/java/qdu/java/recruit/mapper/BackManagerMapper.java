@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public interface BackManagerMapper {
     @Select("SELECT COUNT(*) FROM `admin` WHERE userid = #{userid} AND password = md5(#{password})")
-    Integer backLogin(@Param("userid") Long userid,@Param("password") String password);
+    Integer backLogin(@Param("userid") Long userid, @Param("password") String password);
 
     @Select("SELECT COUNT(*) AS 'usernum',`province` AS 'area' FROM `user` GROUP BY `province`")
     ArrayList<UserAreaEntity> userArea();
@@ -28,5 +28,5 @@ public interface BackManagerMapper {
     WebCountEntity getWebCount();
 
     @Insert("INSERT INTO `company`(`companyLogo`,`state`,`companyName`,`companyCode`,`description`) VALUES (7,1,#{companyName},#{companyCode},#{description})")
-    Integer addCompany(@Param("companyName") String companyName,@Param("companyCode") String companyCode,@Param("description") String description);
+    Integer addCompany(@Param("companyName") String companyName, @Param("companyCode") String companyCode, @Param("description") String description);
 }

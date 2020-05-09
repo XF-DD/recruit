@@ -49,7 +49,6 @@ public class RecPositionUtil {
         int userId = user.getUserId();
         int resumeId = 0;
 
-        //获取简历
         if(posConst.resumeMapper.getResumeById(userId)!= null){
             resumeId = posConst.resumeMapper.getResumeId(userId);
         }
@@ -83,15 +82,13 @@ public class RecPositionUtil {
         ArithmeticUtil recArithmetic = new ArithmeticUtil();
 
         //根据活跃度标准判断调用的推荐算法
-        //if (activation < actStandard) {
-        //
-        long x = System.currentTimeMillis();
+        if (activation < actStandard) {
+
             posList = recArithmetic.popularityRec(map, user);
-        System.out.println(System.currentTimeMillis() - x);
-        //} else {
-        //
-        //    posList = recArithmetic.synergyItemRec(user);
-        //}
+        } else {
+
+            posList = recArithmetic.synergyItemRec(user);
+        }
 
         return posList;
     }
