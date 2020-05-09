@@ -14,5 +14,7 @@ public interface FavorService {
 
     boolean favorOrNot(int userId, int posId);
 
+    boolean favorOrNotByPosId(int posId);
+
     boolean disfavorPosition(int userId, int posId);
 }

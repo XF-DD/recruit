@@ -64,6 +64,7 @@ public class ResumeController extends BaseController {
 
         positionList = positionService.listPositionByHr(hr.getHrId());
         for(PositionEntity position : positionList){
+            if(!favorService.favorOrNotByPosId(position.getPositionId())) continue;
             List<FavorPositionBO> favorPositionBo = favorService.listFavorByPositionId(position.getPositionId());
             for(FavorPositionBO favor : favorPositionBo){
                 UserEntity user  = userService.getUser(favor.getUserId());
