@@ -17,13 +17,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationMapper applicationMapper;
 
     @Override
-    public boolean applyPosition(int resumeId, int positionId) {
+    public boolean applyPosition(int resumeId, int positionId,int hrId,int userId) {
 
         //获取当前日期时间
         java.util.Date date = new java.util.Date();
         Timestamp recentTime = new Timestamp(date.getTime());
 
-        int result = applicationMapper.saveApplication(recentTime, resumeId, positionId);
+        int result = applicationMapper.saveApplication(recentTime, resumeId, positionId,hrId,userId);
         if (result > 0) {
             return true;
         }

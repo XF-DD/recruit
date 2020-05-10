@@ -26,8 +26,8 @@ public interface ApplicationMapper {
     @Select("select resumeId,userId from application where applicationId = #{applicationId} limit 1")
     ApplicationResumeHRBO getApplicationResumeHRBO(@Param("applicationId") int applicationId);
 
-    @Insert("insert into application(state,recentTime,resumeId,positionId) values (0,#{recentTime},#{resumeId},#{positionId})")
-    int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId);
+    @Insert("insert into application(state,recentTime,resumeId,positionId，hrId,userId) values (0,#{recentTime},#{resumeId},#{positionId},#{hrId}),#{userId}")
+    int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId,@Param("hrId") int hrId,@Param("userId") int userId);
 
     /**
      * 申请处理完成：查询返回 申请 职位 处理hr信息

@@ -47,6 +47,7 @@ public class ResumeController extends BaseController {
             return errorDirect_404();
         }
         List<PostedRecumeBO> resumes = resumeService.getResumeByState(hr.getHrId(),state);
+
         Map output = new TreeMap();
         output.put("resumes",resumes);
 
@@ -104,13 +105,11 @@ public class ResumeController extends BaseController {
     */
     @PostMapping(value = "/hr/resume/ResumeDesc")
     @ResponseBody
-    public String getResumeDesc(HttpServletRequest request){
+    public String getResumeDesc(HttpServletRequest request,@RequestParam(value="applicationId",defaultValue = "")int applicationId){
         HREntity hr = this.getHR(request);
         if(hr == null) {
             return errorDirect_404();
         }
-        int applicationId = (int) request.getSession().getAttribute("applicationId");
-
         ApplicationResumeHRBO applicationResumeHRBO = applicationService.getResumeHRBO(applicationId);
         UserEntity userEntity = userService.getUser(applicationResumeHRBO.getUserId());
         ResumeEntity resumeEntity = resumeService.getResumeById(applicationResumeHRBO.getResumeId());

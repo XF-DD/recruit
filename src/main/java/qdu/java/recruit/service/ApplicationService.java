@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ApplicationService {
 
-    boolean applyPosition(int resumeId, int positionId);
+    boolean applyPosition(int resumeId, int positionId,int hrId,int userId);
 
     int updateResumeState(int state,int applicationid);
 

@@ -299,7 +299,7 @@ public class DataController extends BaseController {
         if (resume == null) {
             return "redirect:/user/info?type=person";
         }
-        boolean result = applicationService.applyPosition(resume.getResumeId(), position.getPositionId());
+        boolean result = applicationService.applyPosition(resume.getResumeId(), position.getPositionId(),position.getHrIdPub(),resume.getUserId());
         if (!result) {
             this.errorDirect_404();
         }
@@ -579,6 +579,8 @@ public class DataController extends BaseController {
 
         return "redirect:/user/login";
     }
+
+
 
 
 }

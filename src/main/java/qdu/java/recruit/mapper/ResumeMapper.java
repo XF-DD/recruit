@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Update;
 import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.pojo.PostedRecumeBO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ResumeMapper {
@@ -31,7 +30,7 @@ public interface ResumeMapper {
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
             "where hrId = #{hrId} and state = #{state} order by a.recentTime DESC")
-    ArrayList<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId ,@Param("status") int state);
+   List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId ,@Param("state") int state);
 
 
     //查看所有简历
