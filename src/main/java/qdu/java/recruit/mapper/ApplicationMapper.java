@@ -29,6 +29,10 @@ public interface ApplicationMapper {
     @Insert("insert into application(state,recentTime,resumeId,positionId，hrId,userId) values (0,#{recentTime},#{resumeId},#{positionId},#{hrId}),#{userId}")
     int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId,@Param("hrId") int hrId,@Param("userId") int userId);
 
+    //安排面试，输入(String时间地点)
+    @Update("UPDATE application SET state=#{flag},interviewsDesc = #{interviewsDesc} WHERE applicationId = #{applicationId} AND state!=-1")
+    int OperateInterviews(@Param("flag")int flag , @Param("interviewsDesc") String interviewsDesc,@Param("applicationId") int applicationId);
+
     /**
      * 申请处理完成：查询返回 申请 职位 处理hr信息
      * @param resumeId

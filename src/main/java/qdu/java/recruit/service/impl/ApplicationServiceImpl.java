@@ -30,6 +30,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         return false;
     }
 
+    //安排面试
+    @Override
+    public int arrangeInterview(String interviewsDesc,int applicationId,int flag){
+        return applicationMapper.OperateInterviews(flag,interviewsDesc,applicationId);
+    }
+
     @Override
     public int updateResumeState(int state, int applicationid) {
         return applicationMapper.updateResume(state,applicationid);

@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @RestController
-@Api(value = "Resume接口")
+@Api(value = "Resume接口",description = "Resume接口")
 public class ResumeController extends BaseController {
 
     @Autowired
@@ -97,6 +97,36 @@ public class ResumeController extends BaseController {
         return jsonObject.toString();
     }
 
+    /**
+     * 移除简历（条件不符合或者面试不通过）
+     */
+    @PutMapping("/hr/removeresume/{applicationId}")
+    public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
+        HREntity hr = this.getHR(request);
+        if(hr == null) {
+            return errorDirect_404();
+        }
+        if (applicationService.updateResumeState(-1,applicationId)==0){
+            return errorDirect_404();
+        }
+        return "查看简历界面";
+    }
+
+    /**
+     * 安排面试    flag=1 代表 1面
+     */
+    @PutMapping("/hr/Interview/{applicationId}")
+    public String arrangeInterview(HttpServletRequest request, @RequestParam int flag,@RequestParam String interviewsDesc,@PathVariable int applicationId ) {
+        HREntity hr = this.getHR(request);
+        String interviewDesc = interviewsDesc +"("+ flag + "面）";
+        if(hr == null) {
+            return errorDirect_404();
+        }
+        if (applicationService.arrangeInterview(interviewDesc,applicationId,(flag+1))==0){
+            return errorDirect_404();
+        }
+        return "查看简历界面111";
+    }
 
     /**
      *   查看简历具体信息
