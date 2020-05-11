@@ -33,6 +33,11 @@ public interface ApplicationMapper {
     @Update("UPDATE application SET state=#{flag},interviewsDesc = #{interviewsDesc} WHERE applicationId = #{applicationId} AND state!=-1")
     int OperateInterviews(@Param("flag")int flag , @Param("interviewsDesc") String interviewsDesc,@Param("applicationId") int applicationId);
 
+
+    @Select("select * from application where applicationId=1")
+    ApplicationEntity test();
+
+
     /**
      * 申请处理完成：查询返回 申请 职位 处理hr信息
      * @param resumeId

@@ -15,10 +15,10 @@ public class ApplicationServiceTest {
     @Autowired
     private ApplicationService applicationService;
 
-    @Test
-    public void applyPositionTest(){
-        boolean result = applicationService.applyPosition(5,1);
-        Assert.assertEquals(true,result);
-    }
+//    @Test
+//    public void applyPositionTest(){
+//        boolean result = applicationService.applyPosition(5,1);
+//        Assert.assertEquals(true,result);
+//    }
 
 }

@@ -1,6 +1,7 @@
 package qdu.java.recruit.service;
 
 import qdu.java.recruit.entity.ResumeEntity;
+import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.pojo.PostedRecumeBO;
 
 import java.util.List;
@@ -18,4 +19,9 @@ public interface ResumeService {
     boolean updateResume(ResumeEntity resumeEntity);
 
     boolean createResume(ResumeEntity resumeEntity);
+
+    //以下新增
+    List<UserEntity> searchUser(int hrId, String keyword, int page, int limit);
+
+    boolean sendNews(int state, int applicationId, String interviewsDesc, int hrId);
 }
