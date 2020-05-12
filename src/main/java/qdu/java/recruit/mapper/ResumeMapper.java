@@ -32,7 +32,7 @@ public interface ResumeMapper {
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
             "where hrId = #{hrId} and state = #{state} order by a.recentTime DESC")
-   List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId ,@Param("state") int state);
+   List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId, @Param("state") int state);
 
 
     //查看所有简历
@@ -48,7 +48,7 @@ public interface ResumeMapper {
             "join position  p on p.positionId = a.positionId \n"+
             "where hrId = #{hrId} and state >=2 \n" +
             "order by a.recentTime DESC")
-    List<PostedRecumeBO> getInterviewResume(@Param("hrId")int hrId);
+    List<PostedRecumeBO> getInterviewResume(@Param("hrId") int hrId);
 
 
     //将获得offer的学生，state设置为-3
@@ -64,7 +64,7 @@ public interface ResumeMapper {
 
     //新增未测试，搜索用户
     @Select("select b.applicationId,a.* from user as a, application as b where a.userId = b.userId and b.hrId=#{hrId} and (a.mobile like #{keyword} or a.name like #{keyword})")
-    ArrayList<UserEntity> searchUser(@Param("hrId") int hrId, @Param("keyword") String keyword);
+    ArrayList<PostedRecumeBO> searchUser(@Param("hrId") int hrId, @Param("keyword") String keyword);
 
     //发送面试信息
     @Insert("insert into message(state,news,hrId,userId) " +
@@ -73,6 +73,6 @@ public interface ResumeMapper {
 
     //通过applicationId找到userId
     @Select("select userId from application where applicationId = #{applicationId}")
-    int getUserId(@Param("applicationId")int applicationId);
+    int getUserId(@Param("applicationId") int applicationId);
 
 }

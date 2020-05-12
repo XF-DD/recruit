@@ -60,9 +60,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     //以下新增
     @Override
-    public List<UserEntity> searchUser(int hrId, String keyword, int page, int limit) {
+    public List<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
         PageHelper.startPage(page, limit);
-        List<UserEntity> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
+        List<PostedRecumeBO> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
         return searchList;
     }
 

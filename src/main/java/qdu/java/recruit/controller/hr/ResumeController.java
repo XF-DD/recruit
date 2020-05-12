@@ -173,7 +173,7 @@ public class ResumeController extends BaseController {
             return errorDirect_404();
         }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
-        List<UserEntity> posInfo = resumeService.searchUser(hr.getHrId(), keyword, page, limit);
+        List<PostedRecumeBO> posInfo = resumeService.searchUser(hr.getHrId(), keyword, page, limit);
 
         Map output = new TreeMap();
         output.put("hr", hr);

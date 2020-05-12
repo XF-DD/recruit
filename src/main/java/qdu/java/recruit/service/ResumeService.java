@@ -10,7 +10,7 @@ public interface ResumeService {
 
     ResumeEntity getResumeById(int userId);
 
-    List<PostedRecumeBO> getResumeByState(int hrId,int state);
+    List<PostedRecumeBO> getResumeByState(int hrId, int state);
 
     List<PostedRecumeBO> getAllResume(int hrId);
 
@@ -21,7 +21,7 @@ public interface ResumeService {
     boolean createResume(ResumeEntity resumeEntity);
 
     //以下新增
-    List<UserEntity> searchUser(int hrId, String keyword, int page, int limit);
+    List<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit);
 
     boolean sendNews(int state, int applicationId, String interviewsDesc, int hrId);
 }
