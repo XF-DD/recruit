@@ -120,9 +120,9 @@ public class HRController extends BaseController {
             return 0;
         }
 
-        if (hrService.loginHR(hrName, hrPass)) {
+        if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
-            httpSession.setAttribute("hr", hrService.getHRByMobile(hrName));
+            httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
             return 1;
         }
         return 0;
@@ -188,7 +188,8 @@ public class HRController extends BaseController {
      * @return
      */
     @PostMapping("/hr/info/update")
-    public String updateInfo(HttpServletRequest request,
+    public String updateInfo(HttpSession httpSession,
+                             HttpServletRequest request,
                              @RequestParam("hrMobile") String mobile,
                              @RequestParam("hrPassword") String password,
                              @RequestParam("hrName") String name,
@@ -209,8 +210,13 @@ public class HRController extends BaseController {
 
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
+        }else {
+            if (hrService.loginHR(mobile, password)) {
+                System.out.println("匹配到了");
+                httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
+            }
         }
-        return this.hrDirect("hr_info");
+        return this.hrDirect("hr_info");git
     }
 
     /**
