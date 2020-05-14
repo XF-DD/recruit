@@ -204,6 +204,7 @@ public class HRController extends BaseController {
         HREntity.setHrPassword(password);
         HREntity.setHrName(name);
         HREntity.setHrEmail(email);
+        HREntity.setDescription(description);
         HREntity.setDepartmentId(departmentId);
 
         if (!hrService.updateHR(HREntity)) {

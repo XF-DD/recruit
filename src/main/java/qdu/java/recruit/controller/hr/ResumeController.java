@@ -83,7 +83,7 @@ public class ResumeController extends BaseController {
      *   根据hrId查询正在面试中的简历(包括一面，二面...)
      *   @author  PocketKnife
      *   @create  19:11 2020/5/9
-    */
+     */
     @GetMapping(value = "/hr/resume/interviewresume")
     @ResponseBody
     public String getInterviewResume(HttpServletRequest request){
@@ -123,10 +123,10 @@ public class ResumeController extends BaseController {
         if(hr == null) {
             return errorDirect_404();
         }
-        if (applicationService.arrangeInterview(interviewDesc,applicationId,(flag+1))==0){
+        if (applicationService.arrangeInterview(applicationId,(flag+1))==0){
             return errorDirect_404();
         }else {
-            if(!resumeService.sendNews((flag+1), applicationId, interviewsDesc, hr.getHrId()))
+            if(!resumeService.sendNews((flag+1), applicationId, interviewDesc, hr.getHrId()))
                 return "发送信息失败";
             else
                 return "成功";

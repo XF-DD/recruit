@@ -30,9 +30,8 @@ public interface ApplicationMapper {
     int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId,@Param("hrId") int hrId,@Param("userId") int userId);
 
     //安排面试，输入(String时间地点)
-    @Update("UPDATE application SET state=#{flag},interviewsDesc = #{interviewsDesc} WHERE applicationId = #{applicationId} AND state!=-1")
-    int OperateInterviews(@Param("flag")int flag , @Param("interviewsDesc") String interviewsDesc,@Param("applicationId") int applicationId);
-
+    @Update("UPDATE application SET state=#{flag} WHERE applicationId = #{applicationId} AND state!=-1")
+    int OperateInterviews(@Param("flag")int flag , @Param("applicationId") int applicationId);
 
     @Select("select * from application where applicationId=1")
     ApplicationEntity test();

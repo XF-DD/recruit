@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50087
 File Encoding         : 65001
 
-Date: 2020-05-11 22:21:16
+Date: 2020-05-14 23:50:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,7 +44,6 @@ CREATE TABLE `application` (
   `resumeId` int(11) NOT NULL,
   `positionId` int(11) NOT NULL,
   `hrId` int(11) NOT NULL,
-  `interviewsDesc` varchar(255) default NULL,
   `userId` int(11) NOT NULL,
   PRIMARY KEY  (`applicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -52,9 +51,9 @@ CREATE TABLE `application` (
 -- ----------------------------
 -- Records of application
 -- ----------------------------
-INSERT INTO `application` VALUES ('1', '2', '2020-05-09 15:06:53', '1', '16', '6', '下午6点来我家(1面）', '1');
-INSERT INTO `application` VALUES ('2', '1', '2020-05-09 15:52:32', '1', '16', '6', null, '1');
-INSERT INTO `application` VALUES ('3', '0', '2020-05-09 16:00:21', '1', '16', '6', null, '1');
+INSERT INTO `application` VALUES ('1', '-3', null, '1', '16', '6', '1');
+INSERT INTO `application` VALUES ('2', '-2', '2020-05-09 15:52:32', '1', '16', '6', '1');
+INSERT INTO `application` VALUES ('3', '-2', '2020-05-09 16:00:21', '1', '16', '6', '1');
 
 -- ----------------------------
 -- Table structure for category
@@ -217,14 +216,14 @@ CREATE TABLE `hr` (
 -- ----------------------------
 -- Records of hr
 -- ----------------------------
-INSERT INTO `hr` VALUES ('1', '1234568', '4QrcOUm6Wau+VuBX8g+IPg==', '董一鸣', 'dongyiming@163.com', '行政部HR', '2');
-INSERT INTO `hr` VALUES ('2', '13685653625', 'e10adc3949ba59abbe56e057f20f883e', '张帆', 'zhangfan@163.com', '行政部HR', '5');
-INSERT INTO `hr` VALUES ('3', '18596475235', 'e10adc3949ba59abbe56e057f20f883e', '李斌', 'libin@163.com', '行政部HR', '8');
-INSERT INTO `hr` VALUES ('4', '16785253625', 'e10adc3949ba59abbe56e057f20f883e', '王语意', 'wangyuyi@163.com', '行政部HR', '11');
-INSERT INTO `hr` VALUES ('5', '17865253625', 'e10adc3949ba59abbe56e057f20f883e', '李星泽', 'lixingze@163.com', '行政部HR', '14');
-INSERT INTO `hr` VALUES ('6', '123456', '4QrcOUm6Wau+VuBX8g+IPg==', '程瑜', 'chengyu@163.com', '行政部HR', '17');
-INSERT INTO `hr` VALUES ('8', '15521626016', 'Omu+D4HSM8slw+RLRLEC5w==', null, null, null, '16');
-INSERT INTO `hr` VALUES ('9', '1234567', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
+INSERT INTO `hr` VALUES ('1', '1', '4QrcOUm6Wau+VuBX8g+IPg==', '董一鸣', 'dongyiming@163.com', '行政部HR', '2');
+INSERT INTO `hr` VALUES ('2', '2', '4QrcOUm6Wau+VuBX8g+IPg==', '张帆', 'zhangfan@163.com', '行政部HR', '5');
+INSERT INTO `hr` VALUES ('3', '3', '4QrcOUm6Wau+VuBX8g+IPg==', '李斌', 'libin@163.com', '行政部HR', '8');
+INSERT INTO `hr` VALUES ('4', '4', '4QrcOUm6Wau+VuBX8g+IPg==', '王语意', 'wangyuyi@163.com', '行政部HR', '11');
+INSERT INTO `hr` VALUES ('5', '5', '4QrcOUm6Wau+VuBX8g+IPg==', '李星泽', 'lixingze@163.com', '行政部HR', '14');
+INSERT INTO `hr` VALUES ('6', '6', '4QrcOUm6Wau+VuBX8g+IPg==', '哈哈哈', '54173@qq.com', '牛皮就完事了', '17');
+INSERT INTO `hr` VALUES ('8', '8', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
+INSERT INTO `hr` VALUES ('9', '9', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
 
 -- ----------------------------
 -- Table structure for message
@@ -238,11 +237,12 @@ CREATE TABLE `message` (
   `hrId` int(255) default NULL,
   `state` int(255) default NULL,
   PRIMARY KEY  (`messageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
+INSERT INTO `message` VALUES ('1', '恭喜你通过面试！请晚上来我家', '1', '1', '6', '-3');
 
 -- ----------------------------
 -- Table structure for position
@@ -284,7 +284,7 @@ INSERT INTO `position` VALUES ('12', 'Python开发', '精通Python，2年或以�
 INSERT INTO `position` VALUES ('13', '数据挖掘工程师', '熟悉 Linux平台上的编程环境，精通Java开发，精通 Python/Shell等脚本语言', '12', '天津市', '22000', '15000', '2017-11-05', null, '1', '4', '6', '7', '3');
 INSERT INTO `position` VALUES ('14', '数据挖掘工程师', '熟悉Hadoop、Hive、Spark、流式计算、实时计算等大数据相关技术者优先，熟悉时序挖掘、文本挖掘、网络挖掘等优先', '2', '北京市', '32000', '28000', '2017-11-06', null, '1', '7', '6', '1', '1');
 INSERT INTO `position` VALUES ('15', '数据挖掘工程师', '精通Python，熟悉PHP/GO/Java/C++/C等语言中的一种或几种', '2', '杭州市', '26000', '14000', '2017-11-08', null, '1', '20', '6', '13', '5');
-INSERT INTO `position` VALUES ('16', 'Java工程师', '熟悉Spring、Freemark、Struts、Hibernate 等开源框架', '13', '杭州市', '18000', '15000', '2017-11-11', null, '1', '11', '1', '17', '6');
+INSERT INTO `position` VALUES ('16', 'Java工程师', '熟悉Spring、Freemark、Struts、Hibernate 等开源框架', '13', '杭州市', '18000', '15000', '2017-11-11', null, '1', '12', '1', '17', '6');
 INSERT INTO `position` VALUES ('17', 'Java后端开发', '熟练使用Mybatis，SpringMVC，SpringCloud等框架', '5', '杭州市', '21000', '18000', '2017-10-23', null, '1', '3', '1', '13', '5');
 INSERT INTO `position` VALUES ('18', 'C++后端开发', '熟练linux系统操作，熟练gcc,gdb,vim, eclipse等开发工具', '5', '北京市', '12000', '9000', '2017-10-28', null, '1', '0', '2', '1', '1');
 

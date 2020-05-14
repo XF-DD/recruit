@@ -1,6 +1,7 @@
 package qdu.java.recruit.controller.hr;
 
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+@RestController
+@Api(value = "职位管理",description = "职位管理")
 public class PositionController extends BaseController {
     /**
      * postion part
@@ -174,6 +177,10 @@ public class PositionController extends BaseController {
         return positionService.updatePosition(positionEntity);
     }
 
+
+    /**
+     * 职位创建
+     */
     @PostMapping("hr{id}/position/create")
     public int createPosition(ModelMap modelMap, HttpServletRequest request, @PathVariable int id, PositionEntity positionEntity) {
         HREntity hr = this.getHR(request);
