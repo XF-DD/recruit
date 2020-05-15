@@ -3,6 +3,7 @@ package qdu.java.recruit.service;
 import com.github.pagehelper.PageInfo;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.entity.UserEntity;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 
 import java.util.List;
@@ -47,12 +48,16 @@ public interface PositionService {
     PositionEntity getPositionById(int positionId);
 
     /**
-     * 根据hrid查询返回职位
+     * 根据hrid查询返回职位包含分类信息
      *
      * @param hrid
      * @return
      */
-    PageInfo<PositionEntity> listPositionByHr(int hrid, int page, int limit);
+    PageInfo<PositionCategoryHRBO> listPositionByHrWithCag(int hrid, int page, int limit);
+
+    List<PositionCategoryHRBO> listPositionByHrWithCag(int hrid);
+
+
 
     List<PositionEntity> listPositionByHr(int hrid);
 

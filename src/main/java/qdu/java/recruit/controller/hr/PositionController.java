@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.*;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,10 +59,9 @@ public class PositionController extends BaseController {
      * @param request
      * @return
      */
-    @GetMapping("/hr{id}/position/{page}")
+    @GetMapping("/hr/position/{page}")
     @ResponseBody
     public String showPostionInfo(HttpServletRequest request,
-                                  @PathVariable int id,
                                   @PathVariable int page,
                                   @RequestParam(value = "limit", defaultValue = "12") int limit){
 
@@ -71,10 +71,10 @@ public class PositionController extends BaseController {
             this.errorDirect_404();
             //其实应该返回的是401，或者403
         }
-        id = hr.getHrId();
+        int id = hr.getHrId();
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-        PageInfo<PositionEntity> positionEntities = positionService.listPositionByHr(id,page,limit);
+        PageInfo<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id,page,limit);
 
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));

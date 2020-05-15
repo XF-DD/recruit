@@ -37,6 +37,7 @@ public class ResumeController extends BaseController {
      *   查询简历
      *   通过state判断查询的简历状态，返回相应状态的简历
      *   可查询新、备选、放弃、未通过、通过、一面、二面简历
+     *   0 1 -1 -2 -3 2 3
      *   @author  PocketKnife
      *   @create  23:34 2020/5/9
     */

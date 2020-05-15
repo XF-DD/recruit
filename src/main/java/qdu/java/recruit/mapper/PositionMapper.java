@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.entity.UserEntity;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 
 import java.util.ArrayList;
@@ -17,7 +18,10 @@ public interface PositionMapper {
     @Select("select * from position where positionId = #{posId} and statePub = 1")
     PositionEntity getPosition(@Param("posId") int posId);
 
-    @Select("select * from position where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
+    @Select("select p.*,c.* from position p , category c where p.hrIdPub = #{hrId} and p.statePub = 1 and p.categoryId = c.categoryId order by p.releaseDate DESC")
+    ArrayList<PositionCategoryHRBO> listHRPosWithCag(@Param("hrId") int hrId);
+
+    @Select("select * from position  where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
     @Select("select p.*,c.* from position p,department d,company c \n" +
