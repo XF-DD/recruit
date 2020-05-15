@@ -7,8 +7,11 @@ public class ApplicationEntity {
     private int applicationState;
     private Timestamp recentTime;
 
+    //简历
     private int resumeId;
+    //岗位
     private int positionId;
+    //hr
     private int hrId;
 
     public int getApplicationId() {
