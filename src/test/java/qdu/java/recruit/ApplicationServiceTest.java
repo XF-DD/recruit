@@ -17,7 +17,7 @@ public class ApplicationServiceTest {
 
     @Test
     public void applyPositionTest(){
-        boolean result = applicationService.applyPosition(5,1);
+        boolean result = applicationService.applyPosition(1,1,1,3);
         Assert.assertEquals(true,result);
     }
 
