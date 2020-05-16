@@ -54,6 +54,14 @@ public class PositionController extends BaseController {
     @Autowired
     CompanyService companyService;
 
+
+    /**
+     *
+     */
+
+
+//===============以上新增5/16====================
+
     /**
      * 职位信息表
      * @param request
@@ -192,6 +200,7 @@ public class PositionController extends BaseController {
             modelMap.put("categoryEntities",categoryEntities);
             positionEntity.setReleaseDate(new Date());
             positionEntity.setStatePub(1);
+            positionEntity.setHrIdPub(id);
             return positionService.savePosition(positionEntity);
 
 

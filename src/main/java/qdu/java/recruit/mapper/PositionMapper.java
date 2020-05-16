@@ -61,10 +61,10 @@ public interface PositionMapper {
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
-    @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
+    @Insert("insert into position (title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
             "departmentId,categoryId,hrIdPub) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
-            "#{departmentId},#{categoryId},#{hrIdPub}")
+            "#{departmentId},#{categoryId},#{hrIdPub})")
     int savePosition(PositionEntity positionEntity);
 
 }
