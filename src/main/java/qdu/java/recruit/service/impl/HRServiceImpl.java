@@ -90,11 +90,6 @@ public class HRServiceImpl implements HRService {
             System.out.println("md5加密出错");
         } catch (UnsupportedEncodingException e) {
             System.out.println("编码转化错误");
-<<<<<<< HEAD
-        } catch (Exception e){
-            System.out.println("=================MD5出錯===============");
-=======
->>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
         }
         return false;
     }

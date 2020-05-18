@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.mapper.PositionMapper;
-<<<<<<< HEAD
-=======
+
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
->>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
+
 import qdu.java.recruit.pojo.PositionCompanyBO;
 import qdu.java.recruit.service.PositionService;
 import qdu.java.recruit.util.RecPositionUtil;
@@ -122,19 +121,12 @@ public class PositionServiceImpl implements PositionService {
      * @return
      */
     @Override
-<<<<<<< HEAD
-    public PageInfo<PositionEntity> listPositionByHr(int hrid,int page, int limit) {
-        int total = positionMapper.countHRPos(hrid);
-        PageHelper.startPage(page, limit);
-        List<PositionEntity> posList = listPositionByHr(hrid);
-        PageInfo<PositionEntity> pagination = new PageInfo<>(posList);
-=======
+
     public PageInfo<PositionCategoryHRBO> listPositionByHrWithCag(int hrid,int page, int limit) {
         int total = positionMapper.countHRPos(hrid);
         PageHelper.startPage(page, limit);
         List<PositionCategoryHRBO> posList = listPositionByHrWithCag(hrid);
         PageInfo<PositionCategoryHRBO> pagination = new PageInfo<>(posList);
->>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
         pagination.setTotal(total);
         return pagination;
     }
@@ -145,14 +137,12 @@ public class PositionServiceImpl implements PositionService {
     *   @create  11:27 2020/5/9
     */
     @Override
-<<<<<<< HEAD
-=======
+
     public List<PositionCategoryHRBO> listPositionByHrWithCag(int hrid) {
         return positionMapper.listHRPosWithCag(hrid);
     }
 
     @Override
->>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
     public List<PositionEntity> listPositionByHr(int hrid) {
         return positionMapper.listHRPos(hrid);
     }
