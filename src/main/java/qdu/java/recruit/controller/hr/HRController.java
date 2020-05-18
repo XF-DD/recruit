@@ -17,6 +17,8 @@ import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
+
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -131,7 +133,11 @@ public class HRController extends BaseController {
 
 
     /**
+<<<<<<< HEAD
      * 用户个人信息 输出
+=======
+     * HR个人信息 输出
+>>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
      *
      * @param request
      * @return
@@ -155,7 +161,8 @@ public class HRController extends BaseController {
         //收件箱
         List<ApplicationPositionHRBO> applyPosList = applicationService.listApplyInfoByHr(id);
         //创建的职位
-        List<PositionEntity> positionEntities = positionService.listPositionByHr(id);
+        List<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id);
+
 
         Map output = new TreeMap();
         output.put("hr", hr);
