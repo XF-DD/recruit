@@ -133,11 +133,7 @@ public class HRController extends BaseController {
 
 
     /**
-<<<<<<< HEAD
-     * 用户个人信息 输出
-=======
      * HR个人信息 输出
->>>>>>> e63e69d7b159c22920a9a8c768ee3c98d6d2435a
      *
      * @param request
      * @return
