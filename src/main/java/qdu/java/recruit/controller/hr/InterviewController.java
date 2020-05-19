@@ -138,11 +138,4 @@ public class InterviewController extends BaseController{
         return "简历被放弃，并放入人才库";
     }
 
-
-
-
-
-
-
-
 }
