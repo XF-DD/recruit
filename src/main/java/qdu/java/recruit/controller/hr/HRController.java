@@ -15,7 +15,6 @@ import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;

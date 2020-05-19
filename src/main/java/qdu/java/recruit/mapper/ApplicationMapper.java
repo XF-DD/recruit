@@ -23,7 +23,7 @@ public interface ApplicationMapper {
     @Update("update application set state = #{flag} where applicationId = #{applicationId}")
     int updateResume(@Param("flag") int flag,@Param("applicationId") int applicationId);
 
-    @Select("select resumeId,userId from application where applicationId = #{applicationId} limit 1")
+    @Select("select state,resumeId,userId from application where applicationId = #{applicationId} limit 1")
     ApplicationResumeHRBO getApplicationResumeHRBO(@Param("applicationId") int applicationId);
 
     @Insert("insert into application(state,recentTime,resumeId,positionId,hrId,userId) values (0,#{recentTime},#{resumeId},#{positionId},#{hrId},#{userId})")
