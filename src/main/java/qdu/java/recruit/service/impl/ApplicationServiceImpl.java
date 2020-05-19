@@ -73,5 +73,4 @@ public class ApplicationServiceImpl implements ApplicationService {
     public ApplicationResumeHRBO getResumeHRBO(int applicationId) {
         return applicationMapper.getApplicationResumeHRBO(applicationId);
     }
-
 }

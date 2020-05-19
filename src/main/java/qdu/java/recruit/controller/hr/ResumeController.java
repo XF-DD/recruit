@@ -185,10 +185,13 @@ public class ResumeController extends BaseController {
     }
 
 
-    //==========================下面功能新增==========================
+    //==========================下面功能新增5/19==========================
 
     /**
      * 简历搜索功能
+     * 黄少龙
+     * 查询所有的简历按keywor
+     * 5/19
      */
     @PostMapping("/hr/search")
     @ResponseBody
@@ -199,8 +202,9 @@ public class ResumeController extends BaseController {
         if (hr == null) {
             return errorDirect_404();
         }
+        request.getSession().setAttribute("keyword",keyword);
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
-        List<PostedRecumeBO> posInfo = resumeService.searchUser(hr.getHrId(), keyword, page, limit);
+        PageInfo<PostedRecumeBO> posInfo = resumeService.searchUser(hr.getHrId(), keyword, page, limit);
 
         Map output = new TreeMap();
         output.put("hr", hr);
@@ -213,6 +217,40 @@ public class ResumeController extends BaseController {
         return jsonObject.toString();
     }
     /**
+     * 简历搜索功能
+     * 黄少龙
+     * 查询所有的简历按keywor+标题+状态
+     * 5/19
+     */
+    @GetMapping(value = "/hr/search/{state}")
+    @ResponseBody
+    public String ResumesearchBystate(HttpServletRequest request,
+                                      @PathVariable int state,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "limit", defaultValue = "6") int limit) {
+        HREntity hr = this.getHR(request);
+        if (hr == null) {
+            return errorDirect_404();
+        }
+        String keyword=(String)request.getSession().getAttribute("keyword");
+        page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+        List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
+        PageInfo<PostedRecumeBO> resumes = null;
+        if (positionIds == null) {
+            resumes = resumeService.getResumeByTitleAndState(hr.getHrId(), keyword,state, page, limit);  //直接按状态查找
+        } else {
+            resumes = resumeService.getResumeByTitleAndStateWithPosIds(hr.getHrId(), state, positionIds,keyword, page, limit);//按状态+标题（查出List positionId）
+        }
+
+        Map output = new TreeMap();
+        output.put("resumes", resumes);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+        return jsonObject.toString();
+
+    }
+
+    /**
+>>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * 发送信息   包括发送offer 和 通知面试未通过
      * //5/18 陈淯   合并 发送offer 和 通知面试未通过
      */

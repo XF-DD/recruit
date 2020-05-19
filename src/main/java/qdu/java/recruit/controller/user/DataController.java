@@ -2,7 +2,6 @@ package qdu.java.recruit.controller.user;
 
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
-import javafx.application.Application;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

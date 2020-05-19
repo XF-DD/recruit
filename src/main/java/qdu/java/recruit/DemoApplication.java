@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ServletComponentScan
-@ComponentScan
 @MapperScan("qdu.java.recruit.mapper")
 @EnableScheduling
 @EnableCaching

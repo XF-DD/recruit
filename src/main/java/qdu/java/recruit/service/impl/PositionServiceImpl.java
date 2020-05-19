@@ -32,6 +32,7 @@ public class PositionServiceImpl implements PositionService {
         return positionMapper.listTitle(hrId);
     }
 
+
     /**
      * 按照title查询职位Id
      */

@@ -29,7 +29,12 @@ public interface ResumeService {
     boolean createResume(ResumeEntity resumeEntity);
 
     //以下新增
-    List<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit);
+    PageInfo<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit);
 
     boolean sendNews(int state, int applicationId, String interviewsDesc, int hrId);
+
+    //5/19  黄少龙  搜索分页
+    PageInfo<PostedRecumeBO> getResumeByTitleAndState(int hrId, String keyword, int state, int page, int limit);
+
+    PageInfo<PostedRecumeBO> getResumeByTitleAndStateWithPosIds(int hrId, int state, List<Integer> positionIds, String keyword, int page, int limit);
 }

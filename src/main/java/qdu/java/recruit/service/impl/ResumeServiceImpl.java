@@ -24,7 +24,6 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeMapper.getResumeById(userId);
     }
 
-
     /**
      * 5/16陈淯
      * 5/18陈淯  添加分页
@@ -124,12 +123,15 @@ public class ResumeServiceImpl implements ResumeService {
         return false;
     }
 
-    //以下新增
+    //5/19 黄少龙
     @Override
-    public List<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
+    public PageInfo<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
         PageHelper.startPage(page, limit);
         List<PostedRecumeBO> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
-        return searchList;
+        int total = searchList.size();
+        PageInfo<PostedRecumeBO> searchListPageInfo = new PageInfo<>(searchList);
+        searchListPageInfo.setTotal(total);
+        return searchListPageInfo;
     }
 
     //5/19 陈淯  合并发送offer 和通知面试不通过
@@ -145,12 +147,13 @@ public class ResumeServiceImpl implements ResumeService {
             //记录发送信息
             if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
                 return false;
-            }if (state==-3){
+            }
+            if (state == -3) {
                 //将已发送offer的其他申请状态设为-2(未通过)
-               resumeMapper.setState1(-2, hrId, applicationId, userId);
+                resumeMapper.setState1(-2, hrId, applicationId, userId);
             }
             return true;
-        }else{
+        } else {
             //记录发送信息
             if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
                 return false;
@@ -159,6 +162,32 @@ public class ResumeServiceImpl implements ResumeService {
         }
     }
 
+    //5/19 黄少龙 搜索分页 按状态+关键字
+    @Override
+    public PageInfo<PostedRecumeBO> getResumeByTitleAndState(int hrId, String keyword, int state, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<PostedRecumeBO> postedResumeBOList = null;
+
+        postedResumeBOList = resumeMapper.getResumeByTitleAndState(hrId, state, "%" + keyword + "%");
+
+        int total = postedResumeBOList.size();
+        PageInfo<PostedRecumeBO> pagination = new PageInfo<>(postedResumeBOList);
+        pagination.setTotal(total);
+
+        return pagination;
+    }
+
+    //5/19 黄少龙 搜索分页 按标题+状态+关键字
+    @Override
+    public PageInfo<PostedRecumeBO> getResumeByTitleAndStateWithPosIds(int hrId, int state, List<Integer> positionIds, String keyword, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<PostedRecumeBO> postedResumeBOList = null;
+        postedResumeBOList = resumeMapper.getResumeByTitleAndStateWithPosIds(hrId, state, positionIds, "%" + keyword + "%");
+        int total = postedResumeBOList.size();
+        PageInfo<PostedRecumeBO> pagination = new PageInfo<>(postedResumeBOList);
+        pagination.setTotal(total);
+        return pagination;
+    }
 
 
 }

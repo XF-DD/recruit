@@ -3,6 +3,9 @@ package qdu.java.recruit.util.SMSUtil;
 import java.security.MessageDigest;
 
 public class CheckSumBuilder {
+    public static void main(String[] args) {
+        System.out.println("");
+    }
     // 计算并获取CheckSum
     public static String getCheckSum(String appSecret, String nonce, String curTime) {
         return encode("sha1", appSecret + nonce + curTime);

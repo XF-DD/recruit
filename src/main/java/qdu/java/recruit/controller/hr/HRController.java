@@ -6,12 +6,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
+import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
@@ -157,15 +161,7 @@ public class HRController extends BaseController{
     }
 
     /**
-     * <p>
-     * private int hrId;
-     * private String hrMobile;
-     * private String hrPassword;
-     * private String hrName;
-     * private String hrEmail;
-     * private String description;
-     * private int departmentId;
-     * </p>
+     *
      * 个人信息更新 功能
      *
      * @param request
@@ -201,6 +197,7 @@ public class HRController extends BaseController{
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
         } else {
+
             if (hrService.loginHR(mobile, password)) {
                 System.out.println("匹配到了");
                 httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));

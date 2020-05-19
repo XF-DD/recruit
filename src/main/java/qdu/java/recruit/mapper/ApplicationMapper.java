@@ -10,7 +10,6 @@ import qdu.java.recruit.pojo.ApplicationResumeHRBO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 public interface ApplicationMapper {
 

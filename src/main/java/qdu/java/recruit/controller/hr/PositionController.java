@@ -18,23 +18,6 @@ import java.util.*;
 @RestController
 @Api(value = "职位管理", description = "职位管理")
 public class PositionController extends BaseController {
-    /**
-     * postion part
-     * private int positionId;
-     * private String title; *
-     * private String requirement; *
-     * private int quantity; *
-     * private String workCity; *
-     * private int salaryUp; *
-     * private int salaryDown; *
-     * private Date releaseDate;
-     * private Date validDate;
-     * private int statePub; *
-     * private int hits;
-     * private int categoryId;
-     * private int departmentId;
-     * private int hrIdPub;
-     */
 
     @Autowired
     PositionService positionService;
@@ -122,7 +105,6 @@ public class PositionController extends BaseController {
 
     /**
      * 职位信息表
-     *
      * @param request
      * @return
      */
@@ -146,7 +128,7 @@ public class PositionController extends BaseController {
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
-        output.put("positions", positionEntities);
+        output.put("positions",positionEntities);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
@@ -156,7 +138,10 @@ public class PositionController extends BaseController {
 
     /**
      * 职位详情
+<<<<<<< HEAD
      *
+=======
+>>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * @param request
      * @param id
      * @return
@@ -297,12 +282,10 @@ public class PositionController extends BaseController {
         positionEntity.setHrIdPub(hr.getHrId());
         positionEntity.setCategoryId(categoryId);
         return positionService.savePosition(positionEntity);
-
     }
 
     /**
      * 权限验证
-     *
      * @param request
      * @param id
      * @return

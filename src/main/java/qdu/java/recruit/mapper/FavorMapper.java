@@ -30,9 +30,9 @@ public interface FavorMapper {
     ArrayList<FavorPositionBO> listFavorByPositionId(@Param("positionId") int userId);
 
     @Insert("insert into favor(userId,positionId) values (#{userId},#{posId})")
-    int saveFavor(@Param("userId") int userId, @Param("posId") int posId);
+    int saveFavor(@Param("userId") int userId,@Param("posId") int posId);
 
     @Delete("delete from favor where userId = #{userId} and positionId = #{posId}")
-    int removeFavor(@Param("userId") int userId, @Param("posId") int posId);
+    int removeFavor(@Param("userId") int userId,@Param("posId") int posId);
 }
 

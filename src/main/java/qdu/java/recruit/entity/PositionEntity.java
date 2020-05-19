@@ -19,7 +19,6 @@ public class PositionEntity {
     private int departmentId;
     private int hrIdPub;
 
-
     public int getPositionId() {
         return positionId;
     }
@@ -127,5 +126,4 @@ public class PositionEntity {
     public void setHrIdPub(int hrIdPub) {
         this.hrIdPub = hrIdPub;
     }
-
 }
