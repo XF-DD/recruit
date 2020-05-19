@@ -29,16 +29,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         return false;
     }
-
     //安排面试
     @Override
-    public int arrangeInterview(String interviewsDesc,int applicationId,int flag){
-        return applicationMapper.OperateInterviews(flag,interviewsDesc,applicationId);
+    public int arrangeInterview(int applicationId,int flag){
+        return applicationMapper.OperateInterviews(flag,applicationId);
     }
 
     @Override
-    public int updateResumeState(int state, int applicationid) {
-        return applicationMapper.updateResume(state,applicationid);
+    public int updateResumeState(int state, int applicationId) {
+        return applicationMapper.updateResume(state,applicationId);
     }
 
     /**
@@ -74,4 +73,5 @@ public class ApplicationServiceImpl implements ApplicationService {
     public ApplicationResumeHRBO getResumeHRBO(int applicationId) {
         return applicationMapper.getApplicationResumeHRBO(applicationId);
     }
+
 }

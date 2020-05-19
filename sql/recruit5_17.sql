@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50087
 File Encoding         : 65001
 
-Date: 2020-05-11 22:21:16
+Date: 2020-05-17 17:32:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,17 +44,25 @@ CREATE TABLE `application` (
   `resumeId` int(11) NOT NULL,
   `positionId` int(11) NOT NULL,
   `hrId` int(11) NOT NULL,
-  `interviewsDesc` varchar(255) default NULL,
   `userId` int(11) NOT NULL,
   PRIMARY KEY  (`applicationId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of application
 -- ----------------------------
-INSERT INTO `application` VALUES ('1', '2', '2020-05-09 15:06:53', '1', '16', '6', '下午6点来我家(1面）', '1');
-INSERT INTO `application` VALUES ('2', '1', '2020-05-09 15:52:32', '1', '16', '6', null, '1');
-INSERT INTO `application` VALUES ('3', '0', '2020-05-09 16:00:21', '1', '16', '6', null, '1');
+INSERT INTO `application` VALUES ('1', '-3', null, '1', '16', '6', '1');
+INSERT INTO `application` VALUES ('2', '-2', '2020-05-09 15:52:32', '1', '16', '6', '1');
+INSERT INTO `application` VALUES ('3', '-2', '2020-05-09 16:00:21', '1', '16', '6', '1');
+INSERT INTO `application` VALUES ('4', '0', '2020-05-15 14:12:43', '1', '10', '1', '1');
+INSERT INTO `application` VALUES ('5', '0', '2020-05-17 16:55:27', '2', '17', '6', '2');
+INSERT INTO `application` VALUES ('6', '0', '2020-05-17 16:55:59', '2', '16', '6', '2');
+INSERT INTO `application` VALUES ('7', '0', '2020-05-17 16:56:21', '2', '15', '6', '2');
+INSERT INTO `application` VALUES ('8', '0', '2020-05-17 16:57:08', '3', '17', '6', '3');
+INSERT INTO `application` VALUES ('9', '0', '2020-05-17 16:57:20', '3', '16', '6', '3');
+INSERT INTO `application` VALUES ('10', '0', '2020-05-17 16:57:30', '3', '14', '1', '3');
+INSERT INTO `application` VALUES ('11', '0', '2020-05-17 16:57:41', '3', '15', '6', '3');
+INSERT INTO `application` VALUES ('12', '0', '2020-05-17 17:30:24', '4', '1', '6', '4');
 
 -- ----------------------------
 -- Table structure for category
@@ -217,14 +225,14 @@ CREATE TABLE `hr` (
 -- ----------------------------
 -- Records of hr
 -- ----------------------------
-INSERT INTO `hr` VALUES ('1', '1234568', '4QrcOUm6Wau+VuBX8g+IPg==', '董一鸣', 'dongyiming@163.com', '行政部HR', '2');
-INSERT INTO `hr` VALUES ('2', '13685653625', 'e10adc3949ba59abbe56e057f20f883e', '张帆', 'zhangfan@163.com', '行政部HR', '5');
-INSERT INTO `hr` VALUES ('3', '18596475235', 'e10adc3949ba59abbe56e057f20f883e', '李斌', 'libin@163.com', '行政部HR', '8');
-INSERT INTO `hr` VALUES ('4', '16785253625', 'e10adc3949ba59abbe56e057f20f883e', '王语意', 'wangyuyi@163.com', '行政部HR', '11');
-INSERT INTO `hr` VALUES ('5', '17865253625', 'e10adc3949ba59abbe56e057f20f883e', '李星泽', 'lixingze@163.com', '行政部HR', '14');
-INSERT INTO `hr` VALUES ('6', '123456', '4QrcOUm6Wau+VuBX8g+IPg==', '程瑜', 'chengyu@163.com', '行政部HR', '17');
-INSERT INTO `hr` VALUES ('8', '15521626016', 'Omu+D4HSM8slw+RLRLEC5w==', null, null, null, '16');
-INSERT INTO `hr` VALUES ('9', '1234567', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
+INSERT INTO `hr` VALUES ('1', '1', '4QrcOUm6Wau+VuBX8g+IPg==', '董一鸣', 'dongyiming@163.com', '行政部HR', '2');
+INSERT INTO `hr` VALUES ('2', '2', '4QrcOUm6Wau+VuBX8g+IPg==', '张帆', 'zhangfan@163.com', '行政部HR', '5');
+INSERT INTO `hr` VALUES ('3', '3', '4QrcOUm6Wau+VuBX8g+IPg==', '李斌', 'libin@163.com', '行政部HR', '8');
+INSERT INTO `hr` VALUES ('4', '4', '4QrcOUm6Wau+VuBX8g+IPg==', '王语意', 'wangyuyi@163.com', '行政部HR', '11');
+INSERT INTO `hr` VALUES ('5', '5', '4QrcOUm6Wau+VuBX8g+IPg==', '李星泽', 'lixingze@163.com', '行政部HR', '14');
+INSERT INTO `hr` VALUES ('6', '6', '4QrcOUm6Wau+VuBX8g+IPg==', '嘻嘻', '54456@qq.com', '牛皮', '17');
+INSERT INTO `hr` VALUES ('8', '8', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
+INSERT INTO `hr` VALUES ('9', '9', '4QrcOUm6Wau+VuBX8g+IPg==', null, null, null, '16');
 
 -- ----------------------------
 -- Table structure for message
@@ -238,11 +246,12 @@ CREATE TABLE `message` (
   `hrId` int(255) default NULL,
   `state` int(255) default NULL,
   PRIMARY KEY  (`messageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of message
 -- ----------------------------
+INSERT INTO `message` VALUES ('1', '恭喜你通过面试！请晚上来我家', '1', '1', '6', '-3');
 
 -- ----------------------------
 -- Table structure for position
@@ -264,12 +273,12 @@ CREATE TABLE `position` (
   `departmentId` int(11) NOT NULL,
   `hrIdPub` int(11) NOT NULL,
   PRIMARY KEY  (`positionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of position
 -- ----------------------------
-INSERT INTO `position` VALUES ('1', 'Java工程师', '熟练使用RPC框架，具备相关的分布式开发经验', '3', '北京市', '12000', '7000', '2017-10-27', null, '1', '142', '1', '1', '1');
+INSERT INTO `position` VALUES ('1', 'Java工程师', '熟练使用RPC框架，具备相关的分布式开发经验', '3', '北京市', '12000', '7000', '2017-10-27', null, '1', '146', '1', '17', '6');
 INSERT INTO `position` VALUES ('2', 'Java工程师', '接收应届实习生，实习期满应聘上岗接收应届实习生，实习期满应聘上岗收应届实习生，实习期满应聘上岗', '5', '上海市', '16000', '11000', '2017-11-07', null, '1', '121', '1', '4', '2');
 INSERT INTO `position` VALUES ('3', 'Java工程师', '有扎实的java基础，熟悉分布式、缓存、异步消息等原理和应用', '15', '天津市', '13000', '10000', '2017-09-30', null, '1', '3', '1', '7', '3');
 INSERT INTO `position` VALUES ('4', 'Java工程师', 'JAVA WEB方向2年+经验', '2', '南京市', '16000', '12000', '2017-09-25', null, '1', '8', '1', '10', '4');
@@ -278,14 +287,14 @@ INSERT INTO `position` VALUES ('6', 'C++工程师', '3-5年工作经验，计算
 INSERT INTO `position` VALUES ('7', 'PHP工程师', '一年以上PHP开发经验 （项目经验丰富的，也可以升级为高级开发工程师）', '10', '上海市', '11000', '8000', '2017-11-10', null, '1', '82', '3', '4', '2');
 INSERT INTO `position` VALUES ('8', 'PHP工程师', '熟悉LNMP/WNMP开发环境 , 熟练使用Yaf, Yii, ThinkPHP等一种或多种框架', '5', '上海市', '12000', '7000', '2017-11-01', null, '1', '1', '3', '4', '2');
 INSERT INTO `position` VALUES ('9', '.NET工程师', '熟悉WinForm/WPF窗体开发并有实际项目经验', '2', '北京市', '13000', '11000', '2017-11-02', null, '1', '11', '4', '1', '1');
-INSERT INTO `position` VALUES ('10', 'Python数据分析', '熟练使用Linux，可以快速上手编写shell、powershell、cmd等操作系统脚本', '2', '北京市', '23000', '18000', '2017-10-09', null, '1', '43', '5', '1', '1');
+INSERT INTO `position` VALUES ('10', 'Python数据分析', '熟练使用Linux，可以快速上手编写shell、powershell、cmd等操作系统脚本', '2', '北京市', '23000', '18000', '2017-10-09', null, '1', '50', '5', '1', '1');
 INSERT INTO `position` VALUES ('11', 'Python开发', '4年以上互联网产品后台研发经验，2年以上后台构架经验', '2', '北京市', '22000', '18000', '2017-09-23', null, '1', '0', '5', '1', '1');
 INSERT INTO `position` VALUES ('12', 'Python开发', '精通Python，2年或以上Python项目经验', '3', '天津市', '16000', '14000', '2017-07-27', null, '1', '35', '5', '7', '3');
 INSERT INTO `position` VALUES ('13', '数据挖掘工程师', '熟悉 Linux平台上的编程环境，精通Java开发，精通 Python/Shell等脚本语言', '12', '天津市', '22000', '15000', '2017-11-05', null, '1', '4', '6', '7', '3');
-INSERT INTO `position` VALUES ('14', '数据挖掘工程师', '熟悉Hadoop、Hive、Spark、流式计算、实时计算等大数据相关技术者优先，熟悉时序挖掘、文本挖掘、网络挖掘等优先', '2', '北京市', '32000', '28000', '2017-11-06', null, '1', '7', '6', '1', '1');
-INSERT INTO `position` VALUES ('15', '数据挖掘工程师', '精通Python，熟悉PHP/GO/Java/C++/C等语言中的一种或几种', '2', '杭州市', '26000', '14000', '2017-11-08', null, '1', '20', '6', '13', '5');
-INSERT INTO `position` VALUES ('16', 'Java工程师', '熟悉Spring、Freemark、Struts、Hibernate 等开源框架', '13', '杭州市', '18000', '15000', '2017-11-11', null, '1', '11', '1', '17', '6');
-INSERT INTO `position` VALUES ('17', 'Java后端开发', '熟练使用Mybatis，SpringMVC，SpringCloud等框架', '5', '杭州市', '21000', '18000', '2017-10-23', null, '1', '3', '1', '13', '5');
+INSERT INTO `position` VALUES ('14', '数据挖掘工程师', '熟悉Hadoop、Hive、Spark、流式计算、实时计算等大数据相关技术者优先，熟悉时序挖掘、文本挖掘、网络挖掘等优先', '2', '北京市', '32000', '28000', '2017-11-06', null, '1', '8', '6', '1', '1');
+INSERT INTO `position` VALUES ('15', '数据挖掘工程师', '精通Python，熟悉PHP/GO/Java/C++/C等语言中的一种或几种', '2', '杭州市', '26000', '14000', '2017-11-08', null, '1', '22', '1', '17', '6');
+INSERT INTO `position` VALUES ('16', 'Java工程师', '熟悉Spring、Freemark、Struts、Hibernate 等开源框架', '13', '杭州市', '18000', '15000', '2017-11-11', null, '1', '17', '1', '17', '6');
+INSERT INTO `position` VALUES ('17', 'Java后端开发', '熟练使用Mybatis，SpringMVC，SpringCloud等框架', '5', '杭州市', '21000', '18000', '2017-10-23', null, '1', '5', '1', '17', '6');
 INSERT INTO `position` VALUES ('18', 'C++后端开发', '熟练linux系统操作，熟练gcc,gdb,vim, eclipse等开发工具', '5', '北京市', '12000', '9000', '2017-10-28', null, '1', '0', '2', '1', '1');
 
 -- ----------------------------
@@ -308,7 +317,7 @@ CREATE TABLE `resume` (
 -- ----------------------------
 INSERT INTO `resume` VALUES ('1', 'a', 'a', 'a', 'a', 'a', '1');
 INSERT INTO `resume` VALUES ('2', null, null, null, null, null, '2');
-INSERT INTO `resume` VALUES ('3', null, null, null, null, null, '3');
+INSERT INTO `resume` VALUES ('3', 'a', 'a', 'a', 'a', 'a', '3');
 INSERT INTO `resume` VALUES ('4', null, null, null, null, null, '4');
 INSERT INTO `resume` VALUES ('5', null, null, null, null, null, '5');
 INSERT INTO `resume` VALUES ('6', null, null, null, null, null, '6');
@@ -353,21 +362,21 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '13754258565', '4QrcOUm6Wau+VuBX8g+IPg==', '夏高兴', '0', null, '云淡天高', 'xiagaoxin@163.com', '北京市', '北京市', '硕士', '中南财经政法大学', null, null, '3');
-INSERT INTO `user` VALUES ('2', '16873315255', '4QrcOUm6Wau+VuBX8g+IPg==', '沈茂德', '0', null, '冷酷的云', 'shenmaode@163.com', '北京市', '北京市', '本科', '湖南师范大学', null, null, '3');
-INSERT INTO `user` VALUES ('3', '16535356412', '4QrcOUm6Wau+VuBX8g+IPg==', '杜文瑞', '0', null, '我心寂寞', 'duwenrui@163.com', '上海市', '上海市', '本科', '东北财经大学', null, null, '1');
-INSERT INTO `user` VALUES ('4', '15785658371', '4QrcOUm6Wau+VuBX8g+IPg==', '彭友卉', '0', null, '尘封记忆', 'pengyouhui@163.com', '上海市', '上海市', '本科', '西南大学', null, null, '2');
-INSERT INTO `user` VALUES ('5', '16735259632', '4QrcOUm6Wau+VuBX8g+IPg==', '崔谷槐', '0', null, '飘雪无垠', 'cuiguhuai@163.com', '上海市', '上海市', '本科', '苏州大学', null, null, '2');
-INSERT INTO `user` VALUES ('6', '17898763255', '4QrcOUm6Wau+VuBX8g+IPg==', '魏茂材', '0', null, '风过无痕', 'weimaocai@163.com', '广东省', '广州市', '本科', '西北大学', null, null, '6');
-INSERT INTO `user` VALUES ('7', '17563522636', '4QrcOUm6Wau+VuBX8g+IPg==', '侯成文', '0', '1997', '星月相随', 'huochengwen', '湖北省', '武汉市', '硕士', '上海财经大学', '2019', '国际金融', '3');
-INSERT INTO `user` VALUES ('8', '18936258863', '4QrcOUm6Wau+VuBX8g+IPg==', '邵夜云', '1', null, '低调沉默者', 'shaoyeyun@163.com', '北京市', '北京市', '本科', '江苏大学', null, null, '2');
-INSERT INTO `user` VALUES ('9', '13752533625', '4QrcOUm6Wau+VuBX8g+IPg==', '方彭湃', '1', null, '梦醒童话', 'fangpengpai@163.com', '天津市', '天津市', '硕士', '西南政法大学', null, null, '4');
-INSERT INTO `user` VALUES ('10', '15763968252', '4QrcOUm6Wau+VuBX8g+IPg==', '熊新觉', '1', null, '咖啡的味道', 'xiongxinjue@163.com', '广东省', '广州市', '本科', '重庆医科大学', null, null, '3');
-INSERT INTO `user` VALUES ('11', '13685259986', '4QrcOUm6Wau+VuBX8g+IPg==', '肖又香', '1', null, '悬世尘埃', 'xiaoyouxiang@163.com', '浙江省', '杭州市', '大专', '福建师范大学', null, null, '2');
-INSERT INTO `user` VALUES ('12', '15788875236', '4QrcOUm6Wau+VuBX8g+IPg==', '严经纶', '0', null, '冰封夕阳', 'yanjinlun@163.com', '浙江省', '杭州市', '本科', '广州中医药大学', null, null, '6');
-INSERT INTO `user` VALUES ('13', '18766635865', '4QrcOUm6Wau+VuBX8g+IPg==', '邓和豫', '1', null, '隐水酣龙', 'dengheyu@163.com', '浙江省', '杭州市', '本科', '哈尔滨工程大学', null, null, '1');
-INSERT INTO `user` VALUES ('14', '15623527861', '4QrcOUm6Wau+VuBX8g+IPg==', '邓雪风', '0', null, '一顿小皮锤', 'dengxuefeng@163.com', '江苏省', '南京市', '本科', '暨南大学', null, null, '4');
-INSERT INTO `user` VALUES ('17', '15726928003', '4QrcOUm6Wau+VuBX8g+IPg==', '龟龟', '0', null, '龟龟', 'guigui@163.com', '广东省', '中山市', '本科', '华东理工大学', null, null, '0');
-INSERT INTO `user` VALUES ('21', '13957336750', '4QrcOUm6Wau+VuBX8g+IPg==', '木木', '0', null, '木木', 'mumu@163.com', '湖北省', '武汉市', '本科', '天津科技大学', null, null, '0');
-INSERT INTO `user` VALUES ('24', '17863954768', '4QrcOUm6Wau+VuBX8g+IPg==', '轩', '0', '1997', '轩', 'xuan@163.com', '山东省', '青岛市', '本科', '青岛科技大学', '2019', '软件工程', '2');
-INSERT INTO `user` VALUES ('25', '17812345687', '4QrcOUm6Wau+VuBX8g+IPg==', '青柠', '0', '1997', '青柠', 'babycoder@foxmail.com', '浙江省', '杭州市', '本科', '青岛科技大学', '2019', '软件', '1');
+INSERT INTO `user` VALUES ('1', '1', '4QrcOUm6Wau+VuBX8g+IPg==', '夏高兴', '0', null, '云淡天高', 'xiagaoxin@163.com', '北京市', '北京市', '硕士', '中南财经政法大学', null, null, '3');
+INSERT INTO `user` VALUES ('2', '2', '4QrcOUm6Wau+VuBX8g+IPg==', '沈茂德', '0', null, '冷酷的云', 'shenmaode@163.com', '北京市', '北京市', '本科', '湖南师范大学', null, null, '3');
+INSERT INTO `user` VALUES ('3', '3', '4QrcOUm6Wau+VuBX8g+IPg==', '杜文瑞', '0', null, '我心寂寞', 'duwenrui@163.com', '上海市', '上海市', '本科', '东北财经大学', null, null, '1');
+INSERT INTO `user` VALUES ('4', '4', '4QrcOUm6Wau+VuBX8g+IPg==', '彭友卉', '0', null, '尘封记忆', 'pengyouhui@163.com', '上海市', '上海市', '本科', '西南大学', null, null, '2');
+INSERT INTO `user` VALUES ('5', '5', '4QrcOUm6Wau+VuBX8g+IPg==', '崔谷槐', '0', null, '飘雪无垠', 'cuiguhuai@163.com', '上海市', '上海市', '本科', '苏州大学', null, null, '2');
+INSERT INTO `user` VALUES ('6', '6', '4QrcOUm6Wau+VuBX8g+IPg==', '魏茂材', '0', null, '风过无痕', 'weimaocai@163.com', '广东省', '广州市', '本科', '西北大学', null, null, '6');
+INSERT INTO `user` VALUES ('7', '7', '4QrcOUm6Wau+VuBX8g+IPg==', '侯成文', '0', '1997', '星月相随', 'huochengwen', '湖北省', '武汉市', '硕士', '上海财经大学', '2019', '国际金融', '3');
+INSERT INTO `user` VALUES ('8', '8', '4QrcOUm6Wau+VuBX8g+IPg==', '邵夜云', '1', null, '低调沉默者', 'shaoyeyun@163.com', '北京市', '北京市', '本科', '江苏大学', null, null, '2');
+INSERT INTO `user` VALUES ('9', '9', '4QrcOUm6Wau+VuBX8g+IPg==', '方彭湃', '1', null, '梦醒童话', 'fangpengpai@163.com', '天津市', '天津市', '硕士', '西南政法大学', null, null, '4');
+INSERT INTO `user` VALUES ('10', '10', '4QrcOUm6Wau+VuBX8g+IPg==', '熊新觉', '1', null, '咖啡的味道', 'xiongxinjue@163.com', '广东省', '广州市', '本科', '重庆医科大学', null, null, '3');
+INSERT INTO `user` VALUES ('11', '11', '4QrcOUm6Wau+VuBX8g+IPg==', '肖又香', '1', null, '悬世尘埃', 'xiaoyouxiang@163.com', '浙江省', '杭州市', '大专', '福建师范大学', null, null, '2');
+INSERT INTO `user` VALUES ('12', '12', '4QrcOUm6Wau+VuBX8g+IPg==', '严经纶', '0', null, '冰封夕阳', 'yanjinlun@163.com', '浙江省', '杭州市', '本科', '广州中医药大学', null, null, '6');
+INSERT INTO `user` VALUES ('13', '13', '4QrcOUm6Wau+VuBX8g+IPg==', '邓和豫', '1', null, '隐水酣龙', 'dengheyu@163.com', '浙江省', '杭州市', '本科', '哈尔滨工程大学', null, null, '1');
+INSERT INTO `user` VALUES ('14', '14', '4QrcOUm6Wau+VuBX8g+IPg==', '邓雪风', '0', null, '一顿小皮锤', 'dengxuefeng@163.com', '江苏省', '南京市', '本科', '暨南大学', null, null, '4');
+INSERT INTO `user` VALUES ('17', '17', '4QrcOUm6Wau+VuBX8g+IPg==', '龟龟', '0', null, '龟龟', 'guigui@163.com', '广东省', '中山市', '本科', '华东理工大学', null, null, '0');
+INSERT INTO `user` VALUES ('21', '21', '4QrcOUm6Wau+VuBX8g+IPg==', '木木', '0', null, '木木', 'mumu@163.com', '湖北省', '武汉市', '本科', '天津科技大学', null, null, '0');
+INSERT INTO `user` VALUES ('24', '24', '4QrcOUm6Wau+VuBX8g+IPg==', '轩', '0', '1997', '轩', 'xuan@163.com', '山东省', '青岛市', '本科', '青岛科技大学', '2019', '软件工程', '2');
+INSERT INTO `user` VALUES ('25', '25', '4QrcOUm6Wau+VuBX8g+IPg==', '青柠', '0', '1997', '青柠', 'babycoder@foxmail.com', '浙江省', '杭州市', '本科', '青岛科技大学', '2019', '软件', '1');

@@ -27,13 +27,12 @@ public interface ApplicationMapper {
     @Select("select resumeId,userId from application where applicationId = #{applicationId} limit 1")
     ApplicationResumeHRBO getApplicationResumeHRBO(@Param("applicationId") int applicationId);
 
-    @Insert("insert into application(state,recentTime,resumeId,positionId，hrId,userId) values (0,#{recentTime},#{resumeId},#{positionId},#{hrId}),#{userId}")
+    @Insert("insert into application(state,recentTime,resumeId,positionId,hrId,userId) values (0,#{recentTime},#{resumeId},#{positionId},#{hrId},#{userId})")
     int saveApplication(@Param("recentTime") Timestamp recentTime, @Param("resumeId") int resumeId, @Param("positionId") int positionId,@Param("hrId") int hrId,@Param("userId") int userId);
 
     //安排面试，输入(String时间地点)
-    @Update("UPDATE application SET state=#{flag},interviewsDesc = #{interviewsDesc} WHERE applicationId = #{applicationId} AND state!=-1")
-    int OperateInterviews(@Param("flag")int flag , @Param("interviewsDesc") String interviewsDesc,@Param("applicationId") int applicationId);
-
+    @Update("UPDATE application SET state=#{flag} WHERE applicationId = #{applicationId} AND state!=-1")
+    int OperateInterviews(@Param("flag")int flag , @Param("applicationId") int applicationId);
 
     @Select("select * from application where applicationId=1")
     ApplicationEntity test();

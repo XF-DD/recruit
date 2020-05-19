@@ -11,9 +11,9 @@ public interface ApplicationService {
     boolean applyPosition(int resumeId, int positionId,int hrId,int userId);
 
 
-    int updateResumeState(int state,int applicationid);
+    int updateResumeState(int state,int applicationId);
 
-    int arrangeInterview(String interviewsDesc,int applicationId,int flag);
+    int arrangeInterview(int applicationId,int flag);
 
     List<ApplicationPositionHRBO> listApplyInfo(int resumeId);
 
