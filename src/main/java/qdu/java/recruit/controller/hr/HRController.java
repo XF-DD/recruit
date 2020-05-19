@@ -6,10 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
@@ -21,21 +18,18 @@ import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
-  <p>
- private int hrId;
- private String hrMobile;
- private String hrPassword;
- private String hrName;
- private String hrEmail;
- private String description;
- private int departmentId;
- </p>
+ * <p>
+ * private int hrId;
+ * private String hrMobile;
+ * private String hrPassword;
+ * private String hrName;
+ * private String hrEmail;
+ * private String description;
+ * private int departmentId;
+ * </p>
  */
 @RestController
 @Api(value = "HR接口",description = "HR接口")
@@ -68,14 +62,13 @@ public class HRController extends BaseController{
                                    HttpServletRequest request,
                                    DepartmentEntity departmentEntity) {
         CompanyEntity companyEntity = companyService.getCompany(CompanyCode);
-        if(companyEntity == null) {
-            throw  new RuntimeException("公司不存在");
-        }
-        else {
+        if (companyEntity == null) {
+            throw new RuntimeException("公司不存在");
+        } else {
             List<DepartmentEntity> departmentEntities = departmentService.getDepartmentByCompany(
                     companyEntity.getCompanyId());
-            map.put("departments",departmentEntities);
-            request.setAttribute("department",departmentEntity.getDepartmentId());
+            map.put("departments", departmentEntities);
+            request.setAttribute("department", departmentEntity.getDepartmentId());
             return hrDirect("hr/register/second");
         }
     }
@@ -84,22 +77,21 @@ public class HRController extends BaseController{
     @PostMapping(value = "hr/register/second")
     @ResponseBody
     public int userRegister(@RequestParam HREntity user,
-                            HttpServletRequest request){
+                            HttpServletRequest request) {
 
-            int deparmentId = (int) request.getAttribute("department");
-            user.setDepartmentId(deparmentId);
-            String password = user.getHrPassword();
+        int deparmentId = (int) request.getAttribute("department");
+        user.setDepartmentId(deparmentId);
+        String password = user.getHrPassword();
 
-            //验证mobile 和 password是否为空
-            if (user.getHrMobile() == null || user.getHrPassword() == null) {
-                return 0;
-            }
-            if (hrService.registerHR(user)) {
-                return 1;
-            }
+        //验证mobile 和 password是否为空
+        if (user.getHrMobile() == null || user.getHrPassword() == null) {
+            return 0;
+        }
+        if (hrService.registerHR(user)) {
             return 1;
         }
-
+        return 1;
+    }
 
 
     /**
@@ -157,7 +149,7 @@ public class HRController extends BaseController{
         Map output = new TreeMap();
         output.put("hr", hr);
         output.put("applyPosList", applyPosList);
-        output.put("positions",positionEntities);
+        output.put("positions", positionEntities);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
@@ -165,16 +157,15 @@ public class HRController extends BaseController{
     }
 
     /**
-     *
-     <p>
-     private int hrId;
-     private String hrMobile;
-     private String hrPassword;
-     private String hrName;
-     private String hrEmail;
-     private String description;
-     private int departmentId;
-     </p>
+     * <p>
+     * private int hrId;
+     * private String hrMobile;
+     * private String hrPassword;
+     * private String hrName;
+     * private String hrEmail;
+     * private String description;
+     * private int departmentId;
+     * </p>
      * 个人信息更新 功能
      *
      * @param request
@@ -209,7 +200,7 @@ public class HRController extends BaseController{
 
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
-        }else {
+        } else {
             if (hrService.loginHR(mobile, password)) {
                 System.out.println("匹配到了");
                 httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
@@ -236,9 +227,4 @@ public class HRController extends BaseController{
 
         return userDirect("logout_success");
     }
-
-
-
-
-
 }

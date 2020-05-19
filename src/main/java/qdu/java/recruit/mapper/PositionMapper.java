@@ -32,7 +32,7 @@ public interface PositionMapper {
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
             "and title like #{keyword} and statePub = 1 \n" +
             "order by ${order} DESC")
-    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,@Param("order") String order);
+    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword, @Param("order") String order);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
@@ -56,10 +56,12 @@ public interface PositionMapper {
     @Delete("delete from position where positionId = #{posId}")
     int delete(@Param("posId") int posId);
 
+    // 5/18陈淯 修改  positionId错写为posId
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
             "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
-            "validDate=#{validDate},statePub=#{statePub}" +
-            " where positionId = #{posId}")
+            "validDate=#{validDate},statePub=#{statePub}," +
+            "categoryId = #{categoryId}"+
+            " where positionId = #{positionId}")
     int updatePosition(PositionEntity positionEntity);
 
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")

@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
@@ -17,24 +16,24 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
-@Api(value = "职位管理",description = "职位管理")
+@Api(value = "职位管理", description = "职位管理")
 public class PositionController extends BaseController {
     /**
      * postion part
      * private int positionId;
-     private String title; *
-     private String requirement; *
-     private int quantity; *
-     private String workCity; *
-     private int salaryUp; *
-     private int salaryDown; *
-     private Date releaseDate;
-     private Date validDate;
-     private int statePub; *
-     private int hits;
-     private int categoryId;
-     private int departmentId;
-     private int hrIdPub;
+     * private String title; *
+     * private String requirement; *
+     * private int quantity; *
+     * private String workCity; *
+     * private int salaryUp; *
+     * private int salaryDown; *
+     * private Date releaseDate;
+     * private Date validDate;
+     * private int statePub; *
+     * private int hits;
+     * private int categoryId;
+     * private int departmentId;
+     * private int hrIdPub;
      */
 
     @Autowired
@@ -93,34 +92,37 @@ public class PositionController extends BaseController {
         JSONObject jsonObject = JSONObject.fromObject(output);
         return jsonObject.toString();
     }
+
     /**
      * 下拉框点击职位名称，返回职位Id列表  5/16新增
      * 按照职位名称查询职位Id列表
-     *
+     * <p>
      * 再次回到无选中（全部）状态，title为空或者乱写
      */
     @GetMapping("/hr/position/category")
     @ResponseBody
     public int jumpToResumePage(HttpSession session,
                                 HttpServletRequest request,
-                                @RequestParam("title") String title){
+                                @RequestParam(value = "title", defaultValue = "", required = false) String title) {
         HREntity hr = this.getHR(request);
         List<Integer> positionIds = positionService.listPositionIdByTitle(title, hr.getHrId());
-        if (positionIds!=null){
-            session.setAttribute("positionId",positionIds);
+        if (positionIds.size() != 0) {
+            System.out.println("positionIds不等于null" + positionIds);
+            session.setAttribute("positionId", positionIds);
             Map output = new TreeMap();
-            output.put("positionId",positionIds);
+            output.put("positionId", positionIds);
             return 1;
-        }else {
-            session.setAttribute("positionId",null);
+        } else {
+            System.out.println("positionIds等于null");
+            session.setAttribute("positionId", null);
             return 0;
         }
-
     }
 //===============以上新增5/16 陈淯====================
 
     /**
      * 职位信息表
+     *
      * @param request
      * @return
      */
@@ -128,7 +130,7 @@ public class PositionController extends BaseController {
     @ResponseBody
     public String showPostionInfo(HttpServletRequest request,
                                   @PathVariable int page,
-                                  @RequestParam(value = "limit", defaultValue = "12") int limit){
+                                  @RequestParam(value = "limit", defaultValue = "12") int limit) {
 
         HREntity hr = this.getHR(request);
 
@@ -139,12 +141,12 @@ public class PositionController extends BaseController {
         int id = hr.getHrId();
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-        PageInfo<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id,page,limit);
+        PageInfo<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id, page, limit);
 
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
-        output.put("positions",positionEntities);
+        output.put("positions", positionEntities);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
@@ -154,6 +156,7 @@ public class PositionController extends BaseController {
 
     /**
      * 职位详情
+     *
      * @param request
      * @param id
      * @return
@@ -162,7 +165,7 @@ public class PositionController extends BaseController {
     @ResponseBody
     public String getPosition(HttpServletRequest request, @PathVariable int id) {
 
-        PositionEntity position = valide(request,id);
+        PositionEntity position = valide(request, id);
 
         //所属部门信息
         DepartmentEntity department = departmentService.getDepartment(position.getDepartmentId());
@@ -189,23 +192,18 @@ public class PositionController extends BaseController {
 
 
     @PostMapping("/position{id}/delete")
-    public int deletePosition(HttpServletRequest request,@PathVariable int id) {
-        valide(request,id);
+    public int deletePosition(HttpServletRequest request, @PathVariable int id) {
+        valide(request, id);
         return positionService.deletePosition(id);
 
     }
 
     /**
-     * private String title; *
-     private String requirement; *
-     private int quantity; *
-     private String workCity; *
-     private int salaryUp; *
-     private int salaryDown; *
-     private Date validDate;
-     * @param request
-     * @param id
-     * @return
+     *
+     * 职位更新
+     *
+     * 5/18陈淯
+     * 修改 validDate为时间戳  后台再进行类型转换
      */
     @PostMapping("/position{id}/update")
     public int updatePosition(HttpServletRequest request,
@@ -214,22 +212,29 @@ public class PositionController extends BaseController {
                               @RequestParam String requirement,
                               @RequestParam int quantity,
                               @RequestParam String workCity,
+                              @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
-                              @RequestParam Date validDate
-                              ) {
-        PositionEntity positionEntity = valide(request,id);
+                              @RequestParam long validDate,
+                              @RequestParam int categoryId
+    ) {
+        PositionEntity positionEntity = valide(request, id);
+
+        positionEntity.setPositionId(id);
         positionEntity.setTitle(title);
         positionEntity.setRequirement(requirement);
         positionEntity.setQuantity(quantity);
-        positionEntity.setValidDate(validDate);
+        positionEntity.setValidDate(new Date(validDate));
+        positionEntity.setSalaryUp(salaryUp);
         positionEntity.setSalaryDown(salaryDown);
         positionEntity.setWorkCity(workCity);
+        positionEntity.setCategoryId(categoryId);
 
         return positionService.updatePosition(positionEntity);
     }
 
     /**
-     *职位下架,即不会在出现
+     * 职位下架,即不会在出现
+     *
      * @param request
      * @param id
      * @return
@@ -237,34 +242,67 @@ public class PositionController extends BaseController {
     @PostMapping("/position{id}/withdraw")
     public int withdrawPosition(HttpServletRequest request,
                                 @PathVariable int id) {
-        PositionEntity positionEntity = valide(request,id);
+        PositionEntity positionEntity = valide(request, id);
         positionEntity.setStatePub(0);//0为下架
         return positionService.updatePosition(positionEntity);
+    }
+
+    /**
+     * 职位创建前先返回 分类
+     */
+    @ResponseBody
+    @GetMapping("hr/getCategory")
+    public String getCategory() {
+        List<CategoryEntity> categoryEntities = categoryService.getAll();
+        Map output = new TreeMap();
+        output.put("categoryEntities", categoryEntities);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+
+        return jsonObject.toString();
     }
 
 
     /**
      * 职位创建
+     * 5/18陈淯  创建职位 validDate前端传入传入时间戳，后台进行转换
      */
-    @PostMapping("hr{id}/position/create")
-    public int createPosition(ModelMap modelMap, HttpServletRequest request, @PathVariable int id, PositionEntity positionEntity) {
+    @PostMapping("hr/position/create")
+    public int createPosition(HttpServletRequest request,
+                              @RequestParam String title,
+                              @RequestParam String requirement,
+                              @RequestParam int quantity,
+                              @RequestParam String workCity,
+                              @RequestParam int salaryUp,
+                              @RequestParam int salaryDown,
+                              @RequestParam long validDate,
+                              @RequestParam int categoryId) {
         HREntity hr = this.getHR(request);
         List<CategoryEntity> categoryEntities = categoryService.getAll();
-        if(hr == null) {
+        if (hr == null) {
             this.errorDirect_404();
         }
-            id = hr.getHrId();
-            modelMap.put("categoryEntities",categoryEntities);
-            positionEntity.setReleaseDate(new Date());
-            positionEntity.setStatePub(1);
-            positionEntity.setHrIdPub(id);
-            return positionService.savePosition(positionEntity);
+        PositionEntity positionEntity = new PositionEntity();
 
+        positionEntity.setTitle(title);
+        positionEntity.setRequirement(requirement);
+        positionEntity.setQuantity(quantity);
+        positionEntity.setWorkCity(workCity);
+        positionEntity.setSalaryUp(salaryUp);
+        positionEntity.setSalaryDown(salaryDown);
+        positionEntity.setReleaseDate(new Date());
+        positionEntity.setValidDate(new Date(validDate));
+
+        positionEntity.setStatePub(1);
+        positionEntity.setDepartmentId(hr.getDepartmentId());
+        positionEntity.setHrIdPub(hr.getHrId());
+        positionEntity.setCategoryId(categoryId);
+        return positionService.savePosition(positionEntity);
 
     }
 
     /**
      * 权限验证
+     *
      * @param request
      * @param id
      * @return
@@ -272,13 +310,12 @@ public class PositionController extends BaseController {
     public PositionEntity valide(HttpServletRequest request,int id) {
         HREntity hr = this.getHR(request);
         PositionEntity position = positionService.getPositionById(id);
-        if(hr == null || position == null) {
+        if (hr == null || position == null) {
             this.errorDirect_404();
             return null;
-        }
-        else {
+        } else {
             int hrid = hr.getHrId();
-            if(position.getHrIdPub() != hrid) {
+            if (position.getHrIdPub() != hrid) {
                 this.errorDirect_404();
                 return null;
             }

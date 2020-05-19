@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.HREntity;
+import qdu.java.recruit.mapper.HRMapper;
 import qdu.java.recruit.service.HRService;
 import sun.misc.BASE64Encoder;
 
@@ -17,7 +18,7 @@ public class HRServiceImpl implements HRService {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Resource
-    private qdu.java.recruit.mapper.HRMapper HRMapper;
+    private HRMapper HRMapper;
 
     @Override
     public HREntity getHR(int HRId) {

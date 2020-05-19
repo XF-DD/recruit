@@ -10,7 +10,6 @@ import java.util.List;
 
 
 public interface PositionService {
-
     /**
      * 查询hr发布的职位
      */
