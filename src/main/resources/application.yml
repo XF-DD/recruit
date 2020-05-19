@@ -1,6 +1,7 @@
 spring:
-    profiles:
-        active: dev
+  profiles:
+      active: dev
+
 # datasource
   datasource:
       name: recruit
@@ -35,17 +36,17 @@ spring:
   # 合并多个DruidDataSource的监控数据
       #useGlobalDataSourceStat: true
 
-    thymeleaf:
-        prefix: classpath:/templates/
-        suffix: .html
-        cache: false
-        encoding: UTF-8
-        mode: LEGACYHTML5
-        content-type: text/html
+  thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+      cache: false
+      encoding: UTF-8
+      mode: LEGACYHTML5
+      content-type: text/html
 
 mybatis:
-    #mapper.xml所在位置
-    #  mapper-locations: classpath:mappers/*.xml
-    # 实体类所在包
-    type-aliases-package: qdu.java.recruit.entity
+  #mapper.xml所在位置
+#  mapper-locations: classpath:mappers/*.xml
+  # 实体类所在包
+  type-aliases-package: qdu.java.recruit.entity
 

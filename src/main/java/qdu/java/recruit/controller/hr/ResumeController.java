@@ -250,7 +250,6 @@ public class ResumeController extends BaseController {
     }
 
     /**
->>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * 发送信息   包括发送offer 和 通知面试未通过
      * //5/18 陈淯   合并 发送offer 和 通知面试未通过
      */
