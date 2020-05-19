@@ -6,24 +6,33 @@ package qdu.java.recruit.pojo;
  */
 public class ApplicationResumeHRBO {
 
+    private int state;
+
     private int resumeId;
 
     private int userId;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getResumeId() {
+        return resumeId;
+    }
 
     public void setResumeId(int resumeId) {
         this.resumeId = resumeId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getResumeId() {
-
-        return resumeId;
-    }
-
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

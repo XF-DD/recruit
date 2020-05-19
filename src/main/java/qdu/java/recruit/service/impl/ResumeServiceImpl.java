@@ -22,10 +22,22 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeMapper.getResumeById(userId);
     }
 
+    //5/16  陈淯
+    @Override
+    public List<PostedRecumeBO> getResumeByStateWithPosIds(int hrId, int state, List<Integer> positionIds) {
+        return resumeMapper.getResumeByStateWithPosIds( hrId,state,positionIds);
+    }
+
     @Override
     public List<PostedRecumeBO> getResumeByState(int hrId, int state) {
         return resumeMapper.getResumeByState(hrId,state);
     }
+
+    @Override
+    public List<PostedRecumeBO> getAllResumeWithPosIds(int hrId,List<Integer> positionIds) {
+        return resumeMapper.getAllResumeWithPosIds(hrId,positionIds);
+    }
+
 
     @Override
     public List<PostedRecumeBO> getAllResume(int hrId) {

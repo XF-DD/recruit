@@ -10,7 +10,13 @@ public interface ResumeService {
 
     ResumeEntity getResumeById(int userId);
 
+    //5/16  陈淯
+    List<PostedRecumeBO> getResumeByStateWithPosIds(int hrId, int state,List<Integer> positionIds);
+
     List<PostedRecumeBO> getResumeByState(int hrId, int state);
+
+    //5/17 陈淯
+    List<PostedRecumeBO> getAllResumeWithPosIds(int hrId,List<Integer> positionIds);
 
     List<PostedRecumeBO> getAllResume(int hrId);
 

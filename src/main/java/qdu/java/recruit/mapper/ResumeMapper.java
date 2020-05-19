@@ -34,6 +34,41 @@ public interface ResumeMapper {
             "where hrId = #{hrId} and state = #{state} order by a.recentTime DESC")
    List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId, @Param("state") int state);
 
+    /**
+     * 5/16  陈淯
+     * 按照状态 + 职位ids  查找
+     * @param hrId
+     * @return
+     */
+    @Select({
+            "<script>",
+            "select a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId where a.positionId in ",
+            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
+            "(#{item})",
+            "</foreach>",
+            "and hrId = #{hrId} and state = #{state} order by a.recentTime DESC",
+            "</script>"
+    })
+    List<PostedRecumeBO> getResumeByStateWithPosIds(@Param("hrId") int hrId, @Param("state") int state,@Param("positionIds") List<Integer> positionIds);
+
+    /**
+     * 5/16  陈淯
+     * 按照状态 + 职位ids  查找
+     * @param hrId
+     * @return
+     */
+    @Select({
+            "<script>",
+            "select a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId \n" +
+            "join position p on p.positionId = a.positionId where a.positionId in ",
+            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
+            "(#{item})",
+            "</foreach>",
+            "and hrId = #{hrId} order by a.recentTime DESC",
+            "</script>"
+    })
+    List<PostedRecumeBO> getAllResumeWithPosIds(@Param("hrId") int hrId, @Param("positionIds") List<Integer> positionIds);
+
 
     //查看所有简历
     @Select("select a.applicationId,u.*,p.title \n" +
@@ -43,6 +78,10 @@ public interface ResumeMapper {
     List<PostedRecumeBO> getAllResume(@Param("hrId") int hrId);
 
 
+
+
+
+
     @Select("select a.applicationId,u.*,p.title \n"+
             "from user u join application a on u.userId = a.userId \n"+
             "join position  p on p.positionId = a.positionId \n"+
@@ -50,12 +89,14 @@ public interface ResumeMapper {
             "order by a.recentTime DESC")
     List<PostedRecumeBO> getInterviewResume(@Param("hrId") int hrId);
 
+    //通过applicationId找到userId
+    @Select("select userId from application where applicationId = #{applicationId}")
+    int getUserId(@Param("applicationId") int applicationId);
 
     //将获得offer的学生，state设置为-3
     @Update("update application set state = #{state}" +
             " where applicationId = #{applicationId}")
     int setState(@Param("state") int state, @Param("applicationId") int applicationId);
-
 
     //将已发送offer的学生，其余职位申请设置为未通过
     @Update("update application set state = #{state}" +
@@ -71,8 +112,5 @@ public interface ResumeMapper {
             "values (#{state},#{news},#{hrId},(select userId from application where applicationId=#{applicationId}))")
     int sendOfferNews(@Param("state") int state, @Param("applicationId") int applicationId, @Param("news") String news, @Param("hrId") int hrId);
 
-    //通过applicationId找到userId
-    @Select("select userId from application where applicationId = #{applicationId}")
-    int getUserId(@Param("applicationId") int applicationId);
 
 }

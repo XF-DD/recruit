@@ -12,6 +12,18 @@ import java.util.List;
 public interface PositionService {
 
     /**
+     * 查询hr发布的职位
+     */
+    public List<String> listTitle(int hrId);
+
+    /**
+     * 按照title查询职位Id
+     */
+    public List<Integer> listPositionIdByTitle(String title,int hrId);
+
+    //=============以上5/16新增 陈淯===============
+
+    /**
      * 分页推荐职位
      *
      * @param user

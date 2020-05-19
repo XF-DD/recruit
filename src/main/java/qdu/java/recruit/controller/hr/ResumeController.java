@@ -16,6 +16,7 @@ import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,7 +40,10 @@ public class ResumeController extends BaseController {
      *   可查询新、备选、放弃、未通过、通过、一面、二面简历
      *   0 1 -1 -2 -3 2 3
      *   @author  PocketKnife
-     *   @create  23:34 2020/5/9
+     *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
     */
     @GetMapping(value = "/hr/resume/{state}")
     @ResponseBody
@@ -48,56 +52,56 @@ public class ResumeController extends BaseController {
         if(hr == null) {
             return errorDirect_404();
         }
-        List<PostedRecumeBO> resumes = resumeService.getResumeByState(hr.getHrId(),state);
+        List<Integer> positionIds = (ArrayList<Integer>)request.getSession().getAttribute("positionId");
+
+        List<PostedRecumeBO> resumes = null;
+
+        if (positionIds==null){
+            resumes = resumeService.getResumeByState(hr.getHrId(),state);  //直接按状态查找
+        }else {
+            resumes = resumeService.getResumeByStateWithPosIds(hr.getHrId(),state,positionIds);//按状态+标题（查出List positionId）
+        }
 
         Map output = new TreeMap();
         output.put("resumes",resumes);
-
         JSONObject jsonObject = JSONObject.fromObject(output);
-
         return jsonObject.toString();
+
     }
 
     /**
      *   查看所有简历
      *   @author  PocketKnife
      *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
     */
     @ResponseBody
     @GetMapping("/hr/resumeInfo")
-    public String ResumeInfo(HttpServletRequest request) {
-        HREntity hr = this.getHR(request);
-        if(hr == null) {
-            return errorDirect_404();
-        }
-        List<PostedRecumeBO>  resumeInfo= resumeService.getAllResume(hr.getHrId());
-        Map output = new TreeMap();
-        output.put("resumeInfo",resumeInfo);
-
-        JSONObject jsonObject = JSONObject.fromObject(output);
-
-        return jsonObject.toString();
-    }
-
-    /**
-     *   查看正在安排面试的简历
-     *   根据hrId查询正在面试中的简历(包括一面，二面...)
-     *   @author  PocketKnife
-     *   @create  19:11 2020/5/9
-     */
-    @GetMapping(value = "/hr/resume/interviewresume")
-    @ResponseBody
-    public String getInterviewResume(HttpServletRequest request){
+    public String ResumeInfo(HttpServletRequest request){
         HREntity hr = this.getHR(request);
         if (hr == null) {
-            this.errorDirect_404();
+            return errorDirect_404();
         }
-        List<PostedRecumeBO> interviewRecumeBOList = resumeService.getInterviewResumeByHrId(hr.getHrId());
-        Map output = new TreeMap();
-        output.put("NewResumeList",interviewRecumeBOList);
-        JSONObject jsonObject = JSONObject.fromObject(output);
-        return jsonObject.toString();
-    }
+        List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
+
+        List<PostedRecumeBO> resumes = null;
+
+        if (positionIds == null) {
+            resumes = resumeService.getAllResume(hr.getHrId());  //直接按状态查找
+        } else {
+            resumes = resumeService.getAllResumeWithPosIds(hr.getHrId(), positionIds);//按状态+标题（查出List positionId）
+        }
+            Map output = new TreeMap();
+            output.put("resumeInfo", resumes);
+
+            JSONObject jsonObject = JSONObject.fromObject(output);
+
+            return jsonObject.toString();
+        }
+
+
 
     /**
      * 移除简历（条件不符合或者面试不通过）
@@ -149,7 +153,10 @@ public class ResumeController extends BaseController {
         ApplicationResumeHRBO applicationResumeHRBO = applicationService.getResumeHRBO(applicationId);
         UserEntity userEntity = userService.getUser(applicationResumeHRBO.getUserId());
         ResumeEntity resumeEntity = resumeService.getResumeById(applicationResumeHRBO.getResumeId());
+        //简历状态未看时 才更新简历状态未备选
+        if(applicationResumeHRBO.getState() == 0){
         applicationService.updateResumeState(1,applicationId);
+        }
 
         Map output = new TreeMap();
         output.put("userEntity",userEntity);

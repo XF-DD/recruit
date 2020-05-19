@@ -13,10 +13,8 @@ import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @RestController
 @Api(value = "职位管理",description = "职位管理")
@@ -55,12 +53,71 @@ public class PositionController extends BaseController {
     CompanyService companyService;
 
 
-    /**
-     *
+     /*
+     * 职位管理界面，点击职位，跳转到简历界面 5/16新增
+     * 按照Id查询
      */
+    @GetMapping("/hr/positionId/{positionId}")
+    @ResponseBody
+    public int jumpToResumePage(HttpSession session,
+                                  @PathVariable int positionId){
 
+        PositionEntity positionById = positionService.getPositionById(positionId);
+        if (positionById!=null){
+            List<Integer> positionIds = Arrays.asList(positionId);
+            session.setAttribute("positionId",positionIds);
+            Map output = new TreeMap();
+            output.put("positionId",positionIds);
+            return 1;
+        }else {
+            session.setAttribute("positionId",null);
+            return 0;
+        }
+    }
+    /**
+     *   返回hr发布的职位列表
+     *   @author  ChenGuiHong
+     *   @create  23:29 2020/5/18
+    */
+    @GetMapping("/hr/position/Combo")
+    @ResponseBody
+    public String listTitle(HttpServletRequest request){
+        HREntity hr = this.getHR(request);
+        if (hr == null) {
+            this.errorDirect_404();
+            //其实应该返回的是401，或者403
+        }
+        List<String> list = positionService.listTitle(hr.getHrId());
+        Map output = new TreeMap();
+        output.put("titles",list);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+        return jsonObject.toString();
+    }
+    /**
+     * 下拉框点击职位名称，返回职位Id列表  5/16新增
+     * 按照职位名称查询职位Id列表
+     *
+     * 再次回到无选中（全部）状态，title为空或者乱写
+     */
+    @GetMapping("/hr/position/category")
+    @ResponseBody
+    public int jumpToResumePage(HttpSession session,
+                                HttpServletRequest request,
+                                @RequestParam("title") String title){
+        HREntity hr = this.getHR(request);
+        List<Integer> positionIds = positionService.listPositionIdByTitle(title, hr.getHrId());
+        if (positionIds!=null){
+            session.setAttribute("positionId",positionIds);
+            Map output = new TreeMap();
+            output.put("positionId",positionIds);
+            return 1;
+        }else {
+            session.setAttribute("positionId",null);
+            return 0;
+        }
 
-//===============以上新增5/16====================
+    }
+//===============以上新增5/16 陈淯====================
 
     /**
      * 职位信息表
@@ -212,7 +269,7 @@ public class PositionController extends BaseController {
      * @param id
      * @return
      */
-    public PositionEntity valide(HttpServletRequest request, int id) {
+    public PositionEntity valide(HttpServletRequest request,int id) {
         HREntity hr = this.getHR(request);
         PositionEntity position = positionService.getPositionById(id);
         if(hr == null || position == null) {

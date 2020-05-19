@@ -2,15 +2,19 @@ package qdu.java.recruit.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.RequestParam;
-import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.PositionEntity;
-import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface PositionMapper {
+
+    @Select("select positionId from position where title = #{title} and hrIdPub = #{hrId}")
+    List<Integer> listPosIdByTitle(@Param("title") String title,@Param("hrId") int hrId);
+    //===========以上为5/16新增 陈淯=========
+
 
     @Select("select * from position where statePub = 1")
     ArrayList<PositionEntity> listPosAll();
@@ -49,7 +53,7 @@ public interface PositionMapper {
     @Select("select count(*) from position where hrIdPub=#{hrIdPub}")
     int countHRPos(@Param("hrIdPub") int hrIdPub);
 
-    @Delete("delete position where positionId = #{posId}")
+    @Delete("delete from position where positionId = #{posId}")
     int delete(@Param("posId") int posId);
 
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
@@ -66,6 +70,9 @@ public interface PositionMapper {
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
             "#{departmentId},#{categoryId},#{hrIdPub})")
     int savePosition(PositionEntity positionEntity);
+
+    @Select("select distinct title from position where hrIdPub =#{hrId}")
+    List<String> listTitle(@RequestParam("hrId") int hrId);
 
 }
 
