@@ -3,4 +3,4 @@ server:
 
 spring:
   datasource:
-    password: 932567
+    password: recruit
