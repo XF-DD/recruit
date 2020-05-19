@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class PositionController extends BaseController {
+public class PositionController extends BaseController{
     /**
      * postion part
      * private int positionId;
@@ -196,7 +196,7 @@ public class PositionController extends BaseController {
      * @param id
      * @return
      */
-    public PositionEntity valide(HttpServletRequest request, int id) {
+    public PositionEntity valide(HttpServletRequest request,int id) {
         HREntity hr = this.getHR(request);
         PositionEntity position = positionService.getPositionById(id);
         if(hr == null || position == null) {

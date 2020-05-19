@@ -14,7 +14,6 @@ import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ApplicationService;
 import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +78,7 @@ public class ResumeController extends BaseController {
     }
 
     /**
+<<<<<<< HEAD
      *   查看正在安排面试的简历
      *   根据hrId查询正在面试中的简历(包括一面，二面...)
      *   @author  PocketKnife

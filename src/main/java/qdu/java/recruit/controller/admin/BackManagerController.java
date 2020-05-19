@@ -91,7 +91,6 @@ public class BackManagerController {
     }
 
 
-    //返回 城市：城市人数 json组
     @RequestMapping(value = "/userareachart", method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> area(){
@@ -105,7 +104,6 @@ public class BackManagerController {
         return map;
     }
 
-    //返回顶部数据
     @RequestMapping("webcount")
     @ResponseBody
     public Map<String,Object> webcount(){

@@ -24,7 +24,7 @@ public interface PositionMapper {
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
             "and title like #{keyword} and statePub = 1 \n" +
             "order by ${order} DESC")
-    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,@Param("order") String order);
+    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword, @Param("order") String order);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
