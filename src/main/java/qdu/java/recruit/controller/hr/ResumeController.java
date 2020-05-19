@@ -1,11 +1,10 @@
 package qdu.java.recruit.controller.hr;
 
+import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.PositionEntity;
@@ -13,8 +12,10 @@ import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.pojo.ApplicationResumeHRBO;
 import qdu.java.recruit.pojo.FavorPositionBO;
-import qdu.java.recruit.service.FavorService;
+import qdu.java.recruit.pojo.PostedRecumeBO;
+import qdu.java.recruit.service.ApplicationService;
 import qdu.java.recruit.service.PositionService;
+import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,60 +27,173 @@ import java.util.TreeMap;
 
 
 @RestController
+@Api(value = "Resume接口",description = "Resume接口")
 public class ResumeController extends BaseController {
+
+    @Autowired
+    ResumeService resumeService;
+
+    @Autowired
+    ApplicationService applicationService;
 
     @Autowired
     UserService userService;
 
-    @Autowired
-    FavorService favorService;
-    @Autowired
-    PositionService positionService;
+    /**
+     *   查询简历
+     *   通过state判断查询的简历状态，返回相应状态的简历
+     *   可查询新、备选、放弃、未通过、通过、一面、二面简历
+     *   0 1 -1 -2 -3 2 3
+     *   @author  PocketKnife
+     *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
+    */
+    @GetMapping(value = "/hr/resume/{state}")
+    @ResponseBody
+    public String getResume(HttpServletRequest request , @PathVariable int state){
+        HREntity hr = this.getHR(request);
+        if(hr == null) {
+            return errorDirect_404();
+        }
+        List<Integer> positionIds = (ArrayList<Integer>)request.getSession().getAttribute("positionId");
 
-    @PostMapping("/hr/applyInfo")
-    public String ResumeInfo(HttpServletRequest request) {
+        List<PostedRecumeBO> resumes = null;
+
+        if (positionIds==null){
+            resumes = resumeService.getResumeByState(hr.getHrId(),state);  //直接按状态查找
+        }else {
+            resumes = resumeService.getResumeByStateWithPosIds(hr.getHrId(),state,positionIds);//按状态+标题（查出List positionId）
+        }
+
+        Map output = new TreeMap();
+        output.put("resumes",resumes);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+        return jsonObject.toString();
+
+    }
+
+    /**
+     *   查看所有简历
+     *   @author  PocketKnife
+     *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
+    */
+    @ResponseBody
+    @GetMapping("/hr/resumeInfo")
+    public String ResumeInfo(HttpServletRequest request){
         HREntity hr = this.getHR(request);
         if (hr == null) {
             return errorDirect_404();
         }
-        return null;
+        List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
+
+        List<PostedRecumeBO> resumes = null;
+
+        if (positionIds == null) {
+            resumes = resumeService.getAllResume(hr.getHrId());  //直接按状态查找
+        } else {
+            resumes = resumeService.getAllResumeWithPosIds(hr.getHrId(), positionIds);//按状态+标题（查出List positionId）
+        }
+            Map output = new TreeMap();
+            output.put("resumeInfo", resumes);
+
+            JSONObject jsonObject = JSONObject.fromObject(output);
+
+            return jsonObject.toString();
+        }
+
+
+
+
+    /**
+     * 移除简历（条件不符合或者面试不通过）
+     */
+    @PutMapping("/hr/removeresume/{applicationId}")
+    public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
+        HREntity hr = this.getHR(request);
+        if (hr == null) {
+            return errorDirect_404();
+        }
+        if (applicationService.updateResumeState(-1,applicationId)==0){
+           return errorDirect_404();
+        }
+        return "查看简历界面";
     }
 
     /**
-     * 查看新简历
-     * 根据HRId查询投递到该hr下的各个岗位的投递者的信息。
-     *
-     * @author PocketKnife
-     * @create 12:12 2020/5/9
+     * 安排面试    flag=1 代表 1面
      */
-    @PostMapping(value = "/hr/resume/{id}")
-    @ResponseBody
-    public String getResume(HttpServletRequest request) {
-        class Resume {
-            UserEntity user = null;
-            PositionEntity positionEntity = null;
-
-            Resume(UserEntity user, PositionEntity position) {
-                this.user = user;
-                this.positionEntity = position;
-            }
-        }
-
+    @PutMapping("/hr/Interview/{applicationId}")
+    public String arrangeInterview(HttpServletRequest request, @RequestParam int flag,@RequestParam String interviewsDesc,@PathVariable int applicationId ) {
         HREntity hr = this.getHR(request);
-        List<PositionEntity> positionList = null;
-        List<Resume> resume = new ArrayList<Resume>();
-
-        positionList = positionService.listPositionByHr(hr.getHrId());
-        for (PositionEntity position : positionList) {
-            if (!favorService.favorOrNotByPosId(position.getPositionId())) continue;
-            List<FavorPositionBO> favorPositionBo = favorService.listFavorByPositionId(position.getPositionId());
-            for (FavorPositionBO favor : favorPositionBo) {
-                UserEntity user = userService.getUser(favor.getUserId());
-                resume.add(new Resume(user, position));
-            }
+        String interviewDesc = interviewsDesc +"("+ flag + "面）";
+        if(hr == null) {
+            return errorDirect_404();
         }
+        if (applicationService.arrangeInterview(applicationId,(flag+1))==0){
+            return errorDirect_404();
+        }else {
+            if(!resumeService.sendNews((flag+1), applicationId, interviewDesc, hr.getHrId()))
+                return "发送信息失败";
+            else
+                return "成功";
+        }
+    }
+
+    /**
+     *   查看简历具体信息
+     *   @author  PocketKnife
+     *   @create  22:09 2020/5/9
+    */
+    @PostMapping(value = "/hr/resume/ResumeDesc")
+    @ResponseBody
+    public String getResumeDesc(HttpServletRequest request,@RequestParam(value="applicationId",defaultValue = "")int applicationId){
+        HREntity hr = this.getHR(request);
+        if(hr == null) {
+            return errorDirect_404();
+        }
+        ApplicationResumeHRBO applicationResumeHRBO = applicationService.getResumeHRBO(applicationId);
+        UserEntity userEntity = userService.getUser(applicationResumeHRBO.getUserId());
+        ResumeEntity resumeEntity = resumeService.getResumeById(applicationResumeHRBO.getResumeId());
+        //简历状态未看时 才更新简历状态未备选
+        if(applicationResumeHRBO.getState() == 0){
+        applicationService.updateResumeState(1,applicationId);
+        }
+
         Map output = new TreeMap();
-        output.put("resume", resume);
+        output.put("userEntity",userEntity);
+        output.put("resumeEntity",resumeEntity);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+        return jsonObject.toString();
+    }
+
+
+    //==========================下面功能新增==========================
+
+    /**
+     * 简历搜索功能
+     */
+    @PostMapping("/hr/search")
+    @ResponseBody
+    public String Resumesearch(HttpServletRequest request, @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "limit", defaultValue = "6") int limit) {
+        HREntity hr = this.getHR(request);
+        if (hr == null) {
+            return errorDirect_404();
+        }
+        page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+        List<PostedRecumeBO> posInfo = resumeService.searchUser(hr.getHrId(), keyword, page, limit);
+
+        Map output = new TreeMap();
+        output.put("hr", hr);
+        output.put("title", ("第" + page + "页"));
+        output.put("keyword", keyword);
+        output.put("posInfo", posInfo);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
@@ -87,22 +201,43 @@ public class ResumeController extends BaseController {
     }
 
 
+
+//    /**
+//     * 发送面试
+//     */
+//    @PutMapping("/hr/Interview/{applicationId}")
+//    public String sendInterview(HttpServletRequest request, @RequestParam int flag, @RequestParam String interviewsDesc, @PathVariable int applicationId) {
+//        HREntity hr = this.getHR(request);
+//        String interviewDesc = interviewsDesc + "(" + flag + "面）";
+//        if (hr == null) {
+//            return errorDirect_404();
+//        }
+//        if (applicationService.arrangeInterview(interviewDesc, applicationId, (flag + 1))==0) {
+//            return "安排面试失败";
+//        }else {
+//            if(!resumeService.sendNews((flag+1), applicationId, interviewsDesc, hr.getHrId()))
+//                return "发送信息失败";
+//            else
+//                return "成功";
+//        }
+//    }
+
     /**
-     * 查看简历具体信息
-     *
-     * @author PocketKnife
-     * @create 22:09 2020/5/9
+     * 发送offer
      */
-    @PostMapping(value = "/hr/resume/ResumeDesc")
-    @ResponseBody
-    public String getResumeDesc(HttpServletRequest request, @RequestParam(value = "applicationId", defaultValue = "") int applicationId) {
+    @PutMapping("/hr/sendoffer/{applicationId}")
+    public String sendOffers(HttpServletRequest request, @RequestParam String interviewsDesc, @PathVariable int applicationId) {
         HREntity hr = this.getHR(request);
+
         if (hr == null) {
             return errorDirect_404();
         }
-        ApplicationResumeHRBO applicationResumeHRBO = applicationService.getResumeHRBO(applicationId);
-        UserEntity userEntity = userService.getUser(applicationResumeHRBO.getUserId());
-        ResumeEntity resumeEntity = resumeService.getResumeById(applicationResumeHRBO.getResumeId());
-        applicationService.updateResumeState(1, applicationId);
+
+        if(!resumeService.sendNews(-3, applicationId, interviewsDesc, hr.getHrId())){
+            return "发送失败";
+        }
+
+        return "成功";
     }
+
 }

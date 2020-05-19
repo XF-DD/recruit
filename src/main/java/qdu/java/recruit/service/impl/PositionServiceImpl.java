@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.mapper.PositionMapper;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 import qdu.java.recruit.service.PositionService;
 import qdu.java.recruit.util.RecPositionUtil;
@@ -25,6 +26,20 @@ public class PositionServiceImpl implements PositionService {
     @Resource
     private PositionMapper positionMapper;
 
+
+    @Override
+    public List<String> listTitle(int hrId) {
+        return positionMapper.listTitle(hrId);
+    }
+
+    /**
+     * 按照title查询职位Id
+     */
+    public List<Integer> listPositionIdByTitle(String title,int hrId){
+        return positionMapper.listPosIdByTitle(title,hrId);
+    }
+
+    //=============以上5/16新增 陈淯===============
 
     /**
      * 分页推荐职位
@@ -118,11 +133,11 @@ public class PositionServiceImpl implements PositionService {
      * @return
      */
     @Override
-    public PageInfo<PositionEntity> listPositionByHr(int hrid,int page, int limit) {
+    public PageInfo<PositionCategoryHRBO> listPositionByHrWithCag(int hrid,int page, int limit) {
         int total = positionMapper.countHRPos(hrid);
         PageHelper.startPage(page, limit);
-        List<PositionEntity> posList = listPositionByHr(hrid);
-        PageInfo<PositionEntity> pagination = new PageInfo<>(posList);
+        List<PositionCategoryHRBO> posList = listPositionByHrWithCag(hrid);
+        PageInfo<PositionCategoryHRBO> pagination = new PageInfo<>(posList);
         pagination.setTotal(total);
         return pagination;
     }
@@ -132,6 +147,11 @@ public class PositionServiceImpl implements PositionService {
     *   @author  PocketKnife
     *   @create  11:27 2020/5/9
     */
+    @Override
+    public List<PositionCategoryHRBO> listPositionByHrWithCag(int hrid) {
+        return positionMapper.listHRPosWithCag(hrid);
+    }
+
     @Override
     public List<PositionEntity> listPositionByHr(int hrid) {
         return positionMapper.listHRPos(hrid);

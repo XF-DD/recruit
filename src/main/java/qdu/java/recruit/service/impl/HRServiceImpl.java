@@ -26,12 +26,25 @@ public class HRServiceImpl implements HRService {
 
     @Override
     public boolean updateHR(HREntity HREntity) {
+        String password = HREntity.getHrPassword();
 
-        int result = HRMapper.updateHR(HREntity);
-        if (result > 0) {
-            return true;
+        int result = -1;
+        try {
+            String encPass = this.EncodingByMd5(password);
+            HREntity.setHrPassword(encPass);
+            result = HRMapper.updateHR(HREntity);
+
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("md5加密出错");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("编码转化出错");
+        } finally {
+            if (result > 0) {
+                System.out.println("成功");
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     @Override

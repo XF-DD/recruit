@@ -1,11 +1,14 @@
 package qdu.java.recruit.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.mapper.ResumeMapper;
+import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ResumeService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
@@ -18,6 +21,35 @@ public class ResumeServiceImpl implements ResumeService {
 
         return resumeMapper.getResumeById(userId);
     }
+
+    //5/16  陈淯
+    @Override
+    public List<PostedRecumeBO> getResumeByStateWithPosIds(int hrId, int state, List<Integer> positionIds) {
+        return resumeMapper.getResumeByStateWithPosIds( hrId,state,positionIds);
+    }
+
+    @Override
+    public List<PostedRecumeBO> getResumeByState(int hrId, int state) {
+        return resumeMapper.getResumeByState(hrId,state);
+    }
+
+    @Override
+    public List<PostedRecumeBO> getAllResumeWithPosIds(int hrId,List<Integer> positionIds) {
+        return resumeMapper.getAllResumeWithPosIds(hrId,positionIds);
+    }
+
+
+    @Override
+    public List<PostedRecumeBO> getAllResume(int hrId) {
+        return resumeMapper.getAllResume(hrId);
+    }
+
+
+    @Override
+    public List<PostedRecumeBO> getInterviewResumeByHrId(int hrId) {
+        return resumeMapper.getInterviewResume(hrId);
+    }
+
 
     @Override
     public boolean updateResume(ResumeEntity resumeEntity) {
@@ -35,6 +67,40 @@ public class ResumeServiceImpl implements ResumeService {
             return true;
         }
         return false;
+    }
+
+    //以下新增
+    @Override
+    public List<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<PostedRecumeBO> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
+        return searchList;
+    }
+
+    @Override
+    public boolean sendNews(int state, int applicationId, String interviewsDesc, int hrId) {
+        int userId = resumeMapper.getUserId(applicationId);
+        if(state == -3) {
+            //将已发送offer的申请状态设为-3
+            if (resumeMapper.setState(-3, applicationId) == 0) {
+                return false;
+            }
+            //记录发送信息
+            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
+                return false;
+            }
+            //将已发送offer的其他申请状态设为-2(未通过)
+            if (resumeMapper.setState1(-2, hrId, applicationId, userId) == 0) {
+                return false;
+            }
+            return true;
+        }else{
+            //记录发送信息
+            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
+                return false;
+            }
+            return true;
+        }
     }
 
 }
