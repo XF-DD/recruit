@@ -114,7 +114,7 @@ public class ResumeController extends BaseController {
             return errorDirect_404();
         }
         if (applicationService.updateResumeState(-1,applicationId)==0){
-           return errorDirect_404();
+            return errorDirect_404();
         }
         return "查看简历界面";
     }
