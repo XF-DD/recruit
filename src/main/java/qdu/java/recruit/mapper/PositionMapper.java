@@ -9,8 +9,14 @@ import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PositionCompanyBO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface PositionMapper {
+
+    @Select("select positionId from position where title = #{title} and hrIdPub = #{hrId}")
+    List<Integer> listPosIdByTitle(@Param("title") String title,@Param("hrId") int hrId);
+    //===========以上为5/16新增 陈淯=========
+
 
     @Select("select * from position where statePub = 1")
     ArrayList<PositionEntity> listPosAll();
@@ -49,13 +55,15 @@ public interface PositionMapper {
     @Select("select count(*) from position where hrIdPub=#{hrIdPub}")
     int countHRPos(@Param("hrIdPub") int hrIdPub);
 
-    @Delete("delete position where positionId = #{posId}")
+    @Delete("delete from position where positionId = #{posId}")
     int delete(@Param("posId") int posId);
 
+    // 5/18陈淯 修改  positionId错写为posId
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
             "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
-            "validDate=#{validDate},statePub=#{statePub}" +
-            " where positionId = #{posId}")
+            "validDate=#{validDate},statePub=#{statePub}," +
+            "categoryId = #{categoryId}"+
+            " where positionId = #{positionId}")
     int updatePosition(PositionEntity positionEntity);
 
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")

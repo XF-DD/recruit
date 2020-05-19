@@ -28,6 +28,15 @@ public class PositionServiceImpl implements PositionService {
 
 
     /**
+     * 按照title查询职位Id
+     */
+    public List<Integer> listPositionIdByTitle(String title,int hrId){
+        return positionMapper.listPosIdByTitle(title,hrId);
+    }
+
+    //=============以上5/16新增 陈淯===============
+
+    /**
      * 分页推荐职位
      *
      * @param user

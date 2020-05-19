@@ -1,5 +1,6 @@
 package qdu.java.recruit.controller.hr;
 
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,43 +39,80 @@ public class ResumeController extends BaseController {
     /**
      *   查询简历
      *   通过state判断查询的简历状态，返回相应状态的简历
-     *   可查询新、备选、放弃、未通过、通过、一面、二面简历
-     *   0 1 -1 -2 -3 2 3
+     *   可查询新、备选、放弃、未通过、通过、一面、二面、三面，其余大于三面的简历
+     *      0       1     -1    -2      -3     2    3     4         >4
      *   @author  PocketKnife
-     *   @create  23:34 2020/5/9
+     *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
+     *
+     *   5/18 陈淯
+     *   添加了分页
+     *   5/19
+     *   添加查询其余大于三面的简历
     */
     @GetMapping(value = "/hr/resume/{state}")
     @ResponseBody
-    public String getResume(HttpServletRequest request , @PathVariable int state){
+    public String getResume(HttpServletRequest request , @PathVariable int state,
+                            @RequestParam(value = "page", defaultValue = "1") int page,
+                            @RequestParam(value = "limit", defaultValue = "6") int limit){
         HREntity hr = this.getHR(request);
         if(hr == null) {
             return errorDirect_404();
         }
-        List<PostedRecumeBO> resumes = resumeService.getResumeByState(hr.getHrId(),state);
+        page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+
+        List<Integer> positionIds = (ArrayList<Integer>)request.getSession().getAttribute("positionId");
+
+        PageInfo<PostedRecumeBO> resumes = null;
+
+        if (positionIds==null){
+            resumes = resumeService.getResumeByState(hr.getHrId(),state,page,limit);  //直接按状态查找
+        }else {
+            resumes = resumeService.getResumeByStateWithPosIds(hr.getHrId(),state,positionIds,page,limit);//按状态+标题（查出List positionId）
+        }
 
         Map output = new TreeMap();
         output.put("resumes",resumes);
-
         JSONObject jsonObject = JSONObject.fromObject(output);
-
         return jsonObject.toString();
+
     }
 
     /**
      *   查看所有简历
      *   @author  PocketKnife
      *   @create  23:40 2020/5/9
+     *
+     *   5/17 16：42  陈淯
+     *   添加按照 状态+title查找
+     *
+     *   5/18 陈淯
+     *   添加了分页
     */
     @ResponseBody
     @GetMapping("/hr/resumeInfo")
-    public String ResumeInfo(HttpServletRequest request) {
+    public String ResumeInfo(HttpServletRequest request,
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
         if(hr == null) {
             return errorDirect_404();
         }
-        List<PostedRecumeBO>  resumeInfo= resumeService.getAllResume(hr.getHrId());
+        page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+
+        List<Integer> positionIds = (List<Integer>)request.getSession().getAttribute("positionId");
+
+        PageInfo<PostedRecumeBO> resumes = null;
+
+        if (positionIds==null){
+            resumes = resumeService.getAllResume(hr.getHrId(),page,limit);  //直接按状态查找
+        }else {
+            resumes = resumeService.getAllResumeWithPosIds(hr.getHrId(),positionIds,page,limit);//按状态+标题（查出List positionId）
+        }
         Map output = new TreeMap();
-        output.put("resumeInfo",resumeInfo);
+        output.put("resumeInfo",resumes);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
@@ -100,10 +140,11 @@ public class ResumeController extends BaseController {
     }
 
     /**
-     * 移除简历（条件不符合或者面试不通过）
+     * 移除简历（条件不符合 没有通过面试的）
      */
     @PutMapping("/hr/removeresume/{applicationId}")
-    public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
+    public String RemoveResume(HttpServletRequest request,
+                               @PathVariable int applicationId) {
         HREntity hr = this.getHR(request);
         if(hr == null) {
             return errorDirect_404();
@@ -187,39 +228,21 @@ public class ResumeController extends BaseController {
         return jsonObject.toString();
     }
 
-
-//    /**
-//     * 发送面试
-//     */
-//    @PutMapping("/hr/Interview/{applicationId}")
-//    public String sendInterview(HttpServletRequest request, @RequestParam int flag, @RequestParam String interviewsDesc, @PathVariable int applicationId) {
-//        HREntity hr = this.getHR(request);
-//        String interviewDesc = interviewsDesc + "(" + flag + "面）";
-//        if (hr == null) {
-//            return errorDirect_404();
-//        }
-//        if (applicationService.arrangeInterview(interviewDesc, applicationId, (flag + 1))==0) {
-//            return "安排面试失败";
-//        }else {
-//            if(!resumeService.sendNews((flag+1), applicationId, interviewsDesc, hr.getHrId()))
-//                return "发送信息失败";
-//            else
-//                return "成功";
-//        }
-//    }
-
     /**
-     * 发送offer
+     * 发送信息   包括发送offer 和 通知面试未通过
+     * //5/18 陈淯   合并 发送offer 和 通知面试未通过
      */
-    @PutMapping("/hr/sendoffer/{applicationId}")
-    public String sendOffers(HttpServletRequest request, @RequestParam String interviewsDesc, @PathVariable int applicationId) {
+    @PutMapping("/hr/sendnews/{applicationId}")
+    public String sendOffers(HttpServletRequest request,
+                             @PathVariable int applicationId,
+                             @RequestParam("interviewsDesc") String interviewsDesc,
+                             @RequestParam("state") int state) {
         HREntity hr = this.getHR(request);
 
         if (hr == null) {
             return errorDirect_404();
         }
-
-        if(!resumeService.sendNews(-3, applicationId, interviewsDesc, hr.getHrId())){
+        if(!resumeService.sendNews(state, applicationId, interviewsDesc, hr.getHrId())){
             return "发送失败";
         }
 
