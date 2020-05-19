@@ -103,6 +103,7 @@ public class ResumeController extends BaseController {
 
 
 
+
     /**
      * 移除简历（条件不符合或者面试不通过）
      */
