@@ -1,6 +1,7 @@
 package qdu.java.recruit.controller.hr;
 
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.*;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+@RestController
+@Api(value = "职位管理",description = "职位管理")
 public class PositionController extends BaseController {
     /**
      * postion part
@@ -50,15 +54,22 @@ public class PositionController extends BaseController {
     @Autowired
     CompanyService companyService;
 
+
+    /**
+     *
+     */
+
+
+//===============以上新增5/16====================
+
     /**
      * 职位信息表
      * @param request
      * @return
      */
-    @GetMapping("/hr{id}/position/{page}")
+    @GetMapping("/hr/position/{page}")
     @ResponseBody
     public String showPostionInfo(HttpServletRequest request,
-                                  @PathVariable int id,
                                   @PathVariable int page,
                                   @RequestParam(value = "limit", defaultValue = "12") int limit){
 
@@ -68,10 +79,10 @@ public class PositionController extends BaseController {
             this.errorDirect_404();
             //其实应该返回的是401，或者403
         }
-        id = hr.getHrId();
+        int id = hr.getHrId();
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-        PageInfo<PositionEntity> positionEntities = positionService.listPositionByHr(id,page,limit);
+        PageInfo<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id,page,limit);
 
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
@@ -174,6 +185,10 @@ public class PositionController extends BaseController {
         return positionService.updatePosition(positionEntity);
     }
 
+
+    /**
+     * 职位创建
+     */
     @PostMapping("hr{id}/position/create")
     public int createPosition(ModelMap modelMap, HttpServletRequest request, @PathVariable int id, PositionEntity positionEntity) {
         HREntity hr = this.getHR(request);
@@ -185,6 +200,7 @@ public class PositionController extends BaseController {
             modelMap.put("categoryEntities",categoryEntities);
             positionEntity.setReleaseDate(new Date());
             positionEntity.setStatePub(1);
+            positionEntity.setHrIdPub(id);
             return positionService.savePosition(positionEntity);
 
 

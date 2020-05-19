@@ -13,7 +13,7 @@ public interface ApplicationService {
 
     int updateResumeState(int state,int applicationid);
 
-    int arrangeInterview(String interviewsDesc,int applicationId,int flag);
+    int arrangeInterview(int applicationId,int flag);
 
     List<ApplicationPositionHRBO> listApplyInfo(int resumeId);
 

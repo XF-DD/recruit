@@ -17,6 +17,7 @@ import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
+import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -120,9 +121,9 @@ public class HRController extends BaseController {
             return 0;
         }
 
-        if (hrService.loginHR(hrName, hrPass)) {
+        if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
-            httpSession.setAttribute("hr", hrService.getHRByMobile(hrName));
+            httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
             return 1;
         }
         return 0;
@@ -130,7 +131,7 @@ public class HRController extends BaseController {
 
 
     /**
-     * 用户个人信息 输出
+     * HR个人信息 输出
      *
      * @param request
      * @return
@@ -153,7 +154,7 @@ public class HRController extends BaseController {
         //收件箱
         List<ApplicationPositionHRBO> applyPosList = applicationService.listApplyInfoByHr(id);
         //创建的职位
-        List<PositionEntity> positionEntities = positionService.listPositionByHr(id);
+        List<PositionCategoryHRBO> positionEntities = positionService.listPositionByHrWithCag(id);
 
         Map output = new TreeMap();
         output.put("hr", hr);
@@ -188,7 +189,8 @@ public class HRController extends BaseController {
      * @return
      */
     @PostMapping("/hr/info/update")
-    public String updateInfo(HttpServletRequest request,
+    public String updateInfo(HttpSession httpSession,
+                             HttpServletRequest request,
                              @RequestParam("hrMobile") String mobile,
                              @RequestParam("hrPassword") String password,
                              @RequestParam("hrName") String name,
@@ -204,10 +206,16 @@ public class HRController extends BaseController {
         HREntity.setHrPassword(password);
         HREntity.setHrName(name);
         HREntity.setHrEmail(email);
+        HREntity.setDescription(description);
         HREntity.setDepartmentId(departmentId);
 
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
+        }else {
+            if (hrService.loginHR(mobile, password)) {
+                System.out.println("匹配到了");
+                httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
+            }
         }
         return this.hrDirect("hr_info");
     }

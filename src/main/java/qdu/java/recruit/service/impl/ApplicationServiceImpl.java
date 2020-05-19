@@ -32,8 +32,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     //安排面试
     @Override
-    public int arrangeInterview(String interviewsDesc,int applicationId,int flag){
-        return applicationMapper.OperateInterviews(flag,interviewsDesc,applicationId);
+    public int arrangeInterview(int applicationId,int flag){
+        return applicationMapper.OperateInterviews(flag,applicationId);
     }
 
     @Override
