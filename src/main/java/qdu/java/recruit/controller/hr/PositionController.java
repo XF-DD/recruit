@@ -43,7 +43,7 @@ public class PositionController extends BaseController {
     @ResponseBody
     public int jumpToResumePage(HttpSession session,
                                   @PathVariable int positionId){
-
+        System.out.println("/hr/positionId/{positionId}");
         PositionEntity positionById = positionService.getPositionById(positionId);
         if (positionById!=null){
             List<Integer> positionIds = Arrays.asList(positionId);
@@ -87,6 +87,7 @@ public class PositionController extends BaseController {
     public int jumpToResumePage(HttpSession session,
                                 HttpServletRequest request,
                                 @RequestParam(value = "title", defaultValue = "", required = false) String title) {
+        System.out.println("/hr/position/category");
         HREntity hr = this.getHR(request);
         List<Integer> positionIds = positionService.listPositionIdByTitle(title, hr.getHrId());
         if (positionIds.size() != 0) {

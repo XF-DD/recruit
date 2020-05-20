@@ -119,8 +119,6 @@ public class ResumeController extends BaseController {
         }
 
 
-
-
     /**
      * 移除简历（条件不符合 没有通过面试的）
      */
@@ -190,12 +188,12 @@ public class ResumeController extends BaseController {
     /**
      * 简历搜索功能
      * 黄少龙
-     * 查询所有的简历按keywor
+     * 查询所有的简历按keyword
      * 5/19
      */
     @PostMapping("/hr/search")
     @ResponseBody
-    public String Resumesearch(HttpServletRequest request, @RequestParam(value = "keyword", defaultValue = "") String keyword,
+    public String ResumeSearch(HttpServletRequest request, @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
@@ -219,12 +217,12 @@ public class ResumeController extends BaseController {
     /**
      * 简历搜索功能
      * 黄少龙
-     * 查询所有的简历按keywor+标题+状态
+     * 查询所有的简历按keyword+标题+状态
      * 5/19
      */
     @GetMapping(value = "/hr/search/{state}")
     @ResponseBody
-    public String ResumesearchBystate(HttpServletRequest request,
+    public String ResumeSearchByState(HttpServletRequest request,
                                       @PathVariable int state,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       @RequestParam(value = "limit", defaultValue = "6") int limit) {

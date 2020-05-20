@@ -30,7 +30,7 @@ public interface ResumeMapper {
     @Select("select a.applicationId,u.*,p.title \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
-            "where hrId = #{hrId} and state = #{state} order by a.recentTime DESC")
+            "where hrId = #{hrId} and hrId = p.hrIdPub and state = #{state} order by a.recentTime DESC")
    List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId, @Param("state") int state);
 
     /**
@@ -106,7 +106,7 @@ public interface ResumeMapper {
     @Select("select a.applicationId,u.*,p.title \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
-            "where hrId = #{hrId} order by a.recentTime DESC")
+            "where hrId = #{hrId} and hrId = p.hrIdPub order by a.recentTime DESC")
     List<PostedRecumeBO> getAllResume(@Param("hrId") int hrId);
 
     @Select("select a.applicationId,u.*,p.title \n"+
