@@ -65,11 +65,11 @@ public class PositionController extends BaseController {
     @ResponseBody
     public String listTitle(HttpServletRequest request){
         HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-            //其实应该返回的是401，或者403
+       if (hr == null) {
+           this.errorDirect_404();
+           //其实应该返回的是401，或者403
         }
-        List<String> list = positionService.listTitle(hr.getHrId());
+        List<String> list = positionService.listTitle(1);
         Map output = new TreeMap();
         output.put("titles",list);
         JSONObject jsonObject = JSONObject.fromObject(output);
@@ -138,10 +138,6 @@ public class PositionController extends BaseController {
 
     /**
      * 职位详情
-<<<<<<< HEAD
-     *
-=======
->>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * @param request
      * @param id
      * @return
@@ -203,7 +199,6 @@ public class PositionController extends BaseController {
                               @RequestParam int categoryId
     ) {
         PositionEntity positionEntity = valide(request, id);
-
         positionEntity.setPositionId(id);
         positionEntity.setTitle(title);
         positionEntity.setRequirement(requirement);

@@ -46,12 +46,12 @@ public class InterviewController extends BaseController{
                                    @RequestParam(value="page",defaultValue = "1")int page,
                                    @RequestParam(value="limit",defaultValue="12") int limit){
         HREntity hr = this.getHR(request);
-       // if (hr == null) {
-      //      this.errorDirect_404();
-      //  }
+        if (hr == null) {
+            this.errorDirect_404();
+        }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(1,page,limit,2,positionIds);
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(hr.getHrId(),page,limit,2,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -78,12 +78,14 @@ public class InterviewController extends BaseController{
                                          @RequestParam(value="limit",defaultValue="12") int limit
                                          ){
        HREntity hr = this.getHR(request);
-      //  if(hr == null) {
-      //      return errorDirect_404();
-      //  }
+       if(hr == null) {
+            return errorDirect_404();
+        }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfoByState(1,page,limit,state,positionIds);
+
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfoByState(hr.getHrId(),page,limit,state,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -108,12 +110,12 @@ public class InterviewController extends BaseController{
                                    @RequestParam(value="page",defaultValue = "1")int page,
                                    @RequestParam(value="limit",defaultValue="12") int limit){
        HREntity hr = this.getHR(request);
-      //  if (hr == null) {
-       //     this.errorDirect_404();
-      //  }
+       if (hr == null) {
+           this.errorDirect_404();
+       }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(1,page,limit,5,positionIds);
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(hr.getHrId(),page,limit,5,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -129,9 +131,9 @@ public class InterviewController extends BaseController{
     @PutMapping("/hr/interview/{applicationId}")
     public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
         HREntity hr = this.getHR(request);
-        //if(hr == null) {
-       //     return errorDirect_404();
-      //  }
+        if(hr == null) {
+           return errorDirect_404();
+        }
         if (applicationService.updateResumeState(-2,applicationId)==0){
             return errorDirect_404();
         }
