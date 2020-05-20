@@ -5,8 +5,8 @@ spring:
 # datasource
   datasource:
       name: recruit
-      url: jdbc:mysql://localhost:3306/recruit?serverTimezone=GMT&useSSL=false
-      username: root
+      url: jdbc:mysql://47.103.223.103:3306/recruit?serverTimezone=GMT&useSSL=false
+      username: recruit
       password: 932567
 # 使用druid数据源
       type: com.alibaba.druid.pool.DruidDataSource
