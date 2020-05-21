@@ -23,7 +23,6 @@ public class ResumeEntity {
     private String annex;
     private int userId;
 
-    private String annex;
     private String education;
     private String interest;
 
