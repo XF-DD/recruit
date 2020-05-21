@@ -2,6 +2,14 @@ package qdu.java.recruit.entity;
 
 import java.util.Date;
 
+/**
+ *@Author: XF-DD
+ *@Date: 20/05/21 16:58
+ *
+ * 新增：
+ * 1. benefits 岗位福利
+ */
+
 public class PositionEntity {
 
     private int positionId;
@@ -18,6 +26,7 @@ public class PositionEntity {
     private int categoryId;
     private int departmentId;
     private int hrIdPub;
+    private String benefits;
 
     public int getPositionId() {
         return positionId;
@@ -125,5 +134,13 @@ public class PositionEntity {
 
     public void setHrIdPub(int hrIdPub) {
         this.hrIdPub = hrIdPub;
+    }
+
+    public String getBenefits() {
+        return benefits;
+    }
+
+    public void setBenefits(String benefits) {
+        this.benefits = benefits;
     }
 }

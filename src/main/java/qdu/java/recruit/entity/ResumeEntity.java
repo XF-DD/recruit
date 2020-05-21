@@ -1,7 +1,19 @@
 package qdu.java.recruit.entity;
 
-public class ResumeEntity {
+/**
+ * @Author: XF-DD
+ * @Date: 20/05/21 16:58
 
+ * 新增 ：
+ * 1. interest 兴趣爱好
+ * 2. education 教育经历
+ * 3. annex 附件路径
+ *
+ * 废弃:
+ * 1. internship 实习
+ * 2. jobDesire 工作期望
+ */
+public class ResumeEntity {
     private int resumeId;
     private String ability;
     private String internship;
@@ -10,6 +22,10 @@ public class ResumeEntity {
     private String jobDesire;
     private String annex;
     private int userId;
+
+    private String annex;
+    private String education;
+    private String interest;
 
     public int getResumeId() {
         return resumeId;
@@ -73,5 +89,29 @@ public class ResumeEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
+        this.annex = annex;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getInterest() {
+        return interest;
+    }
+
+    public void setInterest(String interest) {
+        this.interest = interest;
     }
 }
