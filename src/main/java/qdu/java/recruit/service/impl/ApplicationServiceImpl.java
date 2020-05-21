@@ -23,9 +23,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         java.util.Date date = new java.util.Date();
         Timestamp recentTime = new Timestamp(date.getTime());
 
+
         int result = applicationMapper.saveApplication(recentTime, resumeId, positionId,hrId,userId);
         if (result > 0) {
             return true;
+       /* if (applicationMapper.getApplication(resumeId, positionId) == null) {
+            int result = applicationMapper.saveApplication(recentTime, resumeId, positionId);
+            return result > 0;*/
         }
         return false;
     }
@@ -42,22 +46,24 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * 申请处理完成
+     *
      * @param resumeId
      * @return
      */
     @Override
-    public List<ApplicationPositionHRBO> listApplyInfo(int resumeId){
+    public List<ApplicationPositionHRBO> listApplyInfo(int resumeId) {
 
         return applicationMapper.listAppPosHR(resumeId);
     }
 
     /**
      * 申请待处理
+     *
      * @param resumeId
      * @return
      */
     @Override
-    public List<ApplicationPositionHRBO> listApplyInfoPub(int resumeId){
+    public List<ApplicationPositionHRBO> listApplyInfoPub(int resumeId) {
 
         return applicationMapper.listAppPosHRPub(resumeId);
     }

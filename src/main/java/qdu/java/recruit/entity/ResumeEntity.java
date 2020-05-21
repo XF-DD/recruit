@@ -20,9 +20,9 @@ public class ResumeEntity {
     private String workExperience;
     private String certificate;
     private String jobDesire;
+    private String annex;
     private int userId;
 
-    private String annex;
     private String education;
     private String interest;
 
@@ -73,6 +73,7 @@ public class ResumeEntity {
     public void setJobDesire(String jobDesire) {
         this.jobDesire = jobDesire;
     }
+
 
     public int getUserId() {
         return userId;

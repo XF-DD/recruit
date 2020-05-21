@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="form" action="/user/resume/upload">
+    <input type="file" name="resume"><br/>
+</form><br/>
+<button id="button">保存</button><br/><br/>
+<a href="/user/resume/download/inline" type="application/pdf" target="_blank">预览</a><br/><br/>
+<a href="/user/resume/download/attachment" type="application/pdf" target="_blank">下载</a><br/><br/>
+
+<script src="js/jquery.min.js"></script>
+<script>
+   $("#button").click( function click(){
+        $.ajax({
+            type:"post",
+            contentType:false,
+            processData: false,
+            data:new FormData($("#form").get(0)),
+            url:'/user/resume/upload',
+            dataType:"json",
+            success:function (data) {
+                alert("成功"+data)
+            },
+            error: function (data) {
+                alert (data)
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

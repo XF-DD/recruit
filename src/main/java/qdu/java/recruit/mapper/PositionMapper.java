@@ -29,11 +29,6 @@ public interface PositionMapper {
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
     //可以修改，添加福利
-
-   @Select("select p.*,c.* from position p,department d,company c \n" +
-            "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
-            "and title like #{keyword} and statePub = 1 \n" +
-            "order by ${order} DESC")
     ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
                                                @Param("order") String order,
                                                @Param("workCity") String workCity,

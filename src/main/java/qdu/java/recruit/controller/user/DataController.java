@@ -3,11 +3,14 @@ package qdu.java.recruit.controller.user;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
+import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.*;
@@ -18,10 +21,12 @@ import qdu.java.recruit.pojo.UserCommentBO;
 import qdu.java.recruit.service.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +75,7 @@ public class DataController extends BaseController {
      */
     @PostMapping(value = "user/registerPost")
     @ResponseBody
-    public int userRegister(@RequestParam String mobile, @RequestParam String password, @RequestParam String nickName) {
+    public int userRegister(@RequestParam String mobile, @RequestParam String password, @RequestParam String nickName, HttpSession session) {
 
         //验证mobile 和 password是否为空
         if (mobile == null || password == null || nickName == null) {
@@ -89,7 +94,13 @@ public class DataController extends BaseController {
         if (!userService.registerUser(userEntity)) {
             return 0;
         }
-
+        //todo 确定用户注册传过来的id
+        //创建文件夹用于存放附件、头像
+        int id = ((UserEntity) session.getAttribute("user")).getUserId();
+        File path = new File("d:\\recruit\\" + id);
+        if (!path.exists()) {
+            path.mkdir();
+        }
         ResumeEntity resume = new ResumeEntity();
         resume.setUserId(userService.getUserByMobile(mobile).getUserId());
         if (!resumeService.createResume(resume)) {
@@ -173,25 +184,25 @@ public class DataController extends BaseController {
     @PostMapping(value = "/search")
     @ResponseBody
     public String search(HttpServletRequest request,
-                         @RequestParam(value = "keyword",defaultValue="") String keyword,
-                         @RequestParam(value="orderBy",defaultValue = "salaryUp") String orderBy,
-                         @RequestParam(value="workCity",defaultValue = "") String workCity,
-                         @RequestParam(value="salaryDown",defaultValue = "") String salaryDown,
-                         @RequestParam(value="salaryUp",defaultValue = "") String salaryUp,
-                         @RequestParam(value="page",defaultValue = "1") int page,
+                         @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                         @RequestParam(value = "orderBy", defaultValue = "salaryUp") String orderBy,
+                         @RequestParam(value = "workCity", defaultValue = "") String workCity,
+                         @RequestParam(value = "salaryDown", defaultValue = "") String salaryDown,
+                         @RequestParam(value = "salaryUp", defaultValue = "") String salaryUp,
+                         @RequestParam(value = "page", defaultValue = "1") int page,
                          @RequestParam(value = "limit", defaultValue = "6") int limit) {
         UserEntity user = this.getUser(request);
 
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
-        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword,orderBy,workCity,salaryDown,salaryUp, page, limit);
+        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword, orderBy, workCity, salaryDown, salaryUp, page, limit);
 
         Map output = new TreeMap();
-        output.put("user",user);
+        output.put("user", user);
         output.put("title", ("第" + page + "页"));
         output.put("keyword", keyword);
-        output.put("workCity",workCity);
-        output.put("salaryDown",salaryDown);
-        output.put("salaryUp",salaryUp);
+        output.put("workCity", workCity);
+        output.put("salaryDown", salaryDown);
+        output.put("salaryUp", salaryUp);
         output.put("orderBy", orderBy);
         output.put("posInfo", posInfo);
         JSONObject jsonObject = JSONObject.fromObject(output);
@@ -303,14 +314,14 @@ public class DataController extends BaseController {
         PositionEntity position = positionService.getPositionById(id);
 
         if (user == null) {
-            this.errorDirect_404();
+            return this.errorDirect_404();
         }
         if (resume == null) {
             return "redirect:/user/info?type=person";
         }
         boolean result = applicationService.applyPosition(resume.getResumeId(), position.getPositionId(),position.getHrIdPub(),resume.getUserId());
         if (!result) {
-            this.errorDirect_404();
+            return this.errorDirect_404();
         }
 
         return "redirect:/user/success";
@@ -318,6 +329,7 @@ public class DataController extends BaseController {
 
     /**
      * 职位收藏与否
+     *
      * @param request
      * @param id
      * @return
@@ -340,6 +352,7 @@ public class DataController extends BaseController {
 
     /**
      * 用户收藏职位
+     *
      * @param request
      * @param id
      * @return
@@ -365,6 +378,7 @@ public class DataController extends BaseController {
 
     /**
      * 用户取消收藏职位
+     *
      * @param request
      * @param id
      * @return
@@ -412,7 +426,7 @@ public class DataController extends BaseController {
         if (!result) {
             return this.errorDirect_404();
         }
-        return "redirect:/position/"+id;
+        return "redirect:/position/" + id;
     }
 
     /**
@@ -448,12 +462,88 @@ public class DataController extends BaseController {
         output.put("resume", resume);
         output.put("favorPosList", favorPosList);
         output.put("applyPosList", applyPosList);
-        output.put("prePosList",prePosList);
-        output.put("allCategoryList",allCategoryList);
+        output.put("prePosList", prePosList);
+        output.put("allCategoryList", allCategoryList);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
 
         return jsonObject.toString();
+    }
+
+    /**
+     * 用户简历上传
+     * @Author: wzh
+     * @Date: 05/21
+     * @param
+     * @return 1成功，0失败
+     */
+    @PostMapping("/user/resume/upload")
+    @ResponseBody
+    public int uploadResume(MultipartFile resume, HttpSession session) throws IOException {
+        String resumeName = resume.getOriginalFilename();
+        //不是pdf不给上传
+        if (!resumeName.endsWith(".pdf")) {
+            return 0;
+        }
+        //edge和ie传过来的文件带有路径
+        if (resumeName.contains("\\")) {
+            String[] split = resumeName.split("\\\\");
+            resumeName = split[split.length - 1];
+        }
+        int id = ((UserEntity) session.getAttribute("user")).getUserId();
+        //todo 待user注册功能完善后再改
+        File path = new File("d:\\recruit\\" + id);
+        resumeService.saveResumeName(id, resumeName);
+        if (path.exists() || path.mkdirs()) {
+            resume.transferTo(new File(path, resumeName));
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * 用户简历在线预览
+     * @Author: wzh
+     * @Date: 05/21
+     * @param style 如果要直接浏览器打开就传inline，要下载传attachment
+     * @return
+     */
+    @GetMapping("/user/resume/download/{style}")
+    @ResponseBody
+    public void downloadResume(HttpSession session, HttpServletResponse response, @PathVariable String style) throws UnsupportedEncodingException {
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        int id = user.getUserId();
+        String resumeName = resumeService.getResumeNameById(id);
+        File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
+        if (file.exists()) {
+            response.addHeader("Content-Disposition", style + ";fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
+            FileInputStream fis = null;
+            BufferedInputStream bfis = null;
+            try {
+                fis = new FileInputStream(file);
+                bfis = new BufferedInputStream(fis);
+                //获取响应输出流
+                ServletOutputStream os = response.getOutputStream();
+                IOUtils.copy(bfis, os);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bfis != null) {
+                    try {
+                        bfis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -536,11 +626,11 @@ public class DataController extends BaseController {
      */
     @PostMapping(value = "/user/info/update")
     @ResponseBody
-    public String updateInfo(HttpServletRequest request,@RequestParam("password") String password,@RequestParam("nickname") String nickname,
-                             @RequestParam("email") String email, @RequestParam("name") String name,@RequestParam("gender") int gender,
-                             @RequestParam("birthYear") int birthYear,@RequestParam("graYear") int graYear,@RequestParam("province") String province,
+    public String updateInfo(HttpServletRequest request, @RequestParam("password") String password, @RequestParam("nickname") String nickname,
+                             @RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("gender") int gender,
+                             @RequestParam("birthYear") int birthYear, @RequestParam("graYear") int graYear, @RequestParam("province") String province,
                              @RequestParam("city") String city, @RequestParam("eduDegree") String eduDegree, @RequestParam("graduation") String graduation,
-                             @RequestParam("major") String major,@RequestParam("dirDesire") int dirDesire) {
+                             @RequestParam("major") String major, @RequestParam("dirDesire") int dirDesire) {
 
         int userId = this.getUserId(request);
 
@@ -563,7 +653,7 @@ public class DataController extends BaseController {
         boolean result = userService.updateUser(userEntity);
         HttpSession session = request.getSession();
         session.removeAttribute("user");
-        session.setAttribute("user",userService.getUser(userId));
+        session.setAttribute("user", userService.getUser(userId));
         if (!result) {
             return "fail";
         }
