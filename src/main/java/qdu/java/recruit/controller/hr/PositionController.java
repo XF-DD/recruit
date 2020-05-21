@@ -197,7 +197,8 @@ public class PositionController extends BaseController {
                               @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,
-                              @RequestParam int categoryId
+                              @RequestParam int categoryId,
+                              @RequestParam String benefits
     ) {
         PositionEntity positionEntity = valide(request, id);
         positionEntity.setPositionId(id);
@@ -209,6 +210,7 @@ public class PositionController extends BaseController {
         positionEntity.setSalaryDown(salaryDown);
         positionEntity.setWorkCity(workCity);
         positionEntity.setCategoryId(categoryId);
+        positionEntity.setBenefits(benefits);
 
         return positionService.updatePosition(positionEntity);
     }
@@ -246,17 +248,20 @@ public class PositionController extends BaseController {
     /**
      * 职位创建
      * 5/18陈淯  创建职位 validDate前端传入传入时间戳，后台进行转换
+     *
+     * 5/21添加福利
      */
     @PostMapping("hr/position/create")
     public int createPosition(HttpServletRequest request,
                               @RequestParam String title,
                               @RequestParam String requirement,
                               @RequestParam int quantity,
-                              @RequestParam String workCity,
+                              @RequestParam(required = false) String workCity,
                               @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,
-                              @RequestParam int categoryId) {
+                              @RequestParam int categoryId,
+                              @RequestParam(required = false) String benefits) {
         HREntity hr = this.getHR(request);
         List<CategoryEntity> categoryEntities = categoryService.getAll();
         if (hr == null) {
@@ -277,6 +282,7 @@ public class PositionController extends BaseController {
         positionEntity.setDepartmentId(hr.getDepartmentId());
         positionEntity.setHrIdPub(hr.getHrId());
         positionEntity.setCategoryId(categoryId);
+        positionEntity.setBenefits(benefits);
         return positionService.savePosition(positionEntity);
     }
 

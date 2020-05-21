@@ -29,11 +29,10 @@ public interface PositionMapper {
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
     //可以修改，添加福利
-
-   @Select("select p.*,c.* from position p,department d,company c \n" +
-            "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
-            "and title like #{keyword} and statePub = 1 \n" +
-            "order by ${order} DESC")
+//   @Select("select p.*,c.* from position p,department d,company c \n" +
+//            "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
+//            "and title like #{keyword} and statePub = 1 \n" +
+//            "order by ${order} DESC")
     ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
                                                @Param("order") String order,
                                                @Param("workCity") String workCity,
@@ -64,8 +63,9 @@ public interface PositionMapper {
 
     // 5/18陈淯 修改  positionId错写为posId
     //需要修改，添加福利
+    //5/21
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
-            "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
+            "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown},benefits = #{benefits}" +
             "validDate=#{validDate},statePub=#{statePub}," +
             "categoryId = #{categoryId}"+
             " where positionId = #{positionId}")
@@ -75,11 +75,11 @@ public interface PositionMapper {
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
 
-    //需要修改，添加福利
+    //需要修改，添加福利 5/21
     @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
-            "departmentId,categoryId,hrIdPub) " +
+            "departmentId,categoryId,hrIdPub,benefits) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
-            "#{departmentId},#{categoryId},#{hrIdPub})")
+            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits})")
     int savePosition(PositionEntity positionEntity);
 
     @Select("select distinct title from position where hrIdPub =#{hrId}")
