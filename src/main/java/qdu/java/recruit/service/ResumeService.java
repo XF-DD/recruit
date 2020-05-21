@@ -9,4 +9,8 @@ public interface ResumeService {
     boolean updateResume(ResumeEntity resumeEntity);
 
     boolean createResume(ResumeEntity resumeEntity);
+
+    String getResumeNameById(int userId);
+
+    boolean saveResumeName(int userId, String annex);
 }
