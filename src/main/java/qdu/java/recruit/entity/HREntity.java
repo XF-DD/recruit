@@ -1,5 +1,16 @@
 package qdu.java.recruit.entity;
 
+/**
+ *@Author: XF-DD
+ *@Date: 20/05/21 16:58
+ *
+ * 新增：
+ * 1. companyId  公司Id
+ * 2. power  权限字段，值1 为root权限的hr  ，值为0为普通hr
+ *
+ * 废弃
+ * 1. departmentId 部门id
+ */
 public class HREntity {
 
     private int hrId;
@@ -9,6 +20,10 @@ public class HREntity {
     private String hrEmail;
     private String description;
     private int departmentId;
+
+    private int companyId;
+    private int power;
+
 
     public int getHrId() {
         return hrId;
@@ -64,5 +79,21 @@ public class HREntity {
 
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
     }
 }

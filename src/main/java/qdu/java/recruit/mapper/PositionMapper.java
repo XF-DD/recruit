@@ -20,7 +20,7 @@ public interface PositionMapper {
     @Select("select * from position where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
-
+//可以修改，添加福利
 ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
                                            @Param("order") String order,
                                            @Param("workCity") String workCity,
@@ -49,6 +49,7 @@ ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
     @Delete("delete position where positionId = #{posId}")
     int delete(@Param("posId") int posId);
 
+    //需要修改，添加福利
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
             "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
             "validDate=#{validDate},statePub=#{statePub}" +
@@ -58,6 +59,7 @@ ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
+    //需要修改，添加福利
     @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
             "departmentId,categoryId,hrIdPub) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
