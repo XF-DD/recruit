@@ -74,13 +74,6 @@ public class ResumeEntity {
         this.jobDesire = jobDesire;
     }
 
-    public String getAnnex() {
-        return annex;
-    }
-
-    public void setAnnex(String annex) {
-        this.annex = annex;
-    }
 
     public int getUserId() {
         return userId;
