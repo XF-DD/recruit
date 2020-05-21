@@ -85,17 +85,25 @@ public class PositionServiceImpl implements PositionService {
      * 分页职位搜索
      *
      * @param keyword
+     * @param orderBy
+     * @param workCity
+     * @param salaryDown
+     * @param salaryUp
      * @param page
      * @param limit
      * @return
      */
     @Override
-    public PageInfo<PositionCompanyBO> searchPosition(String keyword,String orderBy, int page, int limit) {
+    public PageInfo<PositionCompanyBO> searchPosition(String keyword,
+                                                      String orderBy,
+                                                      String workCity,
+                                                      String salaryDown,
+                                                      String salaryUp,
+                                                      int page,
+                                                      int limit) {
 
         PageHelper.startPage(page, limit);
-
-        List<PositionCompanyBO> searchList = positionMapper.listSearchPos("%" + keyword + "%",orderBy);
-
+        List<PositionCompanyBO> searchList = positionMapper.listSearchPos(keyword,orderBy,workCity,salaryDown,salaryUp);
         return new PageInfo<>(searchList);
     }
 

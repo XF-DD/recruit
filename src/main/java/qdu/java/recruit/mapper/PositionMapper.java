@@ -28,11 +28,17 @@ public interface PositionMapper {
     @Select("select * from position  where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
-    @Select("select p.*,c.* from position p,department d,company c \n" +
+    //可以修改，添加福利
+
+   @Select("select p.*,c.* from position p,department d,company c \n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
             "and title like #{keyword} and statePub = 1 \n" +
             "order by ${order} DESC")
-    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword, @Param("order") String order);
+    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
+                                               @Param("order") String order,
+                                               @Param("workCity") String workCity,
+                                               @Param("salaryDown") String salaryDown,
+                                               @Param("salaryUp") String salaryUp);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
@@ -57,6 +63,7 @@ public interface PositionMapper {
     int delete(@Param("posId") int posId);
 
     // 5/18陈淯 修改  positionId错写为posId
+    //需要修改，添加福利
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
             "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
             "validDate=#{validDate},statePub=#{statePub}," +
@@ -67,7 +74,9 @@ public interface PositionMapper {
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
-    @Insert("insert into position (title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
+
+    //需要修改，添加福利
+    @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
             "departmentId,categoryId,hrIdPub) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
             "#{departmentId},#{categoryId},#{hrIdPub})")

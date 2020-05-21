@@ -12,10 +12,10 @@ import qdu.java.recruit.mapper.ApplicationMapper;
 public class DemoApplicationTests {
 
 	@Autowired
-	ApplicationMapper applicationMapper;
+//	ApplicationMapper applicationMapper;
 	@Test
 	public void contextLoads() {
-		System.out.println(applicationMapper.test().getInterviewsDesc());
+//		System.out.println(applicationMapper.test().getInterviewsDesc());
 	}
 
 }

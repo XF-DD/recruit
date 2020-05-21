@@ -128,7 +128,7 @@ public class InterviewController extends BaseController{
     /**
      * 移除简历,进入人才库（条件不符合或者面试不通过）
      */
-    @PutMapping("/hr/interview/{applicationId}")
+    @PutMapping("/hr/abandon/{applicationId}")
     public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
         HREntity hr = this.getHR(request);
         if(hr == null) {

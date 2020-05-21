@@ -140,7 +140,7 @@ public class ResumeController extends BaseController {
     /**
      * 安排面试    flag=1 代表 1面
      */
-    @PutMapping("/hr/Interview/{applicationId}")
+    @PutMapping("/hr/interview/{applicationId}")
     public String arrangeInterview(HttpServletRequest request, @RequestParam int flag,@RequestParam String interviewsDesc,@PathVariable int applicationId ) {
         HREntity hr = this.getHR(request);
         String interviewDesc = interviewsDesc +"("+ flag + "面）";
