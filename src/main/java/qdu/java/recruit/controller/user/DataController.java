@@ -483,11 +483,16 @@ public class DataController extends BaseController {
         if (!resumeName.endsWith(".pdf")) {
             return 0;
         }
+        //edge和ie传过来的文件带有路径
+        if (resumeName.contains("\\")) {
+            String[] split = resumeName.split("\\\\");
+            resumeName = split[split.length - 1];
+        }
         int id = ((UserEntity) session.getAttribute("user")).getUserId();
         //todo 待user注册功能完善后再改
         File path = new File("d:\\recruit\\" + id);
         resumeService.saveResumeName(id, resumeName);
-        if (path.exists() || path.mkdir()) {
+        if (path.exists() || path.mkdirs()) {
             resume.transferTo(new File(path, resumeName));
             return 1;
         }
@@ -495,23 +500,20 @@ public class DataController extends BaseController {
     }
 
     /**
-     * 用户简历下载
+     * 用户简历在线预览
      *
-     * @param
+     * @param style 如果要直接浏览器打开就传inline，要下载传attachment
      * @return
      */
     @GetMapping("/user/resume/download")
     @ResponseBody
-    public String downloadResume(HttpSession session, HttpServletResponse response) throws UnsupportedEncodingException {
+    public void downloadResume(HttpSession session, HttpServletResponse response, String style) throws UnsupportedEncodingException {
         UserEntity user = (UserEntity) session.getAttribute("user");
         int id = user.getUserId();
         String resumeName = resumeService.getResumeNameById(id);
         File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
-        if (file.exists()){
-            //在线预览
-            response.setContentType("application/pdf");
-            response.addHeader("Content-Disposition","inline;fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
-            byte[] buffer = new byte[1024];
+        if (file.exists()) {
+            response.addHeader("Content-Disposition", style + ";fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
             FileInputStream fis = null;
             BufferedInputStream bfis = null;
             try {
@@ -520,15 +522,9 @@ public class DataController extends BaseController {
                 //获取响应输出流
                 ServletOutputStream os = response.getOutputStream();
                 IOUtils.copy(bfis, os);
-                //int i = bfis.read(buffer);
-                //while (i != -1) {
-                //    os.write(buffer, 0, 1);
-                //    i = bfis.read();
-                //}
-                return "success";
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 if (bfis != null) {
                     try {
                         bfis.close();
@@ -545,7 +541,6 @@ public class DataController extends BaseController {
                 }
             }
         }
-        return "fail";
     }
 
     /**
