@@ -8,6 +8,7 @@ public class ResumeEntity {
     private String workExperience;
     private String certificate;
     private String jobDesire;
+    private String annex;
     private int userId;
 
     public int getResumeId() {
@@ -56,6 +57,14 @@ public class ResumeEntity {
 
     public void setJobDesire(String jobDesire) {
         this.jobDesire = jobDesire;
+    }
+
+    public String getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
+        this.annex = annex;
     }
 
     public int getUserId() {
