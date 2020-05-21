@@ -37,4 +37,14 @@ public class ResumeServiceImpl implements ResumeService {
         return false;
     }
 
+    @Override
+    public String getResumeNameById(int userId) {
+        return resumeMapper.getResumeNameById(userId);
+    }
+
+    @Override
+    public boolean saveResumeName(int userId, String annex) {
+        return resumeMapper.saveResumeName(userId, annex) == 1;
+    }
+
 }
