@@ -22,5 +22,10 @@ public interface ResumeMapper {
             "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId})")
     int createResume(ResumeEntity resumeEntity);
 
+    @Select("select annex from resume where userId = #{userId} limit 1")
+    String getResumeNameById(@Param("userId") int userId);
+
+    @Update("update resume set annex = #{annex} where userId = #{userId}")
+    int saveResumeName(@Param("userId") int userId, @Param("annex") String annex);
 
 }
