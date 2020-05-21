@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -518,11 +519,12 @@ public class DataController extends BaseController {
                 bfis = new BufferedInputStream(fis);
                 //获取响应输出流
                 ServletOutputStream os = response.getOutputStream();
-                int i = bfis.read(buffer);
-                while (i != -1) {
-                    os.write(buffer, 0, 1);
-                    i = bfis.read();
-                }
+                IOUtils.copy(bfis, os);
+                //int i = bfis.read(buffer);
+                //while (i != -1) {
+                //    os.write(buffer, 0, 1);
+                //    i = bfis.read();
+                //}
                 return "success";
             } catch (IOException e) {
                 e.printStackTrace();
