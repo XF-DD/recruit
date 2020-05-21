@@ -38,12 +38,12 @@ public class DruidDataSourceConfig implements EnvironmentAware {
         datasource.setDriverClassName(propertyResolver.getProperty("driver-class-name"));
         datasource.setUsername(propertyResolver.getProperty("username"));
         datasource.setPassword(propertyResolver.getProperty("password"));
-        datasource.setInitialSize(Integer.valueOf(propertyResolver.getProperty("initialSize")));
-        datasource.setMinIdle(Integer.valueOf(propertyResolver.getProperty("minIdle")));
-        datasource.setMaxWait(Long.valueOf(propertyResolver.getProperty("maxWait")));
-        datasource.setMaxActive(Integer.valueOf(propertyResolver.getProperty("maxActive")));
+        datasource.setInitialSize(Integer.parseInt(propertyResolver.getProperty("initialSize")));
+        datasource.setMinIdle(Integer.parseInt(propertyResolver.getProperty("minIdle")));
+        datasource.setMaxWait(Long.parseLong(propertyResolver.getProperty("maxWait")));
+        datasource.setMaxActive(Integer.parseInt(propertyResolver.getProperty("maxActive")));
         datasource.setMinEvictableIdleTimeMillis(
-                Long.valueOf(propertyResolver.getProperty("minEvictableIdleTimeMillis")));
+                Long.parseLong(propertyResolver.getProperty("minEvictableIdleTimeMillis")));
         try {
             datasource.setFilters("stat,wall");
         } catch (SQLException e) {

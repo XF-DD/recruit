@@ -172,21 +172,28 @@ public class DataController extends BaseController {
      */
     @PostMapping(value = "/search")
     @ResponseBody
-    public String search(HttpServletRequest request, @RequestParam(value = "keyword",defaultValue="") String keyword,
-                         @RequestParam(value="orderBy",defaultValue = "salaryUp") String orderBy,@RequestParam(value="page",defaultValue = "1") int page,
+    public String search(HttpServletRequest request,
+                         @RequestParam(value = "keyword",defaultValue="") String keyword,
+                         @RequestParam(value="orderBy",defaultValue = "salaryUp") String orderBy,
+                         @RequestParam(value="workCity",defaultValue = "") String workCity,
+                         @RequestParam(value="salaryDown",defaultValue = "") String salaryDown,
+                         @RequestParam(value="salaryUp",defaultValue = "") String salaryUp,
+                         @RequestParam(value="page",defaultValue = "1") int page,
                          @RequestParam(value = "limit", defaultValue = "6") int limit) {
         UserEntity user = this.getUser(request);
 
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
-        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword,orderBy, page, limit);
+        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword,orderBy,workCity,salaryDown,salaryUp, page, limit);
 
         Map output = new TreeMap();
         output.put("user",user);
         output.put("title", ("第" + page + "页"));
         output.put("keyword", keyword);
+        output.put("workCity",workCity);
+        output.put("salaryDown",salaryDown);
+        output.put("salaryUp",salaryUp);
         output.put("orderBy", orderBy);
         output.put("posInfo", posInfo);
-
         JSONObject jsonObject = JSONObject.fromObject(output);
 
         return jsonObject.toString();

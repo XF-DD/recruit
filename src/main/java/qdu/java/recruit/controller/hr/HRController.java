@@ -15,14 +15,16 @@ import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -61,6 +63,7 @@ public class HRController extends BaseController{
      */
     @PostMapping("/hr/register/first")
     @ResponseBody
+    //传入部门，公司id
     public String checkCompanyCode(ModelMap map,
                                    @RequestParam String CompanyCode,
                                    HttpServletRequest request,
