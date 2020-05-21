@@ -64,11 +64,11 @@ public interface PositionMapper {
     // 5/18陈淯 修改  positionId错写为posId
     //需要修改，添加福利
     //5/21
-    @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
-            "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown},benefits = #{benefits}" +
-            "validDate=#{validDate},statePub=#{statePub}," +
-            "categoryId = #{categoryId}"+
-            " where positionId = #{positionId}")
+    @Update("update position set title = #{title},requirement = #{requirement},quantity = #{quantity}," +
+            "workCity = #{workCity},salaryUp=#{salaryUp},salaryDown = #{salaryDown},benefits = #{benefits}," +
+            "validDate = #{validDate},statePub = #{statePub}," +
+            "categoryId = #{categoryId} "+
+            "where positionId = #{positionId}")
     int updatePosition(PositionEntity positionEntity);
 
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
@@ -76,7 +76,7 @@ public interface PositionMapper {
 
 
     //需要修改，添加福利 5/21
-    @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
+    @Insert("insert into position (title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
             "departmentId,categoryId,hrIdPub,benefits) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
             "#{departmentId},#{categoryId},#{hrIdPub},#{benefits})")
