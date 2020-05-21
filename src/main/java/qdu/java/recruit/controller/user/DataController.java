@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import javafx.application.Application;
 import net.sf.json.JSONObject;
+import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,12 +21,12 @@ import qdu.java.recruit.pojo.UserCommentBO;
 import qdu.java.recruit.service.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class DataController extends BaseController {
         //todo 确定用户注册传过来的id
         //创建文件夹用于存放附件、头像
         int id = ((UserEntity) session.getAttribute("user")).getUserId();
-        File path = new File("d:\\recruit\\user\\" + id);
+        File path = new File("d:\\recruit\\" + id);
         if (!path.exists()) {
             path.mkdir();
         }
@@ -467,20 +468,82 @@ public class DataController extends BaseController {
         return jsonObject.toString();
     }
 
+    /**
+     * 用户简历上传
+     *
+     * @param
+     * @return 1成功，0失败
+     */
     @PostMapping("/user/resume/upload")
     @ResponseBody
     public int uploadResume(MultipartFile resume, HttpSession session) throws IOException {
-        if (!resume.getOriginalFilename().endsWith(".pdf")) {
+        String resumeName = resume.getOriginalFilename();
+        //不是pdf不给上传
+        if (!resumeName.endsWith(".pdf")) {
             return 0;
         }
         int id = ((UserEntity) session.getAttribute("user")).getUserId();
         //todo 待user注册功能完善后再改
         File path = new File("d:\\recruit\\" + id);
+        resumeService.saveResumeName(id, resumeName);
         if (path.exists() || path.mkdir()) {
-            resume.transferTo(new File(path, resume.getOriginalFilename()));
+            resume.transferTo(new File(path, resumeName));
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * 用户简历下载
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/user/resume/download")
+    @ResponseBody
+    public String downloadResume(HttpSession session, HttpServletResponse response) throws UnsupportedEncodingException {
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        int id = user.getUserId();
+        String resumeName = resumeService.getResumeNameById(id);
+        File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
+        if (file.exists()){
+            //在线预览
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition","inline;fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bfis = null;
+            try {
+                fis = new FileInputStream(file);
+                bfis = new BufferedInputStream(fis);
+                //获取响应输出流
+                ServletOutputStream os = response.getOutputStream();
+                int i = bfis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, 1);
+                    i = bfis.read();
+                }
+                return "success";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                if (bfis != null) {
+                    try {
+                        bfis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "fail";
     }
 
     /**
