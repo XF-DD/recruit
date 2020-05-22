@@ -15,6 +15,7 @@ import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ApplicationService;
 import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
+import qdu.java.recruit.util.StateUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -234,14 +235,14 @@ public class ResumeController extends BaseController {
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
         PageInfo<PostedRecumeBO> resumes = null;
-        if (positionIds == null) {
+        if (positionIds==null) {
             resumes = resumeService.getResumeByTitleAndState(hr.getHrId(), keyword,state, page, limit);  //直接按状态查找
         } else {
             resumes = resumeService.getResumeByTitleAndStateWithPosIds(hr.getHrId(), state, positionIds,keyword, page, limit);//按状态+标题（查出List positionId）
         }
-
         Map output = new TreeMap();
         output.put("resumes", resumes);
+        output.put("stateName", StateUtil.getState(state));
         JSONObject jsonObject = JSONObject.fromObject(output);
         return jsonObject.toString();
 
@@ -251,7 +252,7 @@ public class ResumeController extends BaseController {
      * 发送信息   包括发送offer 和 通知面试未通过
      * //5/18 陈淯   合并 发送offer 和 通知面试未通过
      */
-    @PutMapping("/hr/sendnews/{applicationId}")
+    @PutMapping("/hr/sendNews/{applicationId}")
     public String sendOffers(HttpServletRequest request,
                              @PathVariable int applicationId,
                              @RequestParam("interviewsDesc") String interviewsDesc,
@@ -267,5 +268,4 @@ public class ResumeController extends BaseController {
 
         return "成功";
     }
-
 }

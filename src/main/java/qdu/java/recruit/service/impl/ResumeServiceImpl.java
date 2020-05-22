@@ -125,7 +125,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     //5/19 黄少龙
     @Override
-    public PageInfo<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
+    public PageInfo<PostedRecumeBO>  searchUser(int hrId, String keyword, int page, int limit) {
         PageHelper.startPage(page, limit);
         List<PostedRecumeBO> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
         int total = searchList.size();

@@ -134,7 +134,7 @@ public interface ResumeMapper {
     int setState1(@Param("state") int state, @Param("hrId") int hrId, @Param("applicationId") int applicationId, @Param("userId") int userId);
 
     //搜索用户
-    @Select("select b.applicationId,a.* from user as a, application as b where a.userId = b.userId and b.hrId=#{hrId} " +
+    @Select("select b.applicationId,b.state,a.* from user as a, application as b where a.userId = b.userId and b.hrId=#{hrId} " +
             "and (a.mobile like #{keyword} or a.name like #{keyword}) order by b.recentTime DESC")
     ArrayList<PostedRecumeBO> searchUser(@Param("hrId") int hrId, @Param("keyword") String keyword);
 
