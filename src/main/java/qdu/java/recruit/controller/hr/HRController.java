@@ -66,35 +66,56 @@ public class HRController extends BaseController{
     //传入部门，公司id
     public String checkCompanyCode(ModelMap map,
                                    @RequestParam String CompanyCode,
-                                   HttpServletRequest request,
+                                   HttpSession httpSession,
                                    DepartmentEntity departmentEntity) {
         CompanyEntity companyEntity = companyService.getCompany(CompanyCode);
         if (companyEntity == null) {
             throw new RuntimeException("公司不存在");
         } else {
+            //暂时先保留部门
             List<DepartmentEntity> departmentEntities = departmentService.getDepartmentByCompany(
                     companyEntity.getCompanyId());
             map.put("departments", departmentEntities);
-            request.setAttribute("department", departmentEntity.getDepartmentId());
-            return hrDirect("hr/register/second");
+
+            //已修改为绑定公司:绑定公司
+            httpSession.setAttribute("companyId",companyEntity.getCompanyId());
+            return hrDirect("register/second");
         }
     }
 
 
     @PostMapping(value = "hr/register/second")
     @ResponseBody
-    public int userRegister(@RequestParam HREntity user,
+    public int userRegister(@RequestParam("hrMobile") String mobile,
+                            @RequestParam("hrPassword") String password,
+                            @RequestParam("hrName") String name,
+                            @RequestParam("hrEmail") String email,
+                            Integer departmentId,
+                            String description,
                             HttpServletRequest request) {
 
-        int deparmentId = (int) request.getAttribute("department");
-        user.setDepartmentId(deparmentId);
-        String password = user.getHrPassword();
+        HttpSession session = request.getSession();
+        int companyId = (int) session.getAttribute("companyId");
+        HREntity hrEntity = new HREntity();
+        hrEntity.setCompanyId(companyId);
+        //销毁session域，保证公司代码串只能注册一次
+        session.removeAttribute("companyId");
+
+        hrEntity.setHrMobile(mobile);
+        hrEntity.setHrPassword(password);
+        hrEntity.setHrName(name);
+        hrEntity.setHrEmail(email);
+        hrEntity.setDescription(description);
+        if (departmentId!=null){
+            hrEntity.setDepartmentId(departmentId);
+        }
+
 
         //验证mobile 和 password是否为空
-        if (user.getHrMobile() == null || user.getHrPassword() == null) {
+        if (hrEntity.getHrMobile() == null || hrEntity.getHrPassword() == null) {
             return 0;
         }
-        if (hrService.registerHR(user)) {
+        if (hrService.registerHR(hrEntity)) {
             return 1;
         }
         return 1;
@@ -109,12 +130,12 @@ public class HRController extends BaseController{
      */
     @PostMapping(value = "/hr/loginPost")
     public int userLogin(HttpSession httpSession,
-                         @RequestParam String hrName,
+                         @RequestParam String hrMobile,
                          @RequestParam String hrPass) {
 
-        String mobile = hrName;
+        String mobile = hrMobile;
         String password = hrPass;
-        if (hrName == null || hrPass == null) {
+        if (hrMobile == null || hrPass == null) {
             return 0;
         }
 
@@ -184,18 +205,22 @@ public class HRController extends BaseController{
                              @RequestParam("hrName") String name,
                              @RequestParam("hrEmail") String email,
                              @RequestParam("description") String description,
-                             @RequestParam("departmentId") int departmentId) {
+                             @RequestParam("departmentId") int departmentId,
+                             @RequestParam("companyId") int companyId) {
+
 
         int hrId = this.getHRId(request);
-        request.getSession().getAttribute("hr");
-
         HREntity HREntity = new HREntity();
         HREntity.setHrId(hrId);
+        HREntity.setHrMobile(mobile);
         HREntity.setHrPassword(password);
         HREntity.setHrName(name);
         HREntity.setHrEmail(email);
         HREntity.setDescription(description);
         HREntity.setDepartmentId(departmentId);
+        HREntity.setPower(0);
+        HREntity.setCompanyId(companyId);
+
 
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();

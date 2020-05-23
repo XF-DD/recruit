@@ -40,12 +40,12 @@ public interface HRMapper {
     @Select("select COUNT(*) from hr")
     int getHRSize();
 
-    @Update({"update hr set hrPassword = #{hrPassword},hrName=#{hrName},hrEmail=#{hrEmail}," +
-            "description=#{description},departmentId=#{departmentId} where hrId = #{hrId}"})
+    @Update({"update hr set hrId = #{hrId},hrMobile = #{hrMobile},hrPassword = #{hrPassword},hrName=#{hrName},hrEmail=#{hrEmail}," +
+            "description=#{description},departmentId=#{departmentId},power = #{power},companyId = #{companyId} where hrId = #{hrId}"})
     int updateHR(HREntity hrEntity);
 
-    @Insert({"insert into hr(hrMobile,hrPassword,hrName,hrEmail,description,departmentId) " +
-            "values(#{hrMobile},#{hrPassword},#{hrName},#{hrEmail},#{description},#{departmentId})"})
+    @Insert({"insert into hr(hrMobile,hrPassword,hrName,hrEmail,description,departmentId,power,companyId) " +
+            "values(#{hrMobile},#{hrPassword},#{hrName},#{hrEmail},#{description},#{departmentId},0,#{companyId})"})
     int saveHR(HREntity hrEntity);
 
     @Select("select * from hr where hrMobile = #{hrMobile} limit 1")
