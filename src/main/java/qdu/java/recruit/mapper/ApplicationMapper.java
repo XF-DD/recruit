@@ -39,15 +39,15 @@ public interface ApplicationMapper {
 
     /**
      * 申请处理完成：查询返回 申请 职位 处理hr信息
-     * @param resumeId
+     * @param hrId
      * @return
      */
     @Select("select a.applicationId,a.state,a.recentTime,a.resumeId,p.*,h.hrId,h.hrMobile,h.hrName,h.hrEmail\n" +
             "from application a,position p,hr h\n" +
             "where a.positionId = p.positionId and a.hrId = h.hrId \n" +
-            "and a.hrId is not null and a.resumeId = #{resumeId}\n" +
+            "and a.hrId is not null and a.hrId = #{hrId}\n" +
             "order by recentTime;")
-    ArrayList<ApplicationPositionHRBO> listAppPosHR(@Param("resumeId") int resumeId);
+    ArrayList<ApplicationPositionHRBO> listAppPosHR(@Param("hrId") int hrId);
 
     /**
      * 申请待处理：查询返回 申请 职位 发布hr信息

@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.mapper.ResumeMapper;
-import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ResumeService;
 
@@ -189,5 +188,14 @@ public class ResumeServiceImpl implements ResumeService {
         return pagination;
     }
 
+    @Override
+    public String getResumeNameById(int userId) {
+        return resumeMapper.getResumeNameById(userId);
+    }
+
+    @Override
+    public boolean saveResumeName(int userId, String annex) {
+        return resumeMapper.saveResumeName(userId, annex) == 1;
+    }
 
 }
