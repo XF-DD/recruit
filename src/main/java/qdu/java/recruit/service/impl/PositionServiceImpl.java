@@ -2,6 +2,7 @@ package qdu.java.recruit.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -85,11 +86,15 @@ public class PositionServiceImpl implements PositionService {
                                                       String workCity,
                                                       String salaryDown,
                                                       String salaryUp,
+                                                      String companyProperty,
+                                                      int companyScale,
+                                                      String companyIndustry,
                                                       int page,
                                                       int limit) {
 
         PageHelper.startPage(page, limit);
-        List<PositionCompanyBO> searchList = positionMapper.listSearchPos(keyword,orderBy,workCity,salaryDown,salaryUp);
+        List<PositionCompanyBO> searchList = positionMapper.listSearchPos(keyword,orderBy,workCity,
+                                            salaryDown,salaryUp,companyProperty,companyScale,companyIndustry);
         return new PageInfo<>(searchList);
     }
 

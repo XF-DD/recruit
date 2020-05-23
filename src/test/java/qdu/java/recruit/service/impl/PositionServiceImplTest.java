@@ -32,15 +32,15 @@ public class PositionServiceImplTest extends TestCase {
 
     @Test
     public void testSearchPosition() {
-        PageInfo<PositionCompanyBO> positionCompanyBOPageInfo = positionService.searchPosition(
-                "里巴",
-                "hits",
-                null,
-                "5000",
-                "20000",
-                1,
-                6
-        );
-        System.out.println(positionCompanyBOPageInfo);
+//        PageInfo<PositionCompanyBO> positionCompanyBOPageInfo = positionService.searchPosition(
+//                "里巴",
+//                "hits",
+//                null,
+//                "5000",
+//                "20000",
+//                1,
+//                6
+//        );
+//        System.out.println(positionCompanyBOPageInfo);
     }
 }

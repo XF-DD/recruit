@@ -1,6 +1,7 @@
 package qdu.java.recruit.controller.hr;
 
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.internal.bind.v2.TODO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -118,7 +119,6 @@ public class PositionController extends BaseController{
         output.put("category", category);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
-
         return jsonObject.toString();
     }
 
@@ -130,17 +130,19 @@ public class PositionController extends BaseController{
     }
 
     /**
-     * private String title; *
-     private String requirement; *
-     private int quantity; *
-     private String workCity; *
-     private int salaryUp; *
-     private int salaryDown; *
-     private Date validDate;
+     * 更新职位信息
      * @param request
      * @param id
+     * @param title
+     * @param requirement
+     * @param quantity
+     * @param workCity
+     * @param salaryDown
+     * @param validDate
+     * @param benefits
      * @return
      */
+    //增加benefits参数 ZDL 2020/5/22
     @PostMapping("/position{id}/update")
     public int updatePosition(HttpServletRequest request,
                               @PathVariable int id,
@@ -149,7 +151,8 @@ public class PositionController extends BaseController{
                               @RequestParam int quantity,
                               @RequestParam String workCity,
                               @RequestParam int salaryDown,
-                              @RequestParam Date validDate
+                              @RequestParam Date validDate,
+                              @RequestParam String benefits
                               ) {
         PositionEntity positionEntity = valide(request,id);
         positionEntity.setTitle(title);
@@ -158,7 +161,7 @@ public class PositionController extends BaseController{
         positionEntity.setValidDate(validDate);
         positionEntity.setSalaryDown(salaryDown);
         positionEntity.setWorkCity(workCity);
-
+        positionEntity.setBenefits(benefits);
         return positionService.updatePosition(positionEntity);
     }
 
@@ -176,9 +179,19 @@ public class PositionController extends BaseController{
         return positionService.updatePosition(positionEntity);
     }
 
+    /**
+     * 发布职位
+     * @param modelMap
+     * @param request
+     * @param id
+     * @param positionEntity
+     * @return
+     */
+
     @PostMapping("hr{id}/position/create")
     public int createPosition(ModelMap modelMap, HttpServletRequest request, @PathVariable int id, PositionEntity positionEntity) {
         HREntity hr = this.getHR(request);
+        //TODO 这好像是无用查询
         List<CategoryEntity> categoryEntities = categoryService.getAll();
         if(hr == null) {
             this.errorDirect_404();
@@ -188,7 +201,6 @@ public class PositionController extends BaseController{
             positionEntity.setReleaseDate(new Date());
             positionEntity.setStatePub(1);
             return positionService.savePosition(positionEntity);
-
 
     }
 

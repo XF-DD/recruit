@@ -1,6 +1,22 @@
 
 package qdu.java.recruit.entity;
 
+/**
+ * @Author: ZDL
+ * @Date: 20/05/23 14:42
+
+ * 修改 ：
+ * city -> companyCity
+ *
+ * 新增：
+ * companyProperty
+ * companyScale
+ * companyIndustry
+ *
+ * 废弃:
+ * phone
+ *
+ */
 public class CompanyEntity {
 
     private int companyId;
@@ -9,24 +25,41 @@ public class CompanyEntity {
     private String description;
     private int state;
     private String companyCode;
-    private String city;
-    private String phone;
+    private String companyCity;
+    private String companyProperty;
+    private int companyScale;//0：少于15人 1：15-50人 2：50-150人  3：150人-500人 4：500-2000人 5：2000人以上
+    private String companyIndustry;
 
-
-    public String getCity() {
-        return city;
+    public String getCompanyProperty() {
+        return companyProperty;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCompanyProperty(String companyProperty) {
+        this.companyProperty = companyProperty;
     }
 
-    public String getPhone() {
-        return phone;
+    public int getCompanyScale() {
+        return companyScale;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCompanyScale(int companyScale) {
+        this.companyScale = companyScale;
+    }
+
+    public String getCompanyIndustry() {
+        return companyIndustry;
+    }
+
+    public void setCompanyIndustry(String companyIndustry) {
+        this.companyIndustry = companyIndustry;
+    }
+
+    public String getCompanyCity() {
+        return companyCity;
+    }
+
+    public void setCompanyCity(String companyCity) {
+        this.companyCity = companyCity;
     }
 
     public int getCompanyId() {
@@ -75,5 +108,21 @@ public class CompanyEntity {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyEntity{" +
+                "companyId=" + companyId +
+                ", companyName='" + companyName + '\'' +
+                ", companyLogo=" + companyLogo +
+                ", description='" + description + '\'' +
+                ", state=" + state +
+                ", companyCode='" + companyCode + '\'' +
+                ", companyCity='" + companyCity + '\'' +
+                ", companyProperty='" + companyProperty + '\'' +
+                ", companyScale=" + companyScale +
+                ", companyIndustry='" + companyIndustry + '\'' +
+                '}';
     }
 }

@@ -34,6 +34,9 @@ public interface PositionService {
                                                String workCity,
                                                String salaryDown,
                                                String salaryUp,
+                                               String companyProperty,
+                                               int companyScale,
+                                               String companyIndustry,
                                                int page,
                                                int limit);
     /**
