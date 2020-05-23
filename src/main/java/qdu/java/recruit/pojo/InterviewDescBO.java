@@ -16,6 +16,7 @@ public class InterviewDescBO extends UserEntity{
     private int state;
     private Timestamp msgSendTime;
     private String title;
+    private int isCheck;
 
     public int getApplicationId() {
         return applicationId;
@@ -55,5 +56,14 @@ public class InterviewDescBO extends UserEntity{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+
+    public int getIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(int isCheck) {
+        this.isCheck = isCheck;
     }
 }
