@@ -254,11 +254,11 @@ public class HRController extends BaseController{
      */
     @PostMapping("/roothr/search")
     @ResponseBody
-    public String ResumeSearch(HttpServletRequest request,
+    public String hrSearch(HttpServletRequest request,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
-        if (hr == null) {
+        if (hr == null|| hr.getPower()!=1) {
             return errorDirect_404();
         }
 
@@ -287,7 +287,7 @@ public class HRController extends BaseController{
         if (hr == null || hr.getPower()!=1) {
             return errorDirect_404();
         }
-        if (hrService.deleteHR(hrid)) {
+        if (hrService.deleteHR(hrid ,hr.getCompanyId())) {
             return "删除成功";
         }else
 

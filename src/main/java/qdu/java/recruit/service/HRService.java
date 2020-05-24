@@ -20,6 +20,6 @@ public interface HRService {
 
     PageInfo<HREntity> searchHr(int hrId, int companyId,int page, int limit);
 
-    boolean deleteHR(int hrid);
+    boolean deleteHR(int hrid, int companyId);
 
 }

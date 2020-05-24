@@ -67,7 +67,7 @@ public interface HRMapper {
      * hr删除
      * 5/23
      */
-    @Delete("delete from hr where hrId = #{hrid}")
-    int deleteHR(@Param("hrid") int hrid);
+    @Delete("delete from hr where hrId = #{hrid} and companyId=#{companyId}")
+    int deleteHR(@Param("hrid") int hrid,@Param("companyId") int companyId);
 
 }

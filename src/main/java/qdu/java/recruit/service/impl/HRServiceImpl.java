@@ -144,8 +144,8 @@ public class HRServiceImpl implements HRService {
      * 5/23
      */
     @Override
-    public boolean deleteHR(int hrid) {
-        if (HRMapper.deleteHR(hrid)>0)
+    public boolean deleteHR(int hrid ,int companyId) {
+        if (HRMapper.deleteHR(hrid,companyId)>0)
             return true;
         else
             return false;
