@@ -37,4 +37,11 @@ public interface ResumeService {
     PageInfo<PostedRecumeBO> getResumeByTitleAndState(int hrId, String keyword, int state, int page, int limit);
 
     PageInfo<PostedRecumeBO> getResumeByTitleAndStateWithPosIds(int hrId, int state, List<Integer> positionIds, String keyword, int page, int limit);
+
+
+    String getResumeNameById(int userId);
+
+    boolean saveResumeName(int userId, String annex);
+
+
 }

@@ -1,32 +1,37 @@
 package qdu.java.recruit.mapper;
 
-import org.apache.ibatis.annotations.*;
+
+ import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.pojo.PostedRecumeBO;
 
 import java.util.ArrayList;
-import java.util.List;
-
+ import java.util.List;
 /**
- * <p>
- * private int hrId;
- * private String hrMobile;
- * private String hrPassword;
- * private String hrName;
- * private String hrEmail;
- * private String description;
- * private int departmentId;
+ * <P>
+ *     private int hrId;
+ private String hrMobile;
+ private String hrPassword;
+ private String hrName;
+ private String hrEmail;
+ private String description;
+ private int departmentId;
  * </P>
  */
 public interface HRMapper {
     /**
      * <p>`hrId` int(11) NOT NULL AUTO_INCREMENT,
-     * `hrMobile` varchar(11) NOT NULL,
-     * `hrPassword` varchar(500) NOT NULL,
-     * `hrName` varchar(50) DEFAULT NULL,
-     * `hrEmail` varchar(50) DEFAULT NULL,
-     * `description` longtext,
-     * `departmentId` int(11) NOT NULL,</p>
+
+     `hrMobile` varchar(11) NOT NULL,
+     `hrPassword` varchar(500) NOT NULL,
+     `hrName` varchar(50) DEFAULT NULL,
+     `hrEmail` varchar(50) DEFAULT NULL,
+     `description` longtext,
+     `departmentId` int(11) NOT NULL,</p>
+     *
      */
 
     @Select("select * from hr")
@@ -38,16 +43,17 @@ public interface HRMapper {
     @Select("select COUNT(*) from hr")
     int getHRSize();
 
-    @Update({"update hr set hrPassword = #{hrPassword},hrName=#{hrName},hrEmail=#{hrEmail}," +
-            "description=#{description},departmentId=#{departmentId} where hrId = #{hrId}"})
+    @Update({"update hr set hrId = #{hrId},hrMobile = #{hrMobile},hrPassword = #{hrPassword},hrName=#{hrName},hrEmail=#{hrEmail}," +
+            "description=#{description},departmentId=#{departmentId},power = #{power},companyId = #{companyId} where hrId = #{hrId}"})
     int updateHR(HREntity hrEntity);
 
-    @Insert({"insert into hr(hrMobile,hrPassword,hrName,hrEmail,description,departmentId) " +
-            "values(#{hrMobile},#{hrPassword},#{hrName},#{hrEmail},#{description},#{departmentId})"})
+    @Insert({"insert into hr(hrMobile,hrPassword,hrName,hrEmail,description,departmentId,power,companyId) " +
+            "values(#{hrMobile},#{hrPassword},#{hrName},#{hrEmail},#{description},#{departmentId},0,#{companyId})"})
     int saveHR(HREntity hrEntity);
 
     @Select("select * from hr where hrMobile = #{hrMobile} limit 1")
     HREntity getHRByMobile(@Param("hrMobile") String hrMobile);
+
 
     /*
      *黄少龙
@@ -63,4 +69,5 @@ public interface HRMapper {
      */
     @Delete("delete from hr where hrId = #{hrid}")
     int deleteHR(@Param("hrid") int hrid);
+
 }

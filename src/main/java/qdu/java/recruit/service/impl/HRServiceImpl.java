@@ -1,13 +1,15 @@
 package qdu.java.recruit.service.impl;
 
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.mapper.HRMapper;
-import qdu.java.recruit.pojo.PostedRecumeBO;
+
 import qdu.java.recruit.service.HRService;
 import sun.misc.BASE64Encoder;
 
@@ -15,7 +17,9 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.List;
+
 
 @Service
 public class HRServiceImpl implements HRService {
@@ -87,7 +91,6 @@ public class HRServiceImpl implements HRService {
     public boolean loginHR(String mobile, String password) {
 
         String passwordDB = HRMapper.getHRByMobile(mobile).getHrPassword();
-
         try {
             if (this.EncodingByMd5(password).equals(passwordDB)) {
                 return true;
@@ -118,6 +121,7 @@ public class HRServiceImpl implements HRService {
         return encStr;
     }
 
+
     /*
      *黄少龙
      * hr展示功能
@@ -146,5 +150,6 @@ public class HRServiceImpl implements HRService {
         else
             return false;
     }
+
 
 }

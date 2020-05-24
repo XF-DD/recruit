@@ -36,7 +36,7 @@ public class InterviewController extends BaseController{
      *  点击面试管理，默认，下拉框未选中，查看所有轮次，所有职位的面试管理信息，
      *  下拉框选中，点击正在面试，查看所有轮次，对应职位的面试管理信息，
      *  按照简历的state降序，message的msgSendTime排序
-     *   return  news , state , msgSendTime , applicationId, userEntity , title
+     *   return  news , state ,time, ischeck,msgSendTime , applicationId, userEntity , title
      *   @author  ChenGuiHong
      *   @create  10:23 2020/5/18
     */

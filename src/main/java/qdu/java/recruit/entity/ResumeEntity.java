@@ -20,9 +20,11 @@ public class ResumeEntity {
     private String workExperience;
     private String certificate;
     private String jobDesire;
-    private int userId;
 
     private String annex;
+    private int userId;
+
+
     private String education;
     private String interest;
 
