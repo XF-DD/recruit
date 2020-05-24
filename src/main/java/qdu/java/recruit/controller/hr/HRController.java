@@ -199,12 +199,8 @@ public class HRController extends BaseController{
     }
 
     /**
-<<<<<<< HEAD
      * 黄少龙
      * 5/23
-=======
-     *
->>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
      * 个人信息更新 功能
      *
      * @param request
@@ -226,9 +222,8 @@ public class HRController extends BaseController{
                              @RequestParam("hrName") String name,
                              @RequestParam("hrEmail") String email,
                              @RequestParam("description") String description,
-
-                             @RequestParam("departmentId") int departmentId,
-                             @RequestParam("companyId") int companyId) {
+                             @RequestParam("departmentId") int departmentId
+                             ) {
         int hrId = this.getHRId(request);
         HREntity HREntity = new HREntity();
         HREntity.setHrId(hrid);
@@ -238,8 +233,6 @@ public class HRController extends BaseController{
         HREntity.setHrEmail(email);
         HREntity.setDescription(description);
         HREntity.setDepartmentId(departmentId);
-        HREntity.setPower(0);
-        HREntity.setCompanyId(companyId);
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
         } else {
@@ -291,12 +284,10 @@ public class HRController extends BaseController{
     public String deleteHr(HttpServletRequest request, @PathVariable int hrid
     ) {
         HREntity hr = this.getHR(request);
-        if (hr == null) {
+        if (hr == null || hr.getPower()!=1) {
             return errorDirect_404();
         }
-
         if (hrService.deleteHR(hrid)) {
-
             return "删除成功";
         }else
 
