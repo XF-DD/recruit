@@ -20,12 +20,15 @@ public interface PositionMapper {
     @Select("select * from position where hrIdPub = #{hrId} and statePub = 1 order by releaseDate DESC")
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
-//可以修改，添加福利
-ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
-                                           @Param("order") String order,
-                                           @Param("workCity") String workCity,
-                                           @Param("salaryDown") String salaryDown,
-                                           @Param("salaryUp") String salaryUp);
+
+    ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
+                                               @Param("order") String order,
+                                               @Param("workCity") String workCity,
+                                               @Param("salaryDown") String salaryDown,
+                                               @Param("salaryUp") String salaryUp,
+                                               @Param("companyProperty") String companyProperty,
+                                               @Param("companyScale") int companyScale,
+                                               @Param("companyIndustry") String companyIndustry);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
@@ -50,20 +53,22 @@ ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
     int delete(@Param("posId") int posId);
 
     //需要修改，添加福利
+    //修改完成 ZDL 2020/5/22
     @Update("update position set title = #{title},requirement=#{requirement},quantity=#{quantity}," +
             "workCity=#{workCity},salaryUp=#{salaryUp},salaryDown=#{salaryDown}," +
-            "validDate=#{validDate},statePub=#{statePub}" +
-            " where positionId = #{posId}")
+            "validDate=#{validDate},statePub=#{statePub},benefits=#{benefits}" +
+            " where positionId = #{positionId}")
     int updatePosition(PositionEntity positionEntity);
 
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
     //需要修改，添加福利
+    //修改完成 ZDL 2020/5/22
     @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
-            "departmentId,categoryId,hrIdPub) " +
+            "departmentId,categoryId,hrIdPub,benefits) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
-            "#{departmentId},#{categoryId},#{hrIdPub}")
+            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits}")
     int savePosition(PositionEntity positionEntity);
 
 }

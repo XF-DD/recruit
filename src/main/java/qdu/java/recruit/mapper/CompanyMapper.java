@@ -7,14 +7,17 @@ import org.apache.ibatis.annotations.Update;
 import qdu.java.recruit.entity.CompanyEntity;
 
 /**
- * <p>
- *       private int companyId;
- private String companyName;
- private int companyLogo;
- private String description;
- private int state;
- private String companyCode;
- * </p>
+ * int companyId;
+ * String companyName;
+ * int companyLogo;
+ * String description;
+ * int state;
+ * String companyCode;
+ * String companyCity;
+ * String companyProperty;
+ * String companyScale;//0：
+ * String companyIndustry;
+ * String phone;
  */
 public interface CompanyMapper {
 
@@ -24,10 +27,11 @@ public interface CompanyMapper {
     @Select("select * from company where companyCode = #{companyCode}")
     CompanyEntity getCompanyByCode(@Param("companyCode") String companyCode);
 
-    @Insert({"insert into user(companyName,companyLogo,description,state,companyCode})"
-            +"values(#{companyName},#{companyLogo},#{description},#{state},#{companyCode})"})
+    //增加 companyCity companyProperty companyScale companyIndustry
+    @Insert({"insert into company(companyName,companyLogo,description,state,companyCode,companyCity,companyProperty,companyScale,companyIndustry)"
+            +"values(#{companyName},#{companyLogo},#{description},#{state},#{companyCode},#{companyCity},#{companyProperty},#{companyScale},#{companyIndustry})"})
     int saveCompany(CompanyEntity companyEntity);
 
-//    @Update("update company set companyCode = #{companyCode} where companyId = #{companyId}")
-//    int updateCompany(int companyCode,int companyId);
+    //+修改公司信息
+    int updateCompany(CompanyEntity companyEntity);
 }

@@ -15,13 +15,16 @@ public interface ResumeMapper {
     ResumeEntity getResumeById(@Param("userId") int userId);
 
     //需要修改
+    //修改完成 ZDL 2020/5/22
     @Update("update resume set ability = #{ability},internship=#{internship},workExperience=#{workExperience}," +
-            "certificate = #{certificate},jobDesire = #{jobDesire} where userId = #{userId}")
+            "certificate = #{certificate},jobDesire = #{jobDesire} ,education = #{education}," +
+            "interest = #{interest} where userId = #{userId}")
     int saveResume(ResumeEntity resumeEntity);
 
     //需要修改
-    @Insert("insert into resume(ability,internship,workExperience,certificate,jobDesire,userId) " +
-            "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId})")
+    //修改完成 ZDL 2020/5/22
+    @Insert("insert into resume(ability,internship,workExperience,certificate,jobDesire,userId,education,interest) " +
+            "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId},#{education},#{interest})")
     int createResume(ResumeEntity resumeEntity);
 
     @Select("select annex from resume where userId = #{userId} limit 1")

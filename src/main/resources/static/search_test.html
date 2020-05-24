@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+    </head>
+    <body>
+    <!--@RequestParam(value = "keyword",defaultValue="") String keyword,-->
+    <!--@RequestParam(value="orderBy",defaultValue = "salaryUp") String orderBy,-->
+    <!--@RequestParam(value="workCity",defaultValue = "") String workCity,-->
+    <!--@RequestParam(value="salaryDown",defaultValue = "") String salaryDown,-->
+    <!--@RequestParam(value="salaryUp",defaultValue = "") String salaryUp,-->
+    <!--@RequestParam(value="page",defaultValue = "1") int page,-->
+    <!--@RequestParam(value = "limit", defaultValue = "6") int limit-->
+        <form method="post" action="http://localhost:8080/search">
+            <label>关键字</label>
+            <input name="keyword" value="java" type="text"><br>
+            <label>城市</label>
+            <input name="workCity" value="" type="text"><br>
+            <label>最低工资</label>
+            <input name="salaryDown" value="" type="text"><br>
+            <label>最高工资</label>
+            <input name="salaryUp" value="" type="text"><br>
+            <label>第几页</label>
+            <input name="page" value="1" type="text"><br>
+            <label>每页多少行</label>
+            <input name="limit" value="6" type="text"><br>
+            <label>按照什么排序</label>
+            <input name="orderBy" value="hits" type="text"><br>
+            <input type="submit" value="查询">
+        </form>
+    </body>
+</html>
