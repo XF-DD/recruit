@@ -188,7 +188,7 @@
                             <div class="col-lg-4 l">
                                 <div class=" row">
                                     <label for="sex" class="col-lg-4  col-lg-offset-1 lab">真实性别：</label>
-                                    <select class="form-control col-lg-6" id="sex" name="gender">
+                                    <select class="form-control col-lg-6" id="sex" name="gender" style="height:34px;">
                                         <option>- - - 选择性别 - - -</option>
                                         <option value="0">男</option>
                                         <option value="1">女</option>
@@ -201,7 +201,7 @@
                             <div class=" col-lg-4 l">
                                 <div class=" row">
                                     <label for="birthyear" class="col-lg-4 col-lg-offset-1 lab">出生年份：</label>
-                                    <select class="form-control col-lg-6" id="birthyear" name="birthYear">
+                                    <select class="form-control col-lg-6" id="birthyear" name="birthYear" style="height:30px;">
                                         <option v-model="year" v-for="year in years" :value="year">{{year}}</option>
                                     </select>
                                     <!--<select class="form-control col-lg-3 " id="birthmonth" name="birthmonth">-->
@@ -223,7 +223,7 @@
                             <div class="col-lg-4 l">
                                 <div class=" row">
                                     <label for="sex" class="col-lg-4  col-lg-offset-1 lab">毕业年份：</label>
-                                    <select class="form-control col-lg-6" id="graduateyear" name="graYear">
+                                    <select class="form-control col-lg-6" id="graduateyear" name="graYear" style="height:30px;">
                                         <option v-model="year" v-for="year in years" :value="year">{{year}}</option>
 
                                     </select>
@@ -250,7 +250,7 @@
                             <div class=" col-lg-4 l">
                                 <div class=" row">
                                     <label for="education" class="col-lg-4 col-lg-offset-1 lab">最高学历：</label>
-                                    <select class="form-control col-lg-6" id="education" name="eduDegree">
+                                    <select class="form-control col-lg-6" id="education" name="eduDegree" style="height:30px;">
                                         <option value="本科">本科</option>
                                         <option value="大专">大专</option>
                                         <option value="高中">高中</option>
@@ -279,9 +279,9 @@
                             </div>
                             <div class=" col-lg-4 l">
                                 <div class=" row">
-                                    <label for="dirDesire" class="col-lg-4 col-lg-offset-1 lab">方向选择：</label>
+                                    <label for="dirDesire" class="col-lg-4 col-lg-offset-1 lab" >方向选择：</label>
                                     <select class="form-control col-lg-6" id="dirDesire" name="dirDesire"
-                                            :value="selectCategory.categoryId" v-model="selectCategory.categoryId">
+                                            :value="selectCategory.categoryId" v-model="selectCategory.categoryId" style="height:30px;">
                                         <option v-for="category in categories" :value="category.categoryId">
                                             {{category.categoryName}}
                                         </option>

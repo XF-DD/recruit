@@ -22,26 +22,23 @@ public interface InterviewMapper {
     List<InterviewDescBO> getAllOrMoreInterviewDesc(@Param("hrId")int hrId,@Param("state")int state);
 
     //查询所有轮次或者更多的对应职位的所有面试信息（不同面试轮数，对应职位）。
-    @Select("select m.news,a.state,m.msgSendTime,a.applicationId,u.*,p.title \n"+
-            "from user u join application a on u.userId = a.userId \n" +
-            "join position  p on p.positionId = a.positionId \n" +
-            "join message m on a.applicationId = m.applicationId \n" +
-            "where a.hrId =#{hrId} and a.state >= #{state} and p.positionId in " +
-            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>,\n" +
-            "(#{item})" +
-            "</foreach> \n"+
-            "order by a.state DESC,m.msgSendTime DESC")
+    @Select({
+            "<script>",
+            "select m.news,a.state,m.msgSendTime,a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId join message m on a.applicationId = m.applicationId where a.hrId =#{hrId} and a.state >= #{state} and p.positionId in ",
+            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
+            "(#{item})",
+            "</foreach>",
+            "order by a.state DESC,m.msgSendTime DESC",
+            "</script>"})
     List<InterviewDescBO> getAllOrMoreInterviewDescByPosition(@Param("hrId")int hrId,@Param("state")int state,@Param("positionIds") List<Integer> positionIds);
 
-    @Select("select m.news,a.state,m.msgSendTime,a.applicationId,u.*,p.title \n"+
-            "from user u join application a on u.userId = a.userId \n" +
-            "join position  p on p.positionId = a.positionId \n" +
-            "join message m on a.applicationId = m.applicationId \n" +
-            "where a.hrId =#{hrId} and a.state = #{state} and p.positionId in " +
-            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>,\n" +
-            "(#{item})" +
-            "</foreach> \n"+
-            "order by a.state DESC,m.msgSendTime DESC")
+    @Select({"<script>",
+            "select m.news,a.state,m.msgSendTime,a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId join message m on a.applicationId = m.applicationId where a.hrId =#{hrId} and a.state = #{state} and p.positionId in ",
+            "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>" ,
+            "(#{item})",
+            "</foreach>",
+            "order by a.state DESC,m.msgSendTime DESC",
+            "</script>" })
     List<InterviewDescBO> getInterviewByStateAndPosition(@Param("hrId")int hrId,@Param("state")int state,@Param("positionIds") List<Integer> positionIds);
 
 
