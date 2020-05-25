@@ -186,6 +186,9 @@ public class PositionController extends BaseController {
      *
      * 5/18陈淯
      * 修改 validDate为时间戳  后台再进行类型转换
+     *
+     * 5/25陈淯
+     * 福利改为非必填
      */
     @PostMapping("/position{id}/update")
     public int updatePosition(HttpServletRequest request,
@@ -198,7 +201,7 @@ public class PositionController extends BaseController {
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,
                               @RequestParam int categoryId,
-                              @RequestParam String benefits
+                              @RequestParam(required = false) String benefits
     ) {
         PositionEntity positionEntity = valide(request, id);
         positionEntity.setPositionId(id);
@@ -250,13 +253,15 @@ public class PositionController extends BaseController {
      * 5/18陈淯  创建职位 validDate前端传入传入时间戳，后台进行转换
      *
      * 5/21添加福利
+     *
+     * 5/25福利改为非必填
      */
     @PostMapping("hr/position/create")
     public int createPosition(HttpServletRequest request,
                               @RequestParam String title,
                               @RequestParam String requirement,
                               @RequestParam int quantity,
-                              @RequestParam(required = false) String workCity,
+                              @RequestParam String workCity,
                               @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,

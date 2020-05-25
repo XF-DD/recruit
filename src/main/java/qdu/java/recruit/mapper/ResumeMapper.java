@@ -8,6 +8,7 @@ import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.pojo.PostedRecumeBO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public interface ResumeMapper {
@@ -146,9 +147,9 @@ public interface ResumeMapper {
     ArrayList<PostedRecumeBO> searchUser(@Param("hrId") int hrId, @Param("keyword") String keyword);
 
     //发送面试信息
-    @Insert("insert into message(state,news,hrId,userId,applicationId) " +
-            "values (#{state},#{news},#{hrId},(select userId from application where applicationId=#{applicationId}),#{applicationId})")
-    int sendOfferNews(@Param("state") int state, @Param("applicationId") int applicationId, @Param("news") String news, @Param("hrId") int hrId);
+    @Insert("insert into message(state,news,hrId,userId,applicationId,isCheck,msgSendTime) " +
+            "values (#{state},#{news},#{hrId},(select userId from application where applicationId=#{applicationId}),#{applicationId},#{isCheck},#{msgSendTime})")
+    int sendOfferNews(@Param("state") int state, @Param("applicationId") int applicationId, @Param("news") String news, @Param("hrId") int hrId,@Param("isCheck")int isCheck,@Param("msgSendTime") Date msgSendTime);
 
 
     @Select("select a.applicationId,u.*,p.title \n" +

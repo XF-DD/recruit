@@ -694,11 +694,11 @@ public class DataController extends BaseController {
     public String userLogout(HttpServletRequest request) {
         // 清除session
         Enumeration<String> em = request.getSession().getAttributeNames();
-        while (em.hasMoreElements()) {
-            request.getSession().removeAttribute(em.nextElement().toString());
-        }
+//        while (em.hasMoreElements()) {
+//            request.getSession().removeAttribute(em.nextElement().toString());
+//        }
         request.getSession().removeAttribute(GlobalConst.LOGIN_SESSION_KEY);
-        request.getSession().invalidate();
+//        request.getSession().invalidate();
 
         return "redirect:/user/login";
     }
