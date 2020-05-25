@@ -9,6 +9,7 @@ import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ResumeService;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -144,7 +145,7 @@ public class ResumeServiceImpl implements ResumeService {
                 return false;
             }
             //记录发送信息
-            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
+            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId,0,new Date()) == 0) {
                 return false;
             }
             if (state == -3) {
@@ -154,7 +155,7 @@ public class ResumeServiceImpl implements ResumeService {
             return true;
         } else {
             //记录发送信息
-            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId) == 0) {
+            if (resumeMapper.sendOfferNews(state, applicationId, interviewsDesc, hrId,0,new Date()) == 0) {
                 return false;
             }
             return true;

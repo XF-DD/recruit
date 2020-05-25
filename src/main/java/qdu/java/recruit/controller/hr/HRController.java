@@ -92,7 +92,7 @@ public class HRController extends BaseController{
     @PostMapping(value = "hr/register/second")
     @ResponseBody
 
-    public int userRegister(@RequestParam("hrMobile") String mobile,
+    public int hrRegister(@RequestParam("hrMobile") String mobile,
                             @RequestParam("hrPassword") String password,
                             @RequestParam("hrName") String name,
                             @RequestParam("hrEmail") String email,
@@ -130,12 +130,9 @@ public class HRController extends BaseController{
 
     /**
      * hr登录
-<<<<<<< HEAD
      * 5/23
      * 黄少龙
      * -1-陆失败，0-普通hr，1-roothr
-=======
->>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
      *
      * @param httpSession
      * @return
@@ -298,15 +295,13 @@ public class HRController extends BaseController{
     }
 
     /**
-=======
->>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
-     * 用户注销 功能
+     * Hr注销 功能
      *
      * @param request
      * @return
      */
     @PostMapping(value = "/logout")
-    public String userLogout(HttpServletRequest request) {
+    public String hrLogout(HttpServletRequest request) {
         // 清除session
         Enumeration<String> em = request.getSession().getAttributeNames();
 
