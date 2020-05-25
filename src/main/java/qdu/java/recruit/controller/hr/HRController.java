@@ -14,6 +14,7 @@ import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
+import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
@@ -155,6 +156,8 @@ public class HRController extends BaseController{
             System.out.println("匹配到了");
             HREntity hrEntity = hrService.getHRByMobile(mobile);
             httpSession.setAttribute("hr", hrEntity);
+            UserEntity user = (UserEntity)httpSession.getAttribute("user");
+            logger.info("============>" + user);
             return hrEntity.getPower();
         }
         return -1;
@@ -306,11 +309,12 @@ public class HRController extends BaseController{
     public String userLogout(HttpServletRequest request) {
         // 清除session
         Enumeration<String> em = request.getSession().getAttributeNames();
-        while (em.hasMoreElements()) {
-            request.getSession().removeAttribute(em.nextElement().toString());
-        }
+
+//        while (em.hasMoreElements()) {
+//            request.getSession().removeAttribute(em.nextElement().toString());
+//        }
         request.getSession().removeAttribute(GlobalConst.LOGIN_SESSION_KEY_HR);
-        request.getSession().invalidate();
+//        request.getSession().invalidate();
 
         return userDirect("logout_success");
     }
