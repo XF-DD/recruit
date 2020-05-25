@@ -36,7 +36,7 @@ public class InterviewController extends BaseController{
      *  点击面试管理，默认，下拉框未选中，查看所有轮次，所有职位的面试管理信息，
      *  下拉框选中，点击正在面试，查看所有轮次，对应职位的面试管理信息，
      *  按照简历的state降序，message的msgSendTime排序
-     *   return  news , state , msgSendTime , applicationId, userEntity , title
+     *   return  news , state ,time, ischeck,msgSendTime , applicationId, userEntity , title
      *   @author  ChenGuiHong
      *   @create  10:23 2020/5/18
     */
@@ -46,12 +46,12 @@ public class InterviewController extends BaseController{
                                    @RequestParam(value="page",defaultValue = "1")int page,
                                    @RequestParam(value="limit",defaultValue="12") int limit){
         HREntity hr = this.getHR(request);
-       // if (hr == null) {
-      //      this.errorDirect_404();
-      //  }
+        if (hr == null) {
+            this.errorDirect_404();
+        }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(1,page,limit,2,positionIds);
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(hr.getHrId(),page,limit,2,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -78,12 +78,14 @@ public class InterviewController extends BaseController{
                                          @RequestParam(value="limit",defaultValue="12") int limit
                                          ){
        HREntity hr = this.getHR(request);
-      //  if(hr == null) {
-      //      return errorDirect_404();
-      //  }
+       if(hr == null) {
+            return errorDirect_404();
+        }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfoByState(1,page,limit,state,positionIds);
+
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfoByState(hr.getHrId(),page,limit,state,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -108,12 +110,12 @@ public class InterviewController extends BaseController{
                                    @RequestParam(value="page",defaultValue = "1")int page,
                                    @RequestParam(value="limit",defaultValue="12") int limit){
        HREntity hr = this.getHR(request);
-      //  if (hr == null) {
-       //     this.errorDirect_404();
-      //  }
+       if (hr == null) {
+           this.errorDirect_404();
+       }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds =  (ArrayList<Integer>)request.getSession().getAttribute("positionId");
-        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(1,page,limit,5,positionIds);
+        PageInfo<InterviewDescBO> interviews = interviewService.listInterviewInfos(hr.getHrId(),page,limit,5,positionIds);
         Map output = new TreeMap();
         output.put("title", ("第" + page + "页"));
         output.put("hr", hr);
@@ -126,12 +128,12 @@ public class InterviewController extends BaseController{
     /**
      * 移除简历,进入人才库（条件不符合或者面试不通过）
      */
-    @PutMapping("/hr/interview/{applicationId}")
+    @PutMapping("/hr/abandon/{applicationId}")
     public String RemoveResume(HttpServletRequest request, @PathVariable int applicationId) {
         HREntity hr = this.getHR(request);
-        //if(hr == null) {
-       //     return errorDirect_404();
-      //  }
+        if(hr == null) {
+           return errorDirect_404();
+        }
         if (applicationService.updateResumeState(-2,applicationId)==0){
             return errorDirect_404();
         }

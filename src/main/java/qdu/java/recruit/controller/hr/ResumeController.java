@@ -15,6 +15,7 @@ import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ApplicationService;
 import qdu.java.recruit.service.ResumeService;
 import qdu.java.recruit.service.UserService;
+import qdu.java.recruit.util.StateUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -119,8 +120,6 @@ public class ResumeController extends BaseController {
         }
 
 
-
-
     /**
      * 移除简历（条件不符合 没有通过面试的）
      */
@@ -140,7 +139,7 @@ public class ResumeController extends BaseController {
     /**
      * 安排面试    flag=1 代表 1面
      */
-    @PutMapping("/hr/Interview/{applicationId}")
+    @PutMapping("/hr/interview/{applicationId}")
     public String arrangeInterview(HttpServletRequest request, @RequestParam int flag,@RequestParam String interviewsDesc,@PathVariable int applicationId ) {
         HREntity hr = this.getHR(request);
         String interviewDesc = interviewsDesc +"("+ flag + "面）";
@@ -190,12 +189,12 @@ public class ResumeController extends BaseController {
     /**
      * 简历搜索功能
      * 黄少龙
-     * 查询所有的简历按keywor
+     * 查询所有的简历按keyword
      * 5/19
      */
     @PostMapping("/hr/search")
     @ResponseBody
-    public String Resumesearch(HttpServletRequest request, @RequestParam(value = "keyword", defaultValue = "") String keyword,
+    public String ResumeSearch(HttpServletRequest request, @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
@@ -219,12 +218,12 @@ public class ResumeController extends BaseController {
     /**
      * 简历搜索功能
      * 黄少龙
-     * 查询所有的简历按keywor+标题+状态
+     * 查询所有的简历按keyword+标题+状态
      * 5/19
      */
     @GetMapping(value = "/hr/search/{state}")
     @ResponseBody
-    public String ResumesearchBystate(HttpServletRequest request,
+    public String ResumeSearchByState(HttpServletRequest request,
                                       @PathVariable int state,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       @RequestParam(value = "limit", defaultValue = "6") int limit) {
@@ -236,14 +235,14 @@ public class ResumeController extends BaseController {
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
         List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
         PageInfo<PostedRecumeBO> resumes = null;
-        if (positionIds == null) {
+        if (positionIds==null) {
             resumes = resumeService.getResumeByTitleAndState(hr.getHrId(), keyword,state, page, limit);  //直接按状态查找
         } else {
             resumes = resumeService.getResumeByTitleAndStateWithPosIds(hr.getHrId(), state, positionIds,keyword, page, limit);//按状态+标题（查出List positionId）
         }
-
         Map output = new TreeMap();
         output.put("resumes", resumes);
+        output.put("stateName", StateUtil.getState(state));
         JSONObject jsonObject = JSONObject.fromObject(output);
         return jsonObject.toString();
 
@@ -253,7 +252,7 @@ public class ResumeController extends BaseController {
      * 发送信息   包括发送offer 和 通知面试未通过
      * //5/18 陈淯   合并 发送offer 和 通知面试未通过
      */
-    @PutMapping("/hr/sendnews/{applicationId}")
+    @PutMapping("/hr/sendNews/{applicationId}")
     public String sendOffers(HttpServletRequest request,
                              @PathVariable int applicationId,
                              @RequestParam("interviewsDesc") String interviewsDesc,
@@ -269,5 +268,4 @@ public class ResumeController extends BaseController {
 
         return "成功";
     }
-
 }

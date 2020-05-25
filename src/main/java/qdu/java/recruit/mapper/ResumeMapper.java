@@ -18,19 +18,28 @@ public interface ResumeMapper {
     @Select("select * from resume where userId = #{userId} limit 1")
     ResumeEntity getResumeById(@Param("userId") int userId);
 
+    //需要修改
     @Update("update resume set ability = #{ability},internship=#{internship},workExperience=#{workExperience}," +
             "certificate = #{certificate},jobDesire = #{jobDesire} where userId = #{userId}")
     int saveResume(ResumeEntity resumeEntity);
 
+    //需要修改
     @Insert("insert into resume(ability,internship,workExperience,certificate,jobDesire,userId) " +
             "values (#{ability},#{internship},#{workExperience},#{certificate},#{jobDesire},#{userId})")
     int createResume(ResumeEntity resumeEntity);
 
 
+    @Select("select annex from resume where userId = #{userId} limit 1")
+    String getResumeNameById(@Param("userId") int userId);
+
+    @Update("update resume set annex = #{annex} where userId = #{userId}")
+    int saveResumeName(@Param("userId") int userId, @Param("annex") String annex);
+
+
     @Select("select a.applicationId,u.*,p.title \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
-            "where hrId = #{hrId} and state = #{state} order by a.recentTime DESC")
+            "where hrId = #{hrId} and hrId = p.hrIdPub and state = #{state} order by a.recentTime DESC")
    List<PostedRecumeBO> getResumeByState(@Param("hrId") int hrId, @Param("state") int state);
 
     /**
@@ -106,7 +115,7 @@ public interface ResumeMapper {
     @Select("select a.applicationId,u.*,p.title \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
-            "where hrId = #{hrId} order by a.recentTime DESC")
+            "where hrId = #{hrId} and hrId = p.hrIdPub order by a.recentTime DESC")
     List<PostedRecumeBO> getAllResume(@Param("hrId") int hrId);
 
     @Select("select a.applicationId,u.*,p.title \n"+
@@ -132,7 +141,7 @@ public interface ResumeMapper {
     int setState1(@Param("state") int state, @Param("hrId") int hrId, @Param("applicationId") int applicationId, @Param("userId") int userId);
 
     //搜索用户
-    @Select("select b.applicationId,a.* from user as a, application as b where a.userId = b.userId and b.hrId=#{hrId} " +
+    @Select("select b.applicationId,b.state,a.* from user as a, application as b where a.userId = b.userId and b.hrId=#{hrId} " +
             "and (a.mobile like #{keyword} or a.name like #{keyword}) order by b.recentTime DESC")
     ArrayList<PostedRecumeBO> searchUser(@Param("hrId") int hrId, @Param("keyword") String keyword);
 

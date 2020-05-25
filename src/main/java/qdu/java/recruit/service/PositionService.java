@@ -31,15 +31,23 @@ public interface PositionService {
     List<PositionCompanyBO> recPosition(UserEntity user, int page, int limit);
 
     /**
-     * 分页职位搜索
      *
      * @param keyword
+     * @param orderBy
+     * @param workCity
+     * @param salaryDown
+     * @param salaryUp
      * @param page
      * @param limit
      * @return
      */
-    PageInfo<PositionCompanyBO> searchPosition(String keyword, String orderBy, int page, int limit);
-
+    PageInfo<PositionCompanyBO> searchPosition(String keyword,
+                                               String orderBy,
+                                               String workCity,
+                                               String salaryDown,
+                                               String salaryUp,
+                                               int page,
+                                               int limit);
     /**
      * 各分类职位索引页
      *

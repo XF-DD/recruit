@@ -1,28 +1,28 @@
 package qdu.java.recruit.controller.hr;
 
+
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qdu.java.recruit.constant.GlobalConst;
 import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.entity.PositionEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -36,8 +36,10 @@ import java.util.*;
  * </p>
  */
 @RestController
+
 @Api(value = "HR接口",description = "HR接口")
 public class HRController extends BaseController{
+
 
     protected Logger logger = LogManager.getLogger(getClass());
 
@@ -61,37 +63,64 @@ public class HRController extends BaseController{
      */
     @PostMapping("/hr/register/first")
     @ResponseBody
+    //传入部门，公司id
     public String checkCompanyCode(ModelMap map,
                                    @RequestParam String CompanyCode,
-                                   HttpServletRequest request,
+
+                                   HttpSession httpSession,
+
                                    DepartmentEntity departmentEntity) {
         CompanyEntity companyEntity = companyService.getCompany(CompanyCode);
         if (companyEntity == null) {
             throw new RuntimeException("公司不存在");
         } else {
+
+            //暂时先保留部门
             List<DepartmentEntity> departmentEntities = departmentService.getDepartmentByCompany(
                     companyEntity.getCompanyId());
             map.put("departments", departmentEntities);
-            request.setAttribute("department", departmentEntity.getDepartmentId());
-            return hrDirect("hr/register/second");
+
+            //已修改为绑定公司:绑定公司
+            httpSession.setAttribute("companyId",companyEntity.getCompanyId());
+            return hrDirect("register/second");
+
         }
     }
 
 
     @PostMapping(value = "hr/register/second")
     @ResponseBody
-    public int userRegister(@RequestParam HREntity user,
+
+    public int userRegister(@RequestParam("hrMobile") String mobile,
+                            @RequestParam("hrPassword") String password,
+                            @RequestParam("hrName") String name,
+                            @RequestParam("hrEmail") String email,
+                            Integer departmentId,
+                            String description,
                             HttpServletRequest request) {
 
-        int deparmentId = (int) request.getAttribute("department");
-        user.setDepartmentId(deparmentId);
-        String password = user.getHrPassword();
+        HttpSession session = request.getSession();
+        int companyId = (int) session.getAttribute("companyId");
+        HREntity hrEntity = new HREntity();
+        hrEntity.setCompanyId(companyId);
+        //销毁session域，保证公司代码串只能注册一次
+        session.removeAttribute("companyId");
+
+        hrEntity.setHrMobile(mobile);
+        hrEntity.setHrPassword(password);
+        hrEntity.setHrName(name);
+        hrEntity.setHrEmail(email);
+        hrEntity.setDescription(description);
+        if (departmentId!=null){
+            hrEntity.setDepartmentId(departmentId);
+        }
+
 
         //验证mobile 和 password是否为空
-        if (user.getHrMobile() == null || user.getHrPassword() == null) {
+        if (hrEntity.getHrMobile() == null || hrEntity.getHrPassword() == null) {
             return 0;
         }
-        if (hrService.registerHR(user)) {
+        if (hrService.registerHR(hrEntity)) {
             return 1;
         }
         return 1;
@@ -100,27 +129,36 @@ public class HRController extends BaseController{
 
     /**
      * hr登录
+<<<<<<< HEAD
+     * 5/23
+     * 黄少龙
+     * -1-陆失败，0-普通hr，1-roothr
+=======
+>>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
      *
      * @param httpSession
      * @return
      */
     @PostMapping(value = "/hr/loginPost")
     public int userLogin(HttpSession httpSession,
-                         @RequestParam String hrName,
-                         @RequestParam String hrPass) {
 
-        String mobile = hrName;
-        String password = hrPass;
-        if (hrName == null || hrPass == null) {
-            return 0;
+                         @RequestParam String hrMobile,
+                         @RequestParam String hrPass) {
+        if (hrMobile == null || hrPass == null) {
+            return -1;
+
         }
+        String mobile = hrMobile;
+        String password = hrPass;
 
         if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
-            httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
-            return 1;
+            HREntity hrEntity = hrService.getHRByMobile(mobile);
+            httpSession.setAttribute("hr", hrEntity);
+            return hrEntity.getPower();
         }
-        return 0;
+        return -1;
+
     }
 
 
@@ -161,7 +199,8 @@ public class HRController extends BaseController{
     }
 
     /**
-     *
+     * 黄少龙
+     * 5/23
      * 个人信息更新 功能
      *
      * @param request
@@ -173,32 +212,31 @@ public class HRController extends BaseController{
      * @param departmentId
      * @return
      */
-    @PostMapping("/hr/info/update")
+
+    @PostMapping("/hr/info/update/{hrid}")
     public String updateInfo(HttpSession httpSession,
                              HttpServletRequest request,
+                             @PathVariable int hrid,
                              @RequestParam("hrMobile") String mobile,
                              @RequestParam("hrPassword") String password,
                              @RequestParam("hrName") String name,
                              @RequestParam("hrEmail") String email,
                              @RequestParam("description") String description,
-                             @RequestParam("departmentId") int departmentId) {
-
+                             @RequestParam("departmentId") int departmentId
+                             ) {
         int hrId = this.getHRId(request);
-        request.getSession().getAttribute("hr");
-
         HREntity HREntity = new HREntity();
-        HREntity.setHrId(hrId);
+        HREntity.setHrId(hrid);
+        HREntity.setHrMobile(mobile);
         HREntity.setHrPassword(password);
         HREntity.setHrName(name);
         HREntity.setHrEmail(email);
         HREntity.setDescription(description);
         HREntity.setDepartmentId(departmentId);
-
         if (!hrService.updateHR(HREntity)) {
             this.errorDirect_404();
         } else {
-
-            if (hrService.loginHR(mobile, password)) {
+            if (hrService.loginHR(mobile, password) && hrId == hrid) {//仅当hr更新自己的消息时才重新设置session
                 System.out.println("匹配到了");
                 httpSession.setAttribute("hr", hrService.getHRByMobile(mobile));
             }
@@ -207,6 +245,58 @@ public class HRController extends BaseController{
     }
 
     /**
+<<<<<<< HEAD
+     * root
+     * 子hr搜索功能
+     * 黄少龙
+     * 查询所有的简历按keyword
+     * 5/19
+     */
+    @PostMapping("/roothr/search")
+    @ResponseBody
+    public String hrSearch(HttpServletRequest request,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "limit", defaultValue = "6") int limit) {
+        HREntity hr = this.getHR(request);
+        if (hr == null|| hr.getPower()!=1) {
+            return errorDirect_404();
+        }
+
+        page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
+        PageInfo<HREntity> posInfo = hrService.searchHr(hr.getHrId(), hr.getCompanyId(), page, limit);
+
+        Map output = new TreeMap();
+        output.put("hr", hr);
+        output.put("title", ("第" + page + "页"));
+        output.put("posInfo", posInfo);
+        JSONObject jsonObject = JSONObject.fromObject(output);
+        return jsonObject.toString();
+    }
+
+    /**
+     * root
+     * 删除子hr
+     * 黄少龙
+     * 5/23
+     */
+    @PostMapping("/roothr/delete/{hrid}")
+    @ResponseBody
+    public String deleteHr(HttpServletRequest request, @PathVariable int hrid
+    ) {
+        HREntity hr = this.getHR(request);
+        if (hr == null || hr.getPower()!=1) {
+            return errorDirect_404();
+        }
+        if (hrService.deleteHR(hrid ,hr.getCompanyId())) {
+            return "删除成功";
+        }else
+
+        return "删除失败";
+    }
+
+    /**
+=======
+>>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
      * 用户注销 功能
      *
      * @param request

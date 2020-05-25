@@ -43,7 +43,7 @@ public class PositionController extends BaseController {
     @ResponseBody
     public int jumpToResumePage(HttpSession session,
                                   @PathVariable int positionId){
-
+        System.out.println("/hr/positionId/{positionId}");
         PositionEntity positionById = positionService.getPositionById(positionId);
         if (positionById!=null){
             List<Integer> positionIds = Arrays.asList(positionId);
@@ -65,11 +65,11 @@ public class PositionController extends BaseController {
     @ResponseBody
     public String listTitle(HttpServletRequest request){
         HREntity hr = this.getHR(request);
-        if (hr == null) {
-            this.errorDirect_404();
-            //其实应该返回的是401，或者403
+       if (hr == null) {
+           this.errorDirect_404();
+           //其实应该返回的是401，或者403
         }
-        List<String> list = positionService.listTitle(hr.getHrId());
+        List<String> list = positionService.listTitle(1);
         Map output = new TreeMap();
         output.put("titles",list);
         JSONObject jsonObject = JSONObject.fromObject(output);
@@ -87,6 +87,7 @@ public class PositionController extends BaseController {
     public int jumpToResumePage(HttpSession session,
                                 HttpServletRequest request,
                                 @RequestParam(value = "title", defaultValue = "", required = false) String title) {
+        System.out.println("/hr/position/category");
         HREntity hr = this.getHR(request);
         List<Integer> positionIds = positionService.listPositionIdByTitle(title, hr.getHrId());
         if (positionIds.size() != 0) {
@@ -138,10 +139,6 @@ public class PositionController extends BaseController {
 
     /**
      * 职位详情
-<<<<<<< HEAD
-     *
-=======
->>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * @param request
      * @param id
      * @return
@@ -200,10 +197,10 @@ public class PositionController extends BaseController {
                               @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,
-                              @RequestParam int categoryId
+                              @RequestParam int categoryId,
+                              @RequestParam String benefits
     ) {
         PositionEntity positionEntity = valide(request, id);
-
         positionEntity.setPositionId(id);
         positionEntity.setTitle(title);
         positionEntity.setRequirement(requirement);
@@ -213,6 +210,7 @@ public class PositionController extends BaseController {
         positionEntity.setSalaryDown(salaryDown);
         positionEntity.setWorkCity(workCity);
         positionEntity.setCategoryId(categoryId);
+        positionEntity.setBenefits(benefits);
 
         return positionService.updatePosition(positionEntity);
     }
@@ -250,17 +248,20 @@ public class PositionController extends BaseController {
     /**
      * 职位创建
      * 5/18陈淯  创建职位 validDate前端传入传入时间戳，后台进行转换
+     *
+     * 5/21添加福利
      */
     @PostMapping("hr/position/create")
     public int createPosition(HttpServletRequest request,
                               @RequestParam String title,
                               @RequestParam String requirement,
                               @RequestParam int quantity,
-                              @RequestParam String workCity,
+                              @RequestParam(required = false) String workCity,
                               @RequestParam int salaryUp,
                               @RequestParam int salaryDown,
                               @RequestParam long validDate,
-                              @RequestParam int categoryId) {
+                              @RequestParam int categoryId,
+                              @RequestParam(required = false) String benefits) {
         HREntity hr = this.getHR(request);
         List<CategoryEntity> categoryEntities = categoryService.getAll();
         if (hr == null) {
@@ -281,6 +282,7 @@ public class PositionController extends BaseController {
         positionEntity.setDepartmentId(hr.getDepartmentId());
         positionEntity.setHrIdPub(hr.getHrId());
         positionEntity.setCategoryId(categoryId);
+        positionEntity.setBenefits(benefits);
         return positionService.savePosition(positionEntity);
     }
 

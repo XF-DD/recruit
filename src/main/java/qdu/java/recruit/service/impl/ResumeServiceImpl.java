@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.ResumeEntity;
 import qdu.java.recruit.mapper.ResumeMapper;
-import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.pojo.PostedRecumeBO;
 import qdu.java.recruit.service.ResumeService;
 
@@ -125,7 +124,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     //5/19 黄少龙
     @Override
-    public PageInfo<PostedRecumeBO> searchUser(int hrId, String keyword, int page, int limit) {
+    public PageInfo<PostedRecumeBO>  searchUser(int hrId, String keyword, int page, int limit) {
         PageHelper.startPage(page, limit);
         List<PostedRecumeBO> searchList = resumeMapper.searchUser(hrId, "%" + keyword + "%");
         int total = searchList.size();
@@ -187,6 +186,17 @@ public class ResumeServiceImpl implements ResumeService {
         PageInfo<PostedRecumeBO> pagination = new PageInfo<>(postedResumeBOList);
         pagination.setTotal(total);
         return pagination;
+    }
+
+
+    @Override
+    public String getResumeNameById(int userId) {
+        return resumeMapper.getResumeNameById(userId);
+    }
+
+    @Override
+    public boolean saveResumeName(int userId, String annex) {
+        return resumeMapper.saveResumeName(userId, annex) == 1;
     }
 
 

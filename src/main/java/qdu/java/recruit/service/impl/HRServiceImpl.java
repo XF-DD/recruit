@@ -1,10 +1,15 @@
 package qdu.java.recruit.service.impl;
 
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.mapper.HRMapper;
+
 import qdu.java.recruit.service.HRService;
 import sun.misc.BASE64Encoder;
 
@@ -12,6 +17,9 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import java.util.List;
+
 
 @Service
 public class HRServiceImpl implements HRService {
@@ -111,6 +119,36 @@ public class HRServiceImpl implements HRService {
         //加密后的字符串
         String encStr = base64en.encode(md5.digest(str.getBytes("utf-8")));
         return encStr;
+    }
+
+
+    /*
+     *黄少龙
+     * hr展示功能
+     * 5/23
+     */
+    @Override
+    public PageInfo<HREntity> searchHr(int hrId, int companyId, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<HREntity> searchList = HRMapper.searchHr(hrId, companyId);
+        int total = searchList.size();
+        PageInfo<HREntity> searchListPageInfo = new PageInfo<>(searchList);
+        searchListPageInfo.setTotal(total);
+        return searchListPageInfo;
+    }
+
+    /**
+     * root
+     * 删除子hr
+     * 黄少龙
+     * 5/23
+     */
+    @Override
+    public boolean deleteHR(int hrid ,int companyId) {
+        if (HRMapper.deleteHR(hrid,companyId)>0)
+            return true;
+        else
+            return false;
     }
 
 
