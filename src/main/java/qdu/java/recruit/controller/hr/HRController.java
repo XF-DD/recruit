@@ -129,28 +129,21 @@ public class HRController extends BaseController{
 
     /**
      * hr登录
-<<<<<<< HEAD
      * 5/23
      * 黄少龙
-     * -1-陆失败，0-普通hr，1-roothr
-=======
->>>>>>> a1d05ad28a46471b20ed392c6f022a48212f56e4
-     *
+     * -1-登录失败，0-普通hr，1-roothr
      * @param httpSession
      * @return
      */
     @PostMapping(value = "/hr/loginPost")
     public int userLogin(HttpSession httpSession,
-
                          @RequestParam String hrMobile,
                          @RequestParam String hrPass) {
         if (hrMobile == null || hrPass == null) {
             return -1;
-
         }
         String mobile = hrMobile;
         String password = hrPass;
-
         if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
             HREntity hrEntity = hrService.getHRByMobile(mobile);
@@ -158,7 +151,6 @@ public class HRController extends BaseController{
             return hrEntity.getPower();
         }
         return -1;
-
     }
 
 

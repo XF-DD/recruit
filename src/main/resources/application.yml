@@ -50,3 +50,4 @@ mybatis:
   # 实体类所在包
   type-aliases-package: qdu.java.recruit.entity
 
+

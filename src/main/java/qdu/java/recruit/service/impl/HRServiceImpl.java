@@ -89,7 +89,6 @@ public class HRServiceImpl implements HRService {
 
     @Override
     public boolean loginHR(String mobile, String password) {
-
         String passwordDB = HRMapper.getHRByMobile(mobile).getHrPassword();
         try {
             if (this.EncodingByMd5(password).equals(passwordDB)) {

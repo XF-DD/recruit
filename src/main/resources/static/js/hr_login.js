@@ -14,7 +14,7 @@ var form =new Vue({
                 data:this.form,
                 dataType:'json',
                 success:function (msg) {
-                    if(msg=='0'){
+                    if(msg=='-1'){
                         layer.msg("msg ="+msg);
                         layer.msg('您的账号或密码输入错误！！！');
                     }else {
