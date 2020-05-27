@@ -17,6 +17,7 @@ import qdu.java.recruit.entity.HREntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
@@ -37,8 +38,8 @@ import java.util.TreeMap;
  */
 @RestController
 
-@Api(value = "HR接口",description = "HR接口")
-public class HRController extends BaseController{
+@Api(value = "HR接口", description = "HR接口")
+public class HRController extends BaseController {
 
 
     protected Logger logger = LogManager.getLogger(getClass());
@@ -81,7 +82,7 @@ public class HRController extends BaseController{
             map.put("departments", departmentEntities);
 
             //已修改为绑定公司:绑定公司
-            httpSession.setAttribute("companyId",companyEntity.getCompanyId());
+            httpSession.setAttribute("companyId", companyEntity.getCompanyId());
             return hrDirect("register/second");
 
         }
@@ -92,12 +93,12 @@ public class HRController extends BaseController{
     @ResponseBody
 
     public int hrRegister(@RequestParam("hrMobile") String mobile,
-                            @RequestParam("hrPassword") String password,
-                            @RequestParam("hrName") String name,
-                            @RequestParam("hrEmail") String email,
-                            Integer departmentId,
-                            String description,
-                            HttpServletRequest request) {
+                          @RequestParam("hrPassword") String password,
+                          @RequestParam("hrName") String name,
+                          @RequestParam("hrEmail") String email,
+                          Integer departmentId,
+                          String description,
+                          HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         int companyId = (int) session.getAttribute("companyId");
@@ -111,7 +112,7 @@ public class HRController extends BaseController{
         hrEntity.setHrName(name);
         hrEntity.setHrEmail(email);
         hrEntity.setDescription(description);
-        if (departmentId!=null){
+        if (departmentId != null) {
             hrEntity.setDepartmentId(departmentId);
         }
 
@@ -147,7 +148,7 @@ public class HRController extends BaseController{
         }
         String mobile = hrMobile;
         String password = hrPass;
-
+        httpSession.setAttribute("positionId",null);
         if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
             HREntity hrEntity = hrService.getHRByMobile(mobile);
@@ -220,7 +221,7 @@ public class HRController extends BaseController{
                              @RequestParam("hrEmail") String email,
                              @RequestParam("description") String description,
                              @RequestParam("departmentId") int departmentId
-                             ) {
+    ) {
         int hrId = this.getHRId(request);
         HREntity HREntity = new HREntity();
         HREntity.setHrId(hrid);
@@ -242,7 +243,6 @@ public class HRController extends BaseController{
     }
 
     /**
-<<<<<<< HEAD
      * root
      * 子hr搜索功能
      * 黄少龙
@@ -252,10 +252,10 @@ public class HRController extends BaseController{
     @PostMapping("/roothr/search")
     @ResponseBody
     public String hrSearch(HttpServletRequest request,
-                               @RequestParam(value = "page", defaultValue = "1") int page,
-                               @RequestParam(value = "limit", defaultValue = "6") int limit) {
+                           @RequestParam(value = "page", defaultValue = "1") int page,
+                           @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
-        if (hr == null|| hr.getPower()!=1) {
+        if (hr == null || hr.getPower() != 1) {
             return errorDirect_404();
         }
 
@@ -281,14 +281,15 @@ public class HRController extends BaseController{
     public String deleteHr(HttpServletRequest request, @PathVariable int hrid
     ) {
         HREntity hr = this.getHR(request);
-        if (hr == null || hr.getPower()!=1) {
+        request.getSession().setAttribute("positionId",null);
+        if (hr == null || hr.getPower() != 1) {
             return errorDirect_404();
         }
-        if (hrService.deleteHR(hrid ,hr.getCompanyId())) {
+        if (hrService.deleteHR(hrid, hr.getCompanyId())) {
             return "删除成功";
-        }else
+        } else
 
-        return "删除失败";
+            return "删除失败";
     }
 
     /**

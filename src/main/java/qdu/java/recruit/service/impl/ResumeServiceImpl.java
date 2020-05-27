@@ -64,7 +64,6 @@ public class ResumeServiceImpl implements ResumeService {
         int total = postedResumeBOList.size();
         PageInfo<PostedRecumeBO> pagination = new PageInfo<>(postedResumeBOList);
         pagination.setTotal(total);
-
         return pagination;
     }
 

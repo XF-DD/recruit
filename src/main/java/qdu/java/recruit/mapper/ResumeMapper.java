@@ -37,7 +37,7 @@ public interface ResumeMapper {
     int saveResumeName(@Param("userId") int userId, @Param("annex") String annex);
 
 
-    @Select("select a.applicationId,u.*,p.title \n" +
+    @Select("select a.applicationId,u.*,p.title,a.state \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
             "where hrId = #{hrId} and hrId = p.hrIdPub and state = #{state} order by a.recentTime DESC")
@@ -57,16 +57,12 @@ public interface ResumeMapper {
     /**
      * 5/16  陈淯
      * 按照状态 + 职位ids  查找
-<<<<<<< HEAD
-=======
-     *
->>>>>>> 0d4957c0cb80e85703cd755f85e14e2489a562b5
      * @param hrId
      * @return
      */
     @Select({
             "<script>",
-            "select a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId where a.positionId in ",
+            "select a.applicationId,u.*,p.title,a.state from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId where a.positionId in ",
             "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
             "(#{item})",
             "</foreach>",
@@ -102,7 +98,7 @@ public interface ResumeMapper {
      */
     @Select({
             "<script>",
-            "select a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId \n" +
+            "select a.applicationId,u.*,p.title,a.state from user u join application a on u.userId = a.userId \n" +
             "join position p on p.positionId = a.positionId where a.positionId in ",
             "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
             "(#{item})",
@@ -113,7 +109,7 @@ public interface ResumeMapper {
     List<PostedRecumeBO> getAllResumeWithPosIds(@Param("hrId") int hrId, @Param("positionIds") List<Integer> positionIds);
 
     //查看所有简历
-    @Select("select a.applicationId,u.*,p.title \n" +
+    @Select("select a.applicationId,u.*,p.title,a.state \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
             "where hrId = #{hrId} and hrId = p.hrIdPub order by a.recentTime DESC")
@@ -152,7 +148,7 @@ public interface ResumeMapper {
     int sendOfferNews(@Param("state") int state, @Param("applicationId") int applicationId, @Param("news") String news, @Param("hrId") int hrId,@Param("isCheck")int isCheck,@Param("msgSendTime") Date msgSendTime);
 
 
-    @Select("select a.applicationId,u.*,p.title \n" +
+    @Select("select a.applicationId,u.*,p.title,a.state \n" +
             "from user u join application a on u.userId = a.userId \n" +
             "join position  p on p.positionId = a.positionId \n" +
             "where hrId = #{hrId} and state = #{state} and (u.mobile like #{keyword} or u.name like #{keyword}) " +
@@ -161,7 +157,7 @@ public interface ResumeMapper {
 
     @Select({
             "<script>",
-            "select a.applicationId,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId where a.positionId in ",
+            "select a.applicationId,a.state,u.*,p.title from user u join application a on u.userId = a.userId join position  p on p.positionId = a.positionId where a.positionId in ",
             "<foreach collection='positionIds' item='item' index='index' open='(' separator=',' close=')'>",
             "(#{item})",
             "</foreach>",
