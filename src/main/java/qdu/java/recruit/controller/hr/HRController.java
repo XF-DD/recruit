@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,12 @@ import qdu.java.recruit.entity.*;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.service.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -49,6 +54,8 @@ public class HRController extends BaseController{
     @Autowired
     DepartmentService departmentService;
 
+    @Autowired
+    ResumeService resumeService;
     /**
      * 用户注册返回 0 -> 失败 1 -> 成功
      */
@@ -227,7 +234,48 @@ public class HRController extends BaseController{
     }
 
 
-
+    /**
+     * 用户简历在线预览
+     * @Author: wzh
+     * @Date: 05/21
+     * @param style 如果要直接浏览器打开就传inline，要下载传attachment
+     * @return
+     */
+    @GetMapping("/hr/resume/download/{id}/{style}")
+    @ResponseBody
+    public void downloadResume(HttpServletResponse response, @PathVariable String style, @PathVariable int id) throws UnsupportedEncodingException {
+        String resumeName = resumeService.getResumeNameById(id);
+        File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
+        if (file.exists()) {
+            response.addHeader("Content-Disposition", style + ";fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
+            FileInputStream fis = null;
+            BufferedInputStream bfis = null;
+            try {
+                fis = new FileInputStream(file);
+                bfis = new BufferedInputStream(fis);
+                //获取响应输出流
+                ServletOutputStream os = response.getOutputStream();
+                IOUtils.copy(bfis, os);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bfis != null) {
+                    try {
+                        bfis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 
 
 }
