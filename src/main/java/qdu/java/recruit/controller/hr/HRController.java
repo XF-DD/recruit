@@ -243,7 +243,7 @@ public class HRController extends BaseController{
      */
     @GetMapping("/hr/resume/download/{id}/{style}")
     @ResponseBody
-    public void downloadResume(HttpServletResponse response, @PathVariable String style, @PathVariable int id) throws UnsupportedEncodingException {
+    public String downloadResume(HttpServletResponse response, @PathVariable String style, @PathVariable int id) throws UnsupportedEncodingException {
         String resumeName = resumeService.getResumeNameById(id);
         File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
         if (file.exists()) {
@@ -274,8 +274,9 @@ public class HRController extends BaseController{
                     }
                 }
             }
-        }
+            return "success";
+        }else
+            return "resume not found";
     }
-
 
 }
