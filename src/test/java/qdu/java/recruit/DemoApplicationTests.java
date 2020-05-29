@@ -24,7 +24,7 @@ public class DemoApplicationTests {
 
 	@Test
 	public void test01(){
-		String s =	 HRService.getHRByMobile("13685259986").getHrPassword();
+		String s =	 HRService.getHRByMobile("123456").getHrPassword();
 		System.out.println(s);
 	}
 
