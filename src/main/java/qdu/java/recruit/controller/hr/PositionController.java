@@ -69,7 +69,7 @@ public class PositionController extends BaseController {
            this.errorDirect_404();
            //其实应该返回的是401，或者403
         }
-        List<String> list = positionService.listTitle(1);
+        List<String> list = positionService.listTitle(hr.getHrId());
         Map output = new TreeMap();
         output.put("titles",list);
         JSONObject jsonObject = JSONObject.fromObject(output);

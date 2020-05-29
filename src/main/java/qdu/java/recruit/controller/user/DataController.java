@@ -512,7 +512,7 @@ public class DataController extends BaseController {
         }
         int id = ((UserEntity) session.getAttribute("user")).getUserId();
         //todo 待user注册功能完善后再改
-        File path = new File("d:\\recruit\\" + id);
+        File path = new File("c:\\recruit\\" + id);
         resumeService.saveResumeName(id, resumeName);
         if (path.exists() || path.mkdirs()) {
             resume.transferTo(new File(path, resumeName));
@@ -521,50 +521,6 @@ public class DataController extends BaseController {
         return 0;
     }
 
-    /**
-     * 用户简历在线预览
-     * @Author: wzh
-     * @Date: 05/21
-     * @param style 如果要直接浏览器打开就传inline，要下载传attachment
-     * @return
-     */
-    @GetMapping("/user/resume/download/{style}")
-    @ResponseBody
-    public void downloadResume(HttpSession session, HttpServletResponse response, @PathVariable String style) throws UnsupportedEncodingException {
-        UserEntity user = (UserEntity) session.getAttribute("user");
-        int id = user.getUserId();
-        String resumeName = resumeService.getResumeNameById(id);
-        File file = new File("d:\\recruit\\" + id + "\\" + resumeName);
-        if (file.exists()) {
-            response.addHeader("Content-Disposition", style + ";fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
-            FileInputStream fis = null;
-            BufferedInputStream bfis = null;
-            try {
-                fis = new FileInputStream(file);
-                bfis = new BufferedInputStream(fis);
-                //获取响应输出流
-                ServletOutputStream os = response.getOutputStream();
-                IOUtils.copy(bfis, os);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (bfis != null) {
-                    try {
-                        bfis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (fis != null) {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
 
     /**
 

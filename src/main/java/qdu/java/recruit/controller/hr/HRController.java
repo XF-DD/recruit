@@ -14,10 +14,10 @@ import qdu.java.recruit.controller.BaseController;
 import qdu.java.recruit.entity.CompanyEntity;
 import qdu.java.recruit.entity.DepartmentEntity;
 import qdu.java.recruit.entity.HREntity;
-import qdu.java.recruit.entity.UserEntity;
 import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 /**
  * <p>
  * private int hrId;
@@ -38,8 +43,8 @@ import java.util.TreeMap;
  */
 @RestController
 
-@Api(value = "HR接口",description = "HR接口")
-public class HRController extends BaseController{
+@Api(value = "HR接口", description = "HR接口")
+public class HRController extends BaseController {
 
 
     protected Logger logger = LogManager.getLogger(getClass());
@@ -58,6 +63,55 @@ public class HRController extends BaseController{
 
     @Autowired
     DepartmentService departmentService;
+
+    @Autowired
+    ResumeService resumeService;
+
+
+    /**
+     * 用户简历在线预览
+     * @Author: wzh
+     * @Date: 05/21
+     * @param style 如果要直接浏览器打开就传inline，要下载传attachment
+     * @return
+     */
+    @GetMapping("/hr/resume/download/{id}/{style}")
+    @ResponseBody
+    public String downloadResume(HttpServletResponse response, @PathVariable String style, @PathVariable int id) throws UnsupportedEncodingException {
+        String resumeName = resumeService.getResumeNameById(id);
+        File file = new File("c:\\recruit\\" + id + "\\" + resumeName);
+        if (file.exists()) {
+            response.addHeader("Content-Disposition", style + ";fileName=" + URLEncoder.encode(resumeName, "UTF-8"));
+            FileInputStream fis = null;
+            BufferedInputStream bfis = null;
+            try {
+                fis = new FileInputStream(file);
+                bfis = new BufferedInputStream(fis);
+                //获取响应输出流
+                ServletOutputStream os = response.getOutputStream();
+                IOUtils.copy(bfis, os);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (bfis != null) {
+                    try {
+                        bfis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return "success";
+        }else
+            return "resume not found";
+    }
 
     /**
      * 用户注册返回 0 -> 失败 1 -> 成功
@@ -82,7 +136,7 @@ public class HRController extends BaseController{
             map.put("departments", departmentEntities);
 
             //已修改为绑定公司:绑定公司
-            httpSession.setAttribute("companyId",companyEntity.getCompanyId());
+            httpSession.setAttribute("companyId", companyEntity.getCompanyId());
             return hrDirect("register/second");
 
         }
@@ -93,12 +147,12 @@ public class HRController extends BaseController{
     @ResponseBody
 
     public int hrRegister(@RequestParam("hrMobile") String mobile,
-                            @RequestParam("hrPassword") String password,
-                            @RequestParam("hrName") String name,
-                            @RequestParam("hrEmail") String email,
-                            Integer departmentId,
-                            String description,
-                            HttpServletRequest request) {
+                          @RequestParam("hrPassword") String password,
+                          @RequestParam("hrName") String name,
+                          @RequestParam("hrEmail") String email,
+                          Integer departmentId,
+                          String description,
+                          HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         int companyId = (int) session.getAttribute("companyId");
@@ -112,7 +166,7 @@ public class HRController extends BaseController{
         hrEntity.setHrName(name);
         hrEntity.setHrEmail(email);
         hrEntity.setDescription(description);
-        if (departmentId!=null){
+        if (departmentId != null) {
             hrEntity.setDepartmentId(departmentId);
         }
 
@@ -148,13 +202,11 @@ public class HRController extends BaseController{
         }
         String mobile = hrMobile;
         String password = hrPass;
-
+        httpSession.setAttribute("positionId",null);
         if (hrService.loginHR(mobile, password)) {
             System.out.println("匹配到了");
             HREntity hrEntity = hrService.getHRByMobile(mobile);
             httpSession.setAttribute("hr", hrEntity);
-            UserEntity user = (UserEntity)httpSession.getAttribute("user");
-            logger.info("============>" + user);
             return hrEntity.getPower();
         }
         return -1;
@@ -223,7 +275,7 @@ public class HRController extends BaseController{
                              @RequestParam("hrEmail") String email,
                              @RequestParam("description") String description,
                              @RequestParam("departmentId") int departmentId
-                             ) {
+    ) {
         int hrId = this.getHRId(request);
         HREntity HREntity = new HREntity();
         HREntity.setHrId(hrid);
@@ -245,7 +297,6 @@ public class HRController extends BaseController{
     }
 
     /**
-<<<<<<< HEAD
      * root
      * 子hr搜索功能
      * 黄少龙
@@ -255,10 +306,10 @@ public class HRController extends BaseController{
     @PostMapping("/roothr/search")
     @ResponseBody
     public String hrSearch(HttpServletRequest request,
-                               @RequestParam(value = "page", defaultValue = "1") int page,
-                               @RequestParam(value = "limit", defaultValue = "6") int limit) {
+                           @RequestParam(value = "page", defaultValue = "1") int page,
+                           @RequestParam(value = "limit", defaultValue = "6") int limit) {
         HREntity hr = this.getHR(request);
-        if (hr == null|| hr.getPower()!=1) {
+        if (hr == null || hr.getPower() != 1) {
             return errorDirect_404();
         }
 
@@ -284,14 +335,15 @@ public class HRController extends BaseController{
     public String deleteHr(HttpServletRequest request, @PathVariable int hrid
     ) {
         HREntity hr = this.getHR(request);
-        if (hr == null || hr.getPower()!=1) {
+        request.getSession().setAttribute("positionId",null);
+        if (hr == null || hr.getPower() != 1) {
             return errorDirect_404();
         }
-        if (hrService.deleteHR(hrid ,hr.getCompanyId())) {
+        if (hrService.deleteHR(hrid, hr.getCompanyId())) {
             return "删除成功";
-        }else
+        } else
 
-        return "删除失败";
+            return "删除失败";
     }
 
     /**
@@ -304,7 +356,6 @@ public class HRController extends BaseController{
     public String hrLogout(HttpServletRequest request) {
         // 清除session
         Enumeration<String> em = request.getSession().getAttributeNames();
-
 //        while (em.hasMoreElements()) {
 //            request.getSession().removeAttribute(em.nextElement().toString());
 //        }
@@ -313,4 +364,13 @@ public class HRController extends BaseController{
 
         return userDirect("logout_success");
     }
+
+
+
+
+
+
+
 }
+
+

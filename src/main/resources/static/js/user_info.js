@@ -127,6 +127,32 @@ $(document).ready(function () {
         }
     });
 });
+/**
+ * 上传简历
+ */
+function postResume(){
+    var formData = new FormData();
+    formData.append("resume",$("#resume")[0].files[0]);
+    $.ajax({
+        url:'http://localhost:8080/user/resume/upload', /*接口域名地址*/
+        type:'post',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success:function(res){
+            console.log(res)
+            if (res === 1) {
+                alert("简历上传成功!")
+            }else if(res === 0){
+                alert("简历上传失败!")
+            }else {
+                console.log(res);
+            }
+
+        }
+    })
+}
+
 
 /**
  * 更新用户个人信息

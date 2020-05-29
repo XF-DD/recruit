@@ -65,7 +65,7 @@ public class ResumeController extends BaseController {
         }
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-        List<Integer> positionIds = (ArrayList<Integer>)request.getSession().getAttribute("positionId");
+        List<Integer> positionIds = (List<Integer>)request.getSession().getAttribute("positionId");
 
         PageInfo<PostedRecumeBO> resumes = null;
 
@@ -233,7 +233,7 @@ public class ResumeController extends BaseController {
         }
         String keyword=(String)request.getSession().getAttribute("keyword");
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
-        List<Integer> positionIds = (ArrayList<Integer>) request.getSession().getAttribute("positionId");
+        List<Integer> positionIds = (List<Integer>) request.getSession().getAttribute("positionId");
         PageInfo<PostedRecumeBO> resumes = null;
         if (positionIds==null) {
             resumes = resumeService.getResumeByTitleAndState(hr.getHrId(), keyword,state, page, limit);  //直接按状态查找
@@ -242,7 +242,6 @@ public class ResumeController extends BaseController {
         }
         Map output = new TreeMap();
         output.put("resumes", resumes);
-        output.put("stateName", StateUtil.getState(state));
         JSONObject jsonObject = JSONObject.fromObject(output);
         return jsonObject.toString();
 
