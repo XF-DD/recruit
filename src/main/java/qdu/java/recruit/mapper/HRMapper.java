@@ -21,6 +21,7 @@ import java.util.ArrayList;
  private int departmentId;
  * </P>
  */
+
 public interface HRMapper {
     /**
      * <p>`hrId` int(11) NOT NULL AUTO_INCREMENT,
