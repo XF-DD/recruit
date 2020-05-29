@@ -168,7 +168,6 @@ public class PositionController extends BaseController {
         output.put("category", category);
 
         JSONObject jsonObject = JSONObject.fromObject(output);
-
         return jsonObject.toString();
     }
 
@@ -181,6 +180,7 @@ public class PositionController extends BaseController {
     }
 
     /**
+<<<<<<< HEAD
      *
      * 职位更新
      *
@@ -189,7 +189,21 @@ public class PositionController extends BaseController {
      *
      * 5/25陈淯
      * 福利改为非必填
+=======
+     * 更新职位信息
+     * @param request
+     * @param id
+     * @param title
+     * @param requirement
+     * @param quantity
+     * @param workCity
+     * @param salaryDown
+     * @param validDate
+     * @param benefits
+     * @return
+>>>>>>> 004eb43b38313cf5283eba11e3e6bcf4324c2214
      */
+    //增加benefits参数 ZDL 2020/5/22
     @PostMapping("/position{id}/update")
     public int updatePosition(HttpServletRequest request,
                               @PathVariable int id,
@@ -205,6 +219,12 @@ public class PositionController extends BaseController {
     ) {
         PositionEntity positionEntity = valide(request, id);
         positionEntity.setPositionId(id);
+//=======
+//                              @RequestParam Date validDate,
+//                              @RequestParam String benefits
+//                              ) {
+//        PositionEntity positionEntity = valide(request,id);
+//>>>>>>> 004eb43b38313cf5283eba11e3e6bcf4324c2214
         positionEntity.setTitle(title);
         positionEntity.setRequirement(requirement);
         positionEntity.setQuantity(quantity);
@@ -267,8 +287,20 @@ public class PositionController extends BaseController {
                               @RequestParam long validDate,
                               @RequestParam int categoryId,
                               @RequestParam(required = false) String benefits) {
+
+     /* 发布职位
+     * @param modelMap
+     * @param request
+     * @param id
+     * @param positionEntity
+     * @return
+     */
+
+/*    @PostMapping("hr{id}/position/create")
+    public int createPosition(ModelMap modelMap, HttpServletRequest request, @PathVariable int id, PositionEntity positionEntity) {*/
         HREntity hr = this.getHR(request);
-        List<CategoryEntity> categoryEntities = categoryService.getAll();
+        //TODO 这好像是无用查询
+//        List<CategoryEntity> categoryEntities = categoryService.getAll();
         if (hr == null) {
             this.errorDirect_404();
         }
@@ -289,6 +321,16 @@ public class PositionController extends BaseController {
         positionEntity.setCategoryId(categoryId);
         positionEntity.setBenefits(benefits);
         return positionService.savePosition(positionEntity);
+
+/*
+            id = hr.getHrId();
+            modelMap.put("categoryEntities",categoryEntities);
+            positionEntity.setReleaseDate(new Date());
+            positionEntity.setStatePub(1);
+            return positionService.savePosition(positionEntity);
+*/
+
+
     }
 
     /**

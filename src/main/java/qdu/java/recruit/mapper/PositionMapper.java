@@ -29,15 +29,15 @@ public interface PositionMapper {
     ArrayList<PositionEntity> listHRPos(@Param("hrId") int hrId);
 
     //可以修改，添加福利
-//   @Select("select p.*,c.* from position p,department d,company c \n" +
-//            "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
-//            "and title like #{keyword} and statePub = 1 \n" +
-//            "order by ${order} DESC")
+
     ArrayList<PositionCompanyBO> listSearchPos(@Param("keyword") String keyword,
                                                @Param("order") String order,
                                                @Param("workCity") String workCity,
                                                @Param("salaryDown") String salaryDown,
-                                               @Param("salaryUp") String salaryUp);
+                                               @Param("salaryUp") String salaryUp,
+                                               @Param("companyProperty") String companyProperty,
+                                               @Param("companyScale") int companyScale,
+                                               @Param("companyIndustry") String companyIndustry);
 
     @Select("select p.*,c.* from position p,department d,company c\n" +
             "where p.departmentId = d.departmentId and d.companyId = c.companyId \n" +
@@ -68,18 +68,20 @@ public interface PositionMapper {
             "workCity = #{workCity},salaryUp=#{salaryUp},salaryDown = #{salaryDown},benefits = #{benefits}," +
             "validDate = #{validDate},statePub = #{statePub}," +
             "categoryId = #{categoryId} "+
-            "where positionId = #{positionId}")
+            "where positionId = #{positionId}")   //         categoryId
+
     int updatePosition(PositionEntity positionEntity);
 
     @Update("update position set statePub= #{statePub} where positionId = #{posId}")
     int updatePositionState(@RequestParam("statePub") int statePub, @RequestParam("posId") int posId);
 
 
-    //需要修改，添加福利 5/21
-    @Insert("insert into position (title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
+    //需要修改，添加福利
+    //修改完成 ZDL 2020/5/22
+    @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
             "departmentId,categoryId,hrIdPub,benefits) " +
             "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
-            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits})")
+            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits}")
     int savePosition(PositionEntity positionEntity);
 
     @Select("select distinct title from position where hrIdPub =#{hrId}")

@@ -3,104 +3,49 @@
 <mapper namespace="qdu.java.recruit.mapper.PositionMapper">
 
     <select id="listSearchPos" resultType="qdu.java.recruit.pojo.PositionCompanyBO">
-
-<!--        select p.*,c.*-->
-<!--        from position as p-->
-<!--        left join department as d-->
-<!--        on p.departmentId = d.departmentId-->
-<!--        left join company as c-->
-<!--        on d.companyId = c.companyId-->
-<!--        <where>-->
-<!--            statePub = 1-->
-<!--            <if test="keyword!=null and keyword!=''">-->
-<!--                <bind name="keyword" value="'%'+keyword+'%'"/>-->
-<!--                and (p.title like #{keyword} or c.companyName like #{keyword})-->
-<!--            </if>-->
-
-<!--            <if test="workCity!=null and workCity!=''">-->
-<!--                <bind name="workCity" value="'%'+workCity+'%'"/>-->
-<!--                and p.workCity like #{workCity}-->
-<!--            </if>-->
-<!--            <if test="salaryDown!=null and salaryDown!=''">-->
-<!--                and p.salaryDown >= #{salaryDown}-->
-<!--            </if>-->
-<!--            <if test="salaryUp!=null and salaryUp!=''">-->
-<!--                and p.salaryUp &lt;= #{salaryUp}-->
-<!--            </if>-->
-<!--            <if test="order!=null and order!=''">-->
-<!--                order by ${order} DESC-->
-<!--            </if>-->
-<!--        </where>-->
-
-
-
         SELECT
             p.*, c.*
         FROM
-            (
-            SELECT
-                *
-            FROM
-                position
-            WHERE
-                statePub = 1
+            position AS p
+            Inner JOIN department AS d ON d.departmentId = p.departmentId
+            Inner JOIN company AS c ON c.companyId = d.companyId
+        WHERE
+            statePub = 1
             <!-- keyword可以是岗位名和公司名 -->
-            <!-- 岗位名称模糊查询 -->
+            <!-- 岗位名称和公司名称模糊匹配 -->
             <if test="keyword!=null and keyword!=''">
                 <bind name="keyword" value="'%'+keyword+'%'"/>
-                and title like #{keyword}
+                and (p.title like #{keyword} or c.companyName like #{keyword})
             </if>
-            <!-- 城市名称模糊查询 -->
-            <if test="workCity!=null and workCity!=''">
-                <bind name="workCity" value="'%'+workCity+'%'"/>
-                and workCity like #{workCity}
-            </if>
-            <!-- 最低工资 -->
-            <if test="salaryDown!=null and salaryDown!=''">
-                and salaryDown >= #{salaryDown}
-            </if>
-            <!-- 最高工资 -->
-            <if test="salaryUp!=null and salaryUp!=''">
-                and salaryUp &lt;= #{salaryUp}
-            </if>
-            ) AS p
-        LEFT JOIN department AS d ON d.departmentId = p.departmentId
-        LEFT JOIN company AS c ON c.companyId = d.companyId
-
-        <if test="keyword!=null and keyword!=''">
-        <!-- keyword可能是公司名 -->
-            UNION
-            (
-            SELECT
-            p.*, c.*
-            FROM
-            (
-            SELECT
-            *
-            FROM
-            company
-            WHERE
-            companyName like #{keyword}
-            ) AS c
-            LEFT JOIN department AS d ON c.companyId = d.companyId
-            LEFT JOIN position AS p ON d.departmentId = p.departmentId
-            WHERE
-            statePub = 1
+             <!-- 城市名称模糊匹配 -->
             <if test="workCity!=null and workCity!=''">
                 <bind name="workCity" value="'%'+workCity+'%'"/>
                 and p.workCity like #{workCity}
             </if>
+            <!-- 最低工资 -->
             <if test="salaryDown!=null and salaryDown!=''">
                 and p.salaryDown >= #{salaryDown}
             </if>
+            <!-- 最高工资 -->
             <if test="salaryUp!=null and salaryUp!=''">
                 and p.salaryUp &lt;= #{salaryUp}
             </if>
-            )
-        </if>
-        <if test="order!=null and order!=''">
-            order by ${order} DESC
-        </if>
+            <!-- 公司性质精准匹配 -->
+            <if test="companyProperty!=null and companyProperty!=''">
+                and c.companyProperty like #{companyProperty}
+            </if>
+            <!-- 公司规模精准匹配 -->
+            <if test="companyScale>=0">
+                and c.companyScale = #{companyScale}
+            </if>
+            <!-- 公司所属行业精准匹配 -->
+            <if test="companyIndustry!=null and companyIndustry!=''">
+                and c.companyIndustry = #{companyIndustry}
+            </if>
+            <!-- 排序 -->
+            <if test="order!=null and order!=''">
+                order by #{order}
+            </if>
     </select>
 
 </mapper>

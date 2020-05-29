@@ -28,6 +28,22 @@ public class ResumeEntity {
     private String education;
     private String interest;
 
+    public ResumeEntity() {
+    }
+
+    public ResumeEntity(int resumeId, String ability, String internship, String workExperience, String certificate, String jobDesire, int userId, String annex, String education, String interest) {
+        this.resumeId = resumeId;
+        this.ability = ability;
+        this.internship = internship;
+        this.workExperience = workExperience;
+        this.certificate = certificate;
+        this.jobDesire = jobDesire;
+        this.userId = userId;
+        this.annex = annex;
+        this.education = education;
+        this.interest = interest;
+    }
+
     public int getResumeId() {
         return resumeId;
     }

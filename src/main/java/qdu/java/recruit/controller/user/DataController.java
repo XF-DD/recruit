@@ -181,6 +181,7 @@ public class DataController extends BaseController {
 
     /**
      * 职位搜索页分页输出 （关键字，职位列表）
+     * @Author : ZDL
      *
      * @param request
      * @param keyword
@@ -191,18 +192,26 @@ public class DataController extends BaseController {
     @PostMapping(value = "/search")
     @ResponseBody
     public String search(HttpServletRequest request,
-                         @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                         @RequestParam(value = "orderBy", defaultValue = "salaryUp") String orderBy,
-                         @RequestParam(value = "workCity", defaultValue = "") String workCity,
-                         @RequestParam(value = "salaryDown", defaultValue = "") String salaryDown,
-                         @RequestParam(value = "salaryUp", defaultValue = "") String salaryUp,
-                         @RequestParam(value = "page", defaultValue = "1") int page,
+                         String keyword,
+                         @RequestParam(value="orderBy",defaultValue = "salaryUp") String orderBy,
+                         String workCity,
+                         String salaryDown,
+                         String salaryUp,
+                         String companyProperty,
+                         @RequestParam(value="companyScale",defaultValue = "-1") int companyScale,
+                         String companyIndustry,
+                         @RequestParam(value="page",defaultValue = "1") int page,
                          @RequestParam(value = "limit", defaultValue = "6") int limit) {
         UserEntity user = this.getUser(request);
 
         page = page < 1 || page > GlobalConst.MAX_PAGE ? 1 : page;
 
-        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword, orderBy, workCity, salaryDown, salaryUp, page, limit);
+
+
+        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword,orderBy,workCity,salaryDown,salaryUp,companyProperty,companyScale,companyIndustry, page, limit);
+
+
+//        PageInfo<PositionCompanyBO> posInfo = positionService.searchPosition(keyword, orderBy, workCity, salaryDown, salaryUp, page, limit);
         Map output = new TreeMap();
         output.put("user", user);
         output.put("title", ("第" + page + "页"));
@@ -549,30 +558,17 @@ public class DataController extends BaseController {
 
     /**
      * 简历更新 功能
-     *
      * @param request
-     * @param ability
-     * @param internship
-     * @param workExperience
-     * @param certificate
-     * @param jobDesire
+     * @param resumeEntity
      * @return
      */
     @PostMapping(value = "/user/resume/update")
-    public String updateResume(HttpServletRequest request, @RequestParam("ability") String ability,
-                               @RequestParam("internship") String internship, @RequestParam("workExperience") String workExperience,
-                               @RequestParam("certificate") String certificate, @RequestParam("jobDesire") String jobDesire) {
+    public String updateResume(HttpServletRequest request, ResumeEntity resumeEntity) {
 
         //当前用户
         int userId = this.getUserId(request);
 
         //参数对象
-        ResumeEntity resumeEntity = new ResumeEntity();
-        resumeEntity.setAbility(ability);
-        resumeEntity.setInternship(internship);
-        resumeEntity.setWorkExperience(workExperience);
-        resumeEntity.setCertificate(certificate);
-        resumeEntity.setJobDesire(jobDesire);
         resumeEntity.setUserId(userId);
 
         if (resumeService.getResumeById(userId) != null) {

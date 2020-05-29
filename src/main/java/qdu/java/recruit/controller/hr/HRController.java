@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,9 @@ import qdu.java.recruit.pojo.ApplicationPositionHRBO;
 import qdu.java.recruit.pojo.PositionCategoryHRBO;
 import qdu.java.recruit.service.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,6 +33,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+
 /**
  * <p>
  * private int hrId;
@@ -66,8 +70,6 @@ public class HRController extends BaseController {
 
     @Autowired
     ResumeService resumeService;
-
-
     /**
      * 用户简历在线预览
      * @Author: wzh
@@ -364,9 +366,6 @@ public class HRController extends BaseController {
 
         return userDirect("logout_success");
     }
-
-
-
 
 
 
