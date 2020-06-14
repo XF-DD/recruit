@@ -16,8 +16,8 @@ public interface ResumeMapper {
     @Select("select resumeId from resume where userId = #{userId} limit 1")
     int getResumeId(@Param("userId") int userId);
 
-    @Select("select * from resume where userId = #{userId} limit 1")
-    ResumeEntity getResumeById(@Param("userId") int userId);
+    @Select("select * from resume where resumeId = #{resumeId} limit 1")
+    ResumeEntity getResumeById(@Param("resumeId") int resumeId);
 
     //需要修改
     //修改完成 ZDL 2020/5/22
