@@ -78,10 +78,11 @@ public interface PositionMapper {
 
     //需要修改，添加福利
     //修改完成 ZDL 2020/5/22
-    @Insert("insert into position(title,requirement,quantity,workCity,salaryUp,salaryDown,releaseDate,validDate,statePub," +
+    //
+    @Insert("insert into position (title,requirement,quantity,workCity,salaryUp,salaryDown,statePub,releaseDate,validDate," +
             "departmentId,categoryId,hrIdPub,benefits) " +
-            "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{releaseDate},#{validDate},#{statePub}," +
-            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits}")
+            "values(#{title},#{requirement},#{quantity},#{workCity},#{salaryUp},#{salaryDown},#{statePub},#{releaseDate},#{validDate}, " +
+            "#{departmentId},#{categoryId},#{hrIdPub},#{benefits})")
     int savePosition(PositionEntity positionEntity);
 
     @Select("select distinct title from position where hrIdPub =#{hrId}")
